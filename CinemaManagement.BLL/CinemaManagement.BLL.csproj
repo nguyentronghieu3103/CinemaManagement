@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\CinemaManagement.Common\CinemaManagement.Common.csproj" />
+    <ProjectReference Include="..\CinemaManagement.DAL\CinemaManagement.DAL.csproj" />
+    <ProjectReference Include="..\CinemaManagement.Integrations\CinemaManagement.Integrations.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>
