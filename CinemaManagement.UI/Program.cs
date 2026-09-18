@@ -1,16 +1,42 @@
-namespace CinemaManagement.UI;
+using Microsoft.Extensions.Configuration;
+using Serilog;
 
-static class Program
+namespace CinemaManagement.UI
 {
-    /// <summary>
-    ///  The main entry point for the application.
-    /// </summary>
-    [STAThread]
-    static void Main()
+    internal static class Program
     {
-        // To customize application configuration such as set high DPI settings or default font,
-        // see https://aka.ms/applicationconfiguration.
-        ApplicationConfiguration.Initialize();
-        Application.Run(new Form1());
-    }    
+        public static IConfiguration Configuration { get; private set; } = null!;
+
+        [STAThread]
+        static void Main()
+        {
+            // Đọc appsettings.json
+            Configuration = new ConfigurationBuilder()
+                .SetBasePath(AppContext.BaseDirectory)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
+
+            // Cấu hình Serilog đọc section "Serilog" từ appsettings.json
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(Configuration)
+                .Enrich.FromLogContext()
+                .CreateLogger();
+
+            try
+            {
+                Log.Information("Ứng dụng khởi động");
+
+                ApplicationConfiguration.Initialize();
+                Application.Run(new Form1());   
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, "Ứng dụng bị crash ngay lúc khởi động");
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
+        }
+    }
 }

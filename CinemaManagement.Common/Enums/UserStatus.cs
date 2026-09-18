@@ -1,4 +1,4 @@
-﻿namespace CinemaApp.Common.Enums
+﻿namespace CinemaManagement.Common.Enums
 {
     public enum UserStatus
     {

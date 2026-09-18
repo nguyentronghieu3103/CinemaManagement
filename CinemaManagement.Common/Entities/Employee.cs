@@ -1,7 +1,4 @@
 ﻿using CinemaManagement.Common.Enums;
-using CinemaManagement.Common.Entities;
-
-
 namespace CinemaManagement.Common.Entities
 {
     public class Employee

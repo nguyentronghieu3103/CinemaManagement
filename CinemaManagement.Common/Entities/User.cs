@@ -1,6 +1,4 @@
-﻿using CinemaApp.Common.Enums;
-using CinemaManagement.Common.Entities;
-
+﻿using CinemaManagement.Common.Enums;
 namespace CinemaManagement.Common.Entities
 {
     public class User

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CinemaManagement.Common.Entities
+﻿namespace CinemaManagement.Common.Entities
 {
     public class Permission
     {
