@@ -1,3 +1,4 @@
+using CinemaManagement.UI.ExceptionHandling;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 
@@ -22,6 +23,7 @@ namespace CinemaManagement.UI
                 .Enrich.FromLogContext()
                 .CreateLogger();
 
+            GlobalExceptionHandler.Initialize();
             try
             {
                 Log.Information("Ứng dụng khởi động");
