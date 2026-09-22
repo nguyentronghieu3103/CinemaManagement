@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CinemaApp.DAL.Configurations
+namespace CinemaManagement.DAL.Configurations
 {
     public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
     {
