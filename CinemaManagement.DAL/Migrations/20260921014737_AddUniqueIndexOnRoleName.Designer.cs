@@ -3,6 +3,7 @@ using System;
 using CinemaManagement.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CinemaManagement.DAL.Migrations
 {
     [DbContext(typeof(CinemaDbContext))]
-    partial class CinemaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260921014737_AddUniqueIndexOnRoleName")]
+    partial class AddUniqueIndexOnRoleName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -594,9 +597,6 @@ namespace CinemaManagement.DAL.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
-                    b.Property<DateTime?>("LanSaiCuoiCung")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<string>("MatKhauHash")
                         .IsRequired()
                         .HasColumnType("text");
@@ -605,9 +605,6 @@ namespace CinemaManagement.DAL.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("RoleId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("SoLanBiKhoa")
                         .HasColumnType("integer");
 
                     b.Property<int>("SoLanSaiMatKhau")

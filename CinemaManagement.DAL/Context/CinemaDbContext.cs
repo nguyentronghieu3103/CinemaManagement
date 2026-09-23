@@ -12,6 +12,7 @@ namespace CinemaManagement.DAL.Context
         public DbSet<Role> VaiTros => Set<Role>();
         public DbSet<Permission> Quyens => Set<Permission>();
         public DbSet<RolePermission> VaiTroQuyens => Set<RolePermission>();
+        public DbSet<Employee> NhanViens => Set<Employee>();
         public DbSet<Movie> Phims => Set<Movie>();
         public DbSet<Genre> TheLoais => Set<Genre>();
         public DbSet<MovieGenre> PhimTheLoais => Set<MovieGenre>();
@@ -32,6 +33,11 @@ namespace CinemaManagement.DAL.Context
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(CinemaDbContext).Assembly);
             base.OnModelCreating(modelBuilder);
+        }
+        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+        {
+            configurationBuilder.Properties<DateTime>().HaveColumnType("timestamp without time zone");
+            configurationBuilder.Properties<DateTime?>().HaveColumnType("timestamp without time zone");
         }
     }
 }

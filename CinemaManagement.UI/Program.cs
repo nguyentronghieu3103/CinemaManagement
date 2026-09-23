@@ -1,6 +1,11 @@
 using CinemaManagement.DAL.DependencyInjection;
 using CinemaManagement.UI.ExceptionHandling;
 using CinemaManagement.UI.Forms.Auth;
+using CinemaManagement.DAL.Context;
+using CinemaManagement.DAL.DependencyInjection;
+using CinemaManagement.DAL.Seed;
+using CinemaManagement.UI.ExceptionHandling;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -35,7 +40,12 @@ namespace CinemaManagement.UI
             try
             {
                 Log.Information("Ứng dụng khởi động");
-
+                using (var scope = Services.CreateScope())
+                {
+                    var context = scope.ServiceProvider.GetRequiredService<CinemaDbContext>();
+                    context.Database.Migrate();
+                    DbSeeder.SeedAsync(context).GetAwaiter().GetResult();
+                }
                 ApplicationConfiguration.Initialize();
                 Application.Run(new LoginForm());
             }
