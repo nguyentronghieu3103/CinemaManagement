@@ -12,7 +12,9 @@ namespace CinemaManagement.Common.Entities
 
         public UserStatus TrangThaiTaiKhoan { get; set; } = UserStatus.Active;
         public int SoLanSaiMatKhau { get; set; } = 0;
+        public DateTime? LanSaiCuoiCung { get; set; }
         public DateTime? ThoiGianKhoaDenLuc { get; set; }
+        public int SoLanBiKhoa { get; set; } = 0;
         public DateTime NgayTao { get; set; } = DateTime.Now;
     }
 }
