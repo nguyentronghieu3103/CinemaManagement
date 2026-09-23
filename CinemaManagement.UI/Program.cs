@@ -1,3 +1,6 @@
+using CinemaManagement.DAL.DependencyInjection;
+using CinemaManagement.UI.ExceptionHandling;
+using CinemaManagement.UI.Forms.Auth;
 using CinemaManagement.DAL.Context;
 using CinemaManagement.DAL.DependencyInjection;
 using CinemaManagement.DAL.Seed;
@@ -6,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using CinemaManagement.BLL.DependencyInjection;
 
 namespace CinemaManagement.UI
 {
@@ -16,6 +20,7 @@ namespace CinemaManagement.UI
         [STAThread]
         static void Main()
         {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             // Đọc appsettings.json
             Configuration = new ConfigurationBuilder()
                 .SetBasePath(AppContext.BaseDirectory)
@@ -27,11 +32,11 @@ namespace CinemaManagement.UI
                 .ReadFrom.Configuration(Configuration)
                 .Enrich.FromLogContext()
                 .CreateLogger();
-
-            GlobalExceptionHandler.Initialize();
             var services = new ServiceCollection();
-            services.AddDalServices(Configuration);   
+            services.AddDalServices(Configuration);
+            services.AddBllServices();
             Services = services.BuildServiceProvider();
+            GlobalExceptionHandler.Initialize();
             try
             {
                 Log.Information("Ứng dụng khởi động");
@@ -42,7 +47,7 @@ namespace CinemaManagement.UI
                     DbSeeder.SeedAsync(context).GetAwaiter().GetResult();
                 }
                 ApplicationConfiguration.Initialize();
-                Application.Run(new Form1());   
+                Application.Run(new LoginForm());
             }
             catch (Exception ex)
             {

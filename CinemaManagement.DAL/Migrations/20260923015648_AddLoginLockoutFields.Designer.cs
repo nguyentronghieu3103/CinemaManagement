@@ -3,6 +3,7 @@ using System;
 using CinemaManagement.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CinemaManagement.DAL.Migrations
 {
     [DbContext(typeof(CinemaDbContext))]
-    partial class CinemaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260923015648_AddLoginLockoutFields")]
+    partial class AddLoginLockoutFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,7 +53,7 @@ namespace CinemaManagement.DAL.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("ThoiGian")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int?>("UserId")
                         .HasColumnType("integer");
@@ -165,7 +168,7 @@ namespace CinemaManagement.DAL.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("ThoiGianGui")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("TrangThai")
                         .HasColumnType("integer");
@@ -196,7 +199,7 @@ namespace CinemaManagement.DAL.Migrations
                         .HasColumnType("character varying(150)");
 
                     b.Property<DateTime>("NgayVaoLam")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("SDT")
                         .IsRequired()
@@ -250,7 +253,7 @@ namespace CinemaManagement.DAL.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("NgayLap")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("PhuongThuc")
                         .HasColumnType("integer");
@@ -316,7 +319,7 @@ namespace CinemaManagement.DAL.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("NgayKhoiChieu")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Poster")
                         .HasColumnType("text");
@@ -376,10 +379,10 @@ namespace CinemaManagement.DAL.Migrations
                         .HasColumnType("decimal(10,2)");
 
                     b.Property<DateTime?>("ThoiGianCapNhat")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("ThoiGianTao")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("TrangThai")
                         .HasColumnType("integer");
@@ -430,9 +433,6 @@ namespace CinemaManagement.DAL.Migrations
                         .HasColumnType("character varying(50)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("TenVaiTro")
-                        .IsUnique();
 
                     b.ToTable("VaiTro", (string)null);
                 });
@@ -489,7 +489,7 @@ namespace CinemaManagement.DAL.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("ThoiGianGiu")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("TrangThai")
                         .HasColumnType("integer");
@@ -525,7 +525,7 @@ namespace CinemaManagement.DAL.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("NgayChieu")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -561,7 +561,7 @@ namespace CinemaManagement.DAL.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("ThoiGianCheckIn")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("TrangThaiCheckIn")
                         .HasColumnType("integer");
@@ -602,7 +602,7 @@ namespace CinemaManagement.DAL.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("NgayTao")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("RoleId")
                         .HasColumnType("integer");
@@ -614,7 +614,7 @@ namespace CinemaManagement.DAL.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("ThoiGianKhoaDenLuc")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("TrangThaiTaiKhoan")
                         .HasColumnType("integer");

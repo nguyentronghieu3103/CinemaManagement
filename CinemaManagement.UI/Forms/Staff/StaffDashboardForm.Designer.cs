@@ -1,6 +1,6 @@
-﻿namespace CinemaManagement.UI
+﻿namespace CinemaManagement.UI.Forms.Staff
 {
-    partial class Form1
+    partial class StaffDashboardForm
     {
         /// <summary>
         /// Required designer variable.
@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Form1";
+            this.Text = "StaffDashboardForm";
         }
 
         #endregion

@@ -6,11 +6,11 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-namespace CinemaManagement.UI
+namespace CinemaManagement.UI.Forms.Admin
 {
-    public partial class Form1 : Form
+    public partial class AdminDashboardForm : Form
     {
-        public Form1()
+        public AdminDashboardForm()
         {
             InitializeComponent();
         }
