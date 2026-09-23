@@ -12,7 +12,9 @@ namespace CinemaManagement.DAL.Repositories
         public UserRepository(CinemaDbContext context) : base(context) { }
 
         public async Task<User?> GetByEmailAsync(string email)
-            => await _dbSet.Include(u => u.Role)   
+            => await _dbSet.Include(u => u.Role)
+                                .ThenInclude(r => r.RolePermissions)
+                                    .ThenInclude(rp => rp.Permission)
                             .FirstOrDefaultAsync(u => u.Email == email);
     }
 }

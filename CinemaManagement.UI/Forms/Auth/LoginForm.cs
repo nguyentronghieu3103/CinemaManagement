@@ -34,7 +34,16 @@ namespace CinemaManagement.UI.Forms.Auth
 
         private void btnTogglePassword_Click(object sender, EventArgs e)
         {
-
+            if (txtPassword.PasswordChar == '●')
+            {
+                txtPassword.PasswordChar = '\0';
+                btnTogglePassword.Text = "Ẩn";
+            }
+            else
+            {
+                txtPassword.PasswordChar = '●';
+                btnTogglePassword.Text = "Hiện";
+            }
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
@@ -46,7 +55,7 @@ namespace CinemaManagement.UI.Forms.Auth
         {
             if (!ValidateInput()) return;
 
-            btnLogin.Enabled = false;   
+            btnLogin.Enabled = false;
             lblStatus.Text = string.Empty;
 
             var authService = Program.Services.GetRequiredService<IAuthService>();
@@ -75,6 +84,7 @@ namespace CinemaManagement.UI.Forms.Auth
             {
                 "NhanVienBanVe" => new StaffDashboardForm(),
                 "QuanTriVien" => new AdminDashboardForm(),
+                "QuanLy" => new StaffDashboardForm(),
                 _ => throw new NotImplementedException($"Chưa có Dashboard cho vai trò: {roleName}")
             };
 
@@ -116,6 +126,11 @@ namespace CinemaManagement.UI.Forms.Auth
                 valid = false;
             }
             return valid;
+        }
+
+        private void LoginForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

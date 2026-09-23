@@ -97,9 +97,9 @@
             lblStatus.ForeColor = Color.Red;
             lblStatus.Location = new Point(20, 209);
             lblStatus.Name = "lblStatus";
-            lblStatus.Size = new Size(50, 20);
+            lblStatus.Size = new Size(26, 20);
             lblStatus.TabIndex = 8;
-            lblStatus.Text = "label1";
+            lblStatus.Text = "lỗi";
             // 
             // lnkForgotPassword
             // 
@@ -134,7 +134,7 @@
             btnTogglePassword.FlatStyle = FlatStyle.Flat;
             btnTogglePassword.Font = new Font("Segoe UI", 5F);
             btnTogglePassword.ForeColor = Color.DimGray;
-            btnTogglePassword.Location = new Point(229, 188);
+            btnTogglePassword.Location = new Point(238, 188);
             btnTogglePassword.Name = "btnTogglePassword";
             btnTogglePassword.Size = new Size(36, 14);
             btnTogglePassword.TabIndex = 5;
@@ -148,7 +148,7 @@
             txtPassword.BorderStyle = BorderStyle.FixedSingle;
             txtPassword.Location = new Point(22, 181);
             txtPassword.Name = "txtPassword";
-            txtPassword.PasswordChar = '*';
+            txtPassword.PasswordChar = '●';
             txtPassword.Size = new Size(252, 27);
             txtPassword.TabIndex = 4;
             // 
@@ -210,6 +210,7 @@
             Name = "LoginForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "LoginForm";
+            Load += LoginForm_Load;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();

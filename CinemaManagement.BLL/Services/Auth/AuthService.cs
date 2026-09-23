@@ -60,7 +60,8 @@ namespace CinemaManagement.BLL.Services.Auth
                 UserId = user.Id,
                 Email = user.Email,
                 RoleId = user.RoleId,
-                RoleName = user.Role.TenVaiTro
+                RoleName = user.Role.TenVaiTro,
+                Permissions = user.Role.RolePermissions.Select(rp => rp.Permission.MaQuyen).ToList()
             };
             return Result<LoginResultDto>.Success(dto);
         }
