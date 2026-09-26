@@ -1,6 +1,5 @@
 ﻿using CinemaManagement.BLL.Services.Auth;
-using CinemaManagement.Common.Constants;
-using CinemaManagement.UI.Helpers;
+using CinemaManagement.BLL.Services.Dashboard;
 using CinemaManagement.UI.Session;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -8,51 +7,123 @@ namespace CinemaManagement.UI.Forms.Staff
 {
     public partial class StaffDashboardForm : Form
     {
+        private System.Windows.Forms.Timer _clockTimer = null!;
         public StaffDashboardForm()
         {
             InitializeComponent();
-            BuildMenu();
+            SetupClock();
+            WireEvents();
+            lblWelcome.Text = $"Xin chào, {UserSession.HoTen}";
+            btnUserMenu.Text = $"{UserSession.HoTen} ▾";
         }
 
-        private void BuildMenu()
+        private async void StaffDashboardForm_Load(object sender, EventArgs e)
         {
-            var lblWelcome = new Label
+            await LoadDashboardAsync();
+        }
+        private void SetupClock()
+        {
+            UpdateClock();
+            _clockTimer = new System.Windows.Forms.Timer { Interval = 1000 };
+            _clockTimer.Tick += (s, e) => UpdateClock();
+            _clockTimer.Start();
+        }
+        private void UpdateClock()
+        {
+            var culture = new System.Globalization.CultureInfo("vi-VN");
+            lblDateTime.Text = DateTime.Now.ToString("dddd, dd/MM/yyyy • HH:mm", culture);
+        }
+        private async Task LoadDashboardAsync()
+        {
+            var dashboardService = Program.Services.GetRequiredService<IDashboardService>();
+            var data = await dashboardService.GetStaffDashboardAsync();
+
+            lblVeDaBanValue.Text = data.VeDaBanHomNay.ToString();
+            lblSuatHomNayValue.Text = data.SoSuatChieuHomNay.ToString();
+            lblCheckInValue.Text = data.SoLuotCheckInHomNay.ToString();
+            lblDoanhThuValue.Text = data.DoanhThuHomNay.ToString("N0") + " đ";
+
+            dgvUpcoming.Rows.Clear();
+            dgvUpcoming.Columns.Clear();
+            dgvUpcoming.Columns.Add("Gio", "Giờ");
+            dgvUpcoming.Columns.Add("Phim", "Phim");
+            dgvUpcoming.Columns.Add("Phong", "Phòng");
+            dgvUpcoming.Columns.Add("DaBan", "Đã bán");
+            dgvUpcoming.Columns.Add("TrangThai", "Trạng thái");
+
+            foreach (var s in data.SuatChieuSapDienRa)
             {
-                Text = $"Xin chào, {UserSession.Email} ({UserSession.RoleName})",
-                AutoSize = true,
-                Top = 20,
-                Left = 20
-            };
-            Controls.Add(lblWelcome);
+                int rowIndex = dgvUpcoming.Rows.Add(
+                    s.GioBatDau.ToString(@"hh\:mm"),
+                    s.TenPhim,
+                    s.TenPhong,
+                    $"{s.DaBan}/{s.TongGhe}",
+                    s.TrangThai
+                );
 
-            int top = 60;
+                // Tô màu badge trạng thái — Gần đầy/Đã đầy nổi bật màu đỏ
+                var cell = dgvUpcoming.Rows[rowIndex].Cells["TrangThai"];
+                cell.Style.ForeColor = s.TrangThai switch
+                {
+                    "Gần đầy" or "Đã đầy" => Theme.AppColors.StatusRed,
+                    _ => Theme.AppColors.StatusOrange
+                };
+                cell.Style.Font = new Font(dgvUpcoming.Font, FontStyle.Bold);
+            }
+        }
+        private void WireEvents()
+        {
+            btnNavHome.Click += (s, e) => { /* đã ở Trang chủ, không cần làm gì */ };
+            btnNavBooking.Click += (s, e) => OpenTicketBooking();
+            btnBanVe.Click += (s, e) => OpenTicketBooking();
 
-            // Mỗi nút chỉ thêm vào menu NẾU user có đúng quyền — đây là phần "ẩn menu"
-            if (PermissionGuard.HasPermission(PermissionConstants.TICKET_SELL))
-                Controls.Add(CreateMenuButton("Bán vé", top += 40));
+            btnNavCheckIn.Click += (s, e) => OpenCheckIn();
+            btnCheckIn.Click += (s, e) => OpenCheckIn();
 
-            if (PermissionGuard.HasPermission(PermissionConstants.CHECKIN))
-                Controls.Add(CreateMenuButton("Check-in vé", top += 40));
+            btnNavLookup.Click += (s, e) => OpenLookup();
+            btnTraCuu.Click += (s, e) => OpenLookup();
 
-            if (PermissionGuard.HasPermission(PermissionConstants.CUSTOMER_CREATE))
-                Controls.Add(CreateMenuButton("Tra cứu khách hàng", top += 40));
+            btnUserMenu.Click += (s, e) => ShowUserMenu();
+        }
+        private void OpenTicketBooking()
+            => MessageBox.Show("Module Bán vé (M5) chưa được code — sẽ mở TicketBookingForm khi hoàn thành.", "Thông báo");
 
-            var btnLogout = new Button { Text = "Đăng xuất", Top = top += 60, Left = 20 };
-            btnLogout.Click += async (s, e) =>
-            {
-                var authService = Program.Services.GetRequiredService<IAuthService>();
-                await authService.LogoutAsync(UserSession.UserId);
-                UserSession.SignOut();
-                new Auth.LoginForm().Show();
-                this.Close();
-            };
-            Controls.Add(btnLogout);
-            var btnTest = new Button { Text = "[TEST] Mở Form cần quyền Quản lý phim", Top = top + 60, Left = 20, Width = 300 };
-            btnTest.Click += (s, e) => new TestGuardForm().Show();
-            Controls.Add(btnTest);
+        private void OpenCheckIn()
+            => MessageBox.Show("Module Check-in (M7) chưa được code — sẽ mở CheckInForm khi hoàn thành.", "Thông báo");
+
+        private void OpenLookup()
+            => MessageBox.Show("Module Tra cứu vé chưa được code — sẽ mở TicketLookupForm khi hoàn thành.", "Thông báo");
+
+        private void ShowUserMenu()
+        {
+            var menu = new ContextMenuStrip();
+            menu.Items.Add("Đổi mật khẩu", null, (s, e) => MessageBox.Show("Chưa code — module M15/Shared."));
+            menu.Items.Add("Đăng xuất", null, async (s, e) => await LogoutAsync());
+            menu.Show(btnUserMenu, new Point(0, btnUserMenu.Height));
         }
 
-        private Button CreateMenuButton(string text, int top)
-            => new Button { Text = text, Top = top, Left = 20, Width = 200 };
+        private async Task LogoutAsync()
+        {
+            var authService = Program.Services.GetRequiredService<IAuthService>();
+            await authService.LogoutAsync(UserSession.UserId);
+            UserSession.SignOut();
+            _clockTimer.Stop();
+            new Auth.LoginForm().Show();
+            this.Close();
+        }
+        private void btnNavHome_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnNavBooking_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblVeDaBanValue_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

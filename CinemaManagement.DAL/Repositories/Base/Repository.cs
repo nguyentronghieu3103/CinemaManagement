@@ -10,7 +10,7 @@ namespace CinemaManagement.DAL.Repositories.Base
     {
         protected readonly CinemaDbContext _context;
         protected readonly DbSet<T> _dbSet;
-
+        public IQueryable<T> Query() => _dbSet.AsQueryable();
         public Repository(CinemaDbContext context)
         {
             _context = context;

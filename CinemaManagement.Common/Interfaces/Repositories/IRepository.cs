@@ -11,5 +11,6 @@ namespace CinemaManagement.Common.Interfaces.Repositories
         void Update(T entity);
         void Remove(T entity);
         Task<bool> ExistsAsync(Expression<Func<T, bool>> predicate);
+        IQueryable<T> Query();
     }
 }
