@@ -6,6 +6,7 @@ namespace CinemaManagement.UI.Session
     {
         public static int UserId { get; private set; }
         public static string Email { get; private set; } = string.Empty;
+        public static string HoTen { get; private set; } = string.Empty;
         public static int RoleId { get; private set; }
         public static string RoleName { get; private set; } = string.Empty;
         public static List<string> Permissions { get; private set; } = new();
@@ -15,6 +16,7 @@ namespace CinemaManagement.UI.Session
         {
             UserId = dto.UserId;
             Email = dto.Email;
+            HoTen = dto.HoTen;
             RoleId = dto.RoleId;
             RoleName = dto.RoleName;
             Permissions = dto.Permissions;

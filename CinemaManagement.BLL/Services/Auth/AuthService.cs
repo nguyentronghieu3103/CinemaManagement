@@ -54,11 +54,13 @@ namespace CinemaManagement.BLL.Services.Auth
             await _unitOfWork.SaveChangesAsync();
 
             await LogAuditAsync(user.Id, AuditAction.Login, "Đăng nhập thành công");
-
+            var matchedEmployees = await _unitOfWork.Employees.FindAsync(emp => emp.UserId == user.Id);
+            var employee = matchedEmployees.FirstOrDefault();
             var dto = new LoginResultDto
             {
                 UserId = user.Id,
                 Email = user.Email,
+                HoTen = employee?.HoTen ?? user.Email,
                 RoleId = user.RoleId,
                 RoleName = user.Role.TenVaiTro,
                 Permissions = user.Role.RolePermissions.Select(rp => rp.Permission.MaQuyen).ToList()

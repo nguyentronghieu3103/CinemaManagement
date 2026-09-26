@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using CinemaManagement.BLL.DependencyInjection;
+using CinemaManagement.UI.Forms.Staff;
 
 namespace CinemaManagement.UI
 {
