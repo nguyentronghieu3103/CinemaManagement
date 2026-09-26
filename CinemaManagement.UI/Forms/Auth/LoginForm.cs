@@ -37,12 +37,12 @@ namespace CinemaManagement.UI.Forms.Auth
             if (txtPassword.PasswordChar == '●')
             {
                 txtPassword.PasswordChar = '\0';
-                btnTogglePassword.Text = "Ẩn";
+                btnTogglePassword.Text = "👁️‍🗨️";
             }
             else
             {
                 txtPassword.PasswordChar = '●';
-                btnTogglePassword.Text = "Hiện";
+                btnTogglePassword.Text = "👁️";
             }
         }
 
@@ -129,6 +129,11 @@ namespace CinemaManagement.UI.Forms.Auth
         }
 
         private void LoginForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblStatus_Click(object sender, EventArgs e)
         {
 
         }
