@@ -247,9 +247,8 @@
             lblDateTime.AutoSize = true;
             lblDateTime.Location = new Point(1101, 30);
             lblDateTime.Name = "lblDateTime";
-            lblDateTime.Size = new Size(65, 28);
+            lblDateTime.Size = new Size(0, 28);
             lblDateTime.TabIndex = 4;
-            lblDateTime.Text = "label1";
             // 
             // lblWelcome
             // 
