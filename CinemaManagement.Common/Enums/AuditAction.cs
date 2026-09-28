@@ -9,6 +9,7 @@
         Update = 5,
         Delete = 6,
         PermissionChange = 7,
-        ConfigChange = 8
+        ConfigChange = 8,
+        CheckIn = 9
     }
 }
