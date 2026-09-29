@@ -343,7 +343,7 @@
             lblCaptionDoanhThu.Name = "lblCaptionDoanhThu";
             lblCaptionDoanhThu.Size = new Size(226, 28);
             lblCaptionDoanhThu.TabIndex = 4;
-            lblCaptionDoanhThu.Text = "DOANH THU HOM NAY ";
+            lblCaptionDoanhThu.Text = "DOANH THU HÔM NAY ";
             // 
             // cardCheckIn
             // 
@@ -405,9 +405,9 @@
             lblCaptionSuatHomNay.ForeColor = Color.DimGray;
             lblCaptionSuatHomNay.Location = new Point(20, 13);
             lblCaptionSuatHomNay.Name = "lblCaptionSuatHomNay";
-            lblCaptionSuatHomNay.Size = new Size(159, 28);
+            lblCaptionSuatHomNay.Size = new Size(160, 28);
             lblCaptionSuatHomNay.TabIndex = 4;
-            lblCaptionSuatHomNay.Text = "SUÁT HÔM NAY ";
+            lblCaptionSuatHomNay.Text = "SUẤT HÔM NAY ";
             // 
             // panel1
             // 
@@ -570,7 +570,6 @@
 
         private Panel pnlHeader;
         private Label lblLogo;
-        private Button button1;
         private Button btnNavHome;
         private Button btnNavLookup;
         private Button btnNavCheckIn;
@@ -608,7 +607,5 @@
         private Button btnCheckIn;
         private Label lblDateTime;
         private PictureBox pictureBox1;
-        private Button button3;
-        private Button button4;
     }
 }

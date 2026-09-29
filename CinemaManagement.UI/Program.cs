@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using CinemaManagement.BLL.DependencyInjection;
 using CinemaManagement.UI.Forms.Staff;
+using CinemaManagement.BLL.Services.Tickets;
 
 namespace CinemaManagement.UI
 {
@@ -33,7 +34,8 @@ namespace CinemaManagement.UI
                 .CreateLogger();
             var services = new ServiceCollection();
             services.AddDalServices(Configuration);
-            services.AddBllServices();
+            services.AddBllServices(Configuration["Security:QrSecret"]
+                    ?? throw new InvalidOperationException("Thiếu Security:QrSecret trong appsettings.json")); 
             Services = services.BuildServiceProvider();
             GlobalExceptionHandler.Initialize();
             try
@@ -42,8 +44,9 @@ namespace CinemaManagement.UI
                 using (var scope = Services.CreateScope())
                 {
                     var context = scope.ServiceProvider.GetRequiredService<CinemaDbContext>();
+                    var codes = scope.ServiceProvider.GetRequiredService<ITicketCodeService>();
                     context.Database.Migrate();
-                    DbSeeder.SeedAsync(context).GetAwaiter().GetResult();
+                    DbSeeder.SeedAsync(context, codes.GenerateQrPayload).GetAwaiter().GetResult();
                 }
                 ApplicationConfiguration.Initialize();
                 Application.Run(new LoginForm());

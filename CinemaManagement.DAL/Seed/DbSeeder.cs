@@ -4,12 +4,12 @@ namespace CinemaManagement.DAL.Seed
 {
     public static class DbSeeder
     {
-        public static async Task SeedAsync(CinemaDbContext context)
+        public static async Task SeedAsync( CinemaDbContext context, Func<string>? qrPayloadFactory = null)
         {
             await RoleSeeder.SeedAsync(context);
             await PermissionSeeder.SeedAsync(context);
             await UserSeeder.SeedAsync(context);
-            await DemoDataSeeder.SeedAsync(context);
+            await DemoDataSeeder.SeedAsync(context, qrPayloadFactory);
         }
     }
 }
