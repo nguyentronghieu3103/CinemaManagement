@@ -2,6 +2,8 @@
 using CinemaManagement.BLL.Services.Dashboard;
 using CinemaManagement.UI.Session;
 using Microsoft.Extensions.DependencyInjection;
+using CinemaManagement.UI.Forms.Staff.CheckIn;
+using CinemaManagement.UI.Navigation;
 
 namespace CinemaManagement.UI.Forms.Staff
 {
@@ -74,25 +76,48 @@ namespace CinemaManagement.UI.Forms.Staff
         private void WireEvents()
         {
             btnNavHome.Click += (s, e) => { /* đã ở Trang chủ, không cần làm gì */ };
-            btnNavBooking.Click += (s, e) => OpenTicketBooking();
-            btnBanVe.Click += (s, e) => OpenTicketBooking();
+            btnNavBooking.Click += (s, e) => NavigateTo(StaffPage.Booking);
+            btnBanVe.Click += (s, e) => NavigateTo(StaffPage.Booking);
 
-            btnNavCheckIn.Click += (s, e) => OpenCheckIn();
-            btnCheckIn.Click += (s, e) => OpenCheckIn();
+            btnNavCheckIn.Click += (s, e) => NavigateTo(StaffPage.CheckIn);
+            btnCheckIn.Click += (s, e) => NavigateTo(StaffPage.CheckIn);
 
-            btnNavLookup.Click += (s, e) => OpenLookup();
-            btnTraCuu.Click += (s, e) => OpenLookup();
+            btnNavLookup.Click += (s, e) => NavigateTo(StaffPage.Lookup);
+            btnTraCuu.Click += (s, e) => NavigateTo(StaffPage.Lookup);
 
             btnUserMenu.Click += (s, e) => ShowUserMenu();
         }
-        private void OpenTicketBooking()
-            => MessageBox.Show("Module Bán vé (M5) chưa được code — sẽ mở TicketBookingForm khi hoàn thành.", "Thông báo");
+        private async void NavigateTo(StaffPage page)
+        {
+            Hide();
+            try
+            {
+                while (page is not (StaffPage.Home or StaffPage.SignOut))
+                {
+                    using var next = CreatePage(page);
+                    if (next is null)
+                    {
+                        MessageBox.Show("Chức năng này chưa được xây dựng.", "Thông báo");
+                        break;
+                    }
+                    next.ShowDialog();
+                    page = (next as IStaffPage)?.NextPage ?? StaffPage.Home;
+                }
+            }
+            finally
+            {
+                Show();     // nếu trang con ném lỗi (vd. không đủ quyền) thì Dashboard vẫn hiện lại
+            }
 
-        private void OpenCheckIn()
-            => MessageBox.Show("Module Check-in (M7) chưa được code — sẽ mở CheckInForm khi hoàn thành.", "Thông báo");
+            if (page == StaffPage.SignOut) await LogoutAsync();
+            else await LoadDashboardAsync();      // quay về thì làm mới số liệu
+        }
 
-        private void OpenLookup()
-            => MessageBox.Show("Module Tra cứu vé chưa được code — sẽ mở TicketLookupForm khi hoàn thành.", "Thông báo");
+        private static Form? CreatePage(StaffPage page) => page switch
+        {
+            StaffPage.CheckIn => new CheckInForm(),
+            _ => null              // Booking, Lookup: bổ sung khi code tới
+        };
 
         private void ShowUserMenu()
         {

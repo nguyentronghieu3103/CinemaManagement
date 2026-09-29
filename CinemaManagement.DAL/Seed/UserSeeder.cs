@@ -51,7 +51,7 @@ namespace CinemaManagement.DAL.Seed
             await context.SaveChangesAsync();
             await SeedDemoAccountAsync(context, "manager@cinemamanagement.local", "Manager@123", RoleSeeder.QuanLy, "Quản lý Demo");
             await SeedDemoAccountAsync(context, "cashier@cinemamanagement.local", "Cashier@123", RoleSeeder.NhanVienBanVe, "Thu Ngân Demo");
-            // User 1-1 Employee — admin cũng có hồ sơ nhân sự như mọi tài khoản khác
+            // User 1-1 Employee — admin cũng có hồ sơ nhân sự như mọi tài khoản khácCashier@123
             await context.NhanViens.AddAsync(new Employee
             {
                 UserId = admin.Id,
