@@ -24,6 +24,7 @@ namespace CinemaManagement.UI
             Configuration = new ConfigurationBuilder()
                 .SetBasePath(AppContext.BaseDirectory)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
                 .Build();
 
             // Cấu hình Serilog đọc section "Serilog" từ appsettings.json
@@ -46,7 +47,77 @@ namespace CinemaManagement.UI
                     DbSeeder.SeedAsync(context).GetAwaiter().GetResult();
                 }
                 ApplicationConfiguration.Initialize();
-                Application.Run(new LoginForm());
+                var pocForm = new Form
+                {
+                    Text = "POC LiveCharts2 & API Test - KAN-25",
+                    Width = 800,
+                    Height = 600,
+                    StartPosition = FormStartPosition.CenterScreen
+                };
+
+                // Panel chứa các nút test API
+                var panelTop = new Panel { Dock = DockStyle.Top, Height = 50 };
+                var btnTestGemini = new Button { Text = "Test Gemini AI", Width = 150, Left = 10, Top = 10 };
+                var btnTestSePay = new Button { Text = "Test SePay API", Width = 150, Left = 170, Top = 10 };
+                
+                btnTestGemini.Click += async (s, e) =>
+                {
+                    try
+                    {
+                        btnTestGemini.Text = "Đang xử lý...";
+                        btnTestGemini.Enabled = false;
+                        var geminiConfig = Configuration.GetSection("Gemini");
+                        var service = new CinemaManagement.Integrations.AI.GeminiService(
+                            geminiConfig["ApiKey"], geminiConfig["BaseUrl"], geminiConfig["Model"]);
+                        
+                        var result = await service.SendMessageAsync("Xin chào, bạn là ai? Trả lời ngắn gọn trong 1 câu.");
+                        MessageBox.Show("Gemini trả lời:\n" + result, "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Lỗi Gemini", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    finally
+                    {
+                        btnTestGemini.Text = "Test Gemini AI";
+                        btnTestGemini.Enabled = true;
+                    }
+                };
+
+                btnTestSePay.Click += async (s, e) =>
+                {
+                    try
+                    {
+                        btnTestSePay.Text = "Đang xử lý...";
+                        btnTestSePay.Enabled = false;
+                        var sepayConfig = Configuration.GetSection("Seepay");
+                        var service = new CinemaManagement.Integrations.Payment.SeepayService(
+                            sepayConfig["Endpoint"], sepayConfig["PartnerCode"], sepayConfig["AccessKey"], sepayConfig["SecretKey"]);
+                        
+                        var result = await service.TestConnectionAsync();
+                        MessageBox.Show("SePay kết nối thành công!\nDữ liệu trả về (cắt gọn):\n" + (result.Length > 200 ? result.Substring(0, 200) + "..." : result), "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Lỗi SePay", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    finally
+                    {
+                        btnTestSePay.Text = "Test SePay API";
+                        btnTestSePay.Enabled = true;
+                    }
+                };
+
+                panelTop.Controls.Add(btnTestGemini);
+                panelTop.Controls.Add(btnTestSePay);
+
+                var chart = new UserControls.Common.RevenueChartControl();
+                chart.Dock = DockStyle.Fill;
+                
+                pocForm.Controls.Add(chart);
+                pocForm.Controls.Add(panelTop);
+                Application.Run(pocForm);
+
             }
             catch (Exception ex)
             {
