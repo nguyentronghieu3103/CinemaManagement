@@ -3,6 +3,7 @@ using CinemaManagement.BLL.Services.Dashboard;
 using CinemaManagement.UI.Session;
 using Microsoft.Extensions.DependencyInjection;
 using CinemaManagement.UI.Forms.Staff.CheckIn;
+using CinemaManagement.UI.Forms.Staff.Booking;
 using CinemaManagement.UI.Navigation;
 
 namespace CinemaManagement.UI.Forms.Staff
@@ -115,8 +116,9 @@ namespace CinemaManagement.UI.Forms.Staff
 
         private static Form? CreatePage(StaffPage page) => page switch
         {
+            StaffPage.Booking => new BookingForm(),
             StaffPage.CheckIn => new CheckInForm(),
-            _ => null              // Booking, Lookup: bổ sung khi code tới
+            _ => null              // Lookup: bổ sung khi code tới
         };
 
         private void ShowUserMenu()
