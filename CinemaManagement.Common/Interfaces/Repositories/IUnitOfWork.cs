@@ -1,4 +1,5 @@
-﻿using CinemaManagement.Common.Entities;
+﻿using CinemaApp.Common.Entities;
+using CinemaManagement.Common.Entities;
 
 namespace CinemaManagement.Common.Interfaces.Repositories
 {
@@ -18,6 +19,9 @@ namespace CinemaManagement.Common.Interfaces.Repositories
         IRepository<Invoice> Invoices { get; }
 
         IRepository<Ticket> Tickets { get; }
+        IRepository<Payment> Payments { get; }
+        IRepository<SeatShowtimeStatus> SeatShowtimeStatuses { get; }
+        IRepository<SeatTypeSurcharge> SeatTypeSurcharges { get; }
 
         IRepository<EmailLog> EmailLogs { get; }
         IRepository<AuditLog> AuditLogs { get; }

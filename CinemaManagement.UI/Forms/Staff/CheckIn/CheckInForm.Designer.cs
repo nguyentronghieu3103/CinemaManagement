@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             pnlCenter = new Panel();
-            pnlLast = new Panel();
+            pnlLast = new CinemaManagement.UI.Theme.CardPanel { ShowShadow = false, Radius = 12 };
             lblLast = new Label();
-            pnlCard = new Panel();
+            pnlCard = new CinemaManagement.UI.Theme.CardPanel();
             lblMessage = new Label();
-            btnLookup = new Button();
+            btnLookup = new CinemaManagement.UI.Theme.PillButton();
             txtCode = new TextBox();
             lblManualCaption = new Label();
             pnlScanZone = new Panel();
@@ -53,7 +53,8 @@
             pnlCenter.Controls.Add(lblPageSubtitle);
             pnlCenter.Controls.Add(lblPageTitle);
             pnlCenter.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
-            pnlCenter.ForeColor = SystemColors.ControlText;
+            pnlCenter.BackColor = Color.Transparent;
+            pnlCenter.ForeColor = CinemaManagement.UI.Theme.AppColors.TextPrimary;
             pnlCenter.Location = new Point(218, 57);
             pnlCenter.Name = "pnlCenter";
             pnlCenter.Size = new Size(520, 560);
@@ -61,8 +62,7 @@
             // 
             // pnlLast
             // 
-            pnlLast.BackColor = Color.White;
-            pnlLast.BorderStyle = BorderStyle.FixedSingle;
+            pnlLast.BackColor = CinemaManagement.UI.Theme.AppColors.CardBackground;
             pnlLast.Controls.Add(lblLast);
             pnlLast.Location = new Point(0, 495);
             pnlLast.Name = "pnlLast";
@@ -74,7 +74,7 @@
             lblLast.AutoSize = true;
             lblLast.Dock = DockStyle.Fill;
             lblLast.Font = new Font("Segoe UI", 12F);
-            lblLast.ForeColor = Color.FromArgb(141, 110, 99);
+            lblLast.ForeColor = CinemaManagement.UI.Theme.AppColors.TextMuted;
             lblLast.Location = new Point(0, 0);
             lblLast.Name = "lblLast";
             lblLast.Size = new Size(274, 28);
@@ -84,8 +84,8 @@
             // 
             // pnlCard
             // 
-            pnlCard.BackColor = Color.White;
-            pnlCard.BorderStyle = BorderStyle.FixedSingle;
+            pnlCard.BackColor = CinemaManagement.UI.Theme.AppColors.CardBackground;
+            pnlCard.AccentColor = CinemaManagement.UI.Theme.AppColors.Primary;
             pnlCard.Controls.Add(lblMessage);
             pnlCard.Controls.Add(btnLookup);
             pnlCard.Controls.Add(txtCode);
@@ -99,7 +99,7 @@
             // 
             // lblMessage
             // 
-            lblMessage.ForeColor = Color.Red;
+            lblMessage.ForeColor = CinemaManagement.UI.Theme.AppColors.StatusRed;
             lblMessage.Location = new Point(40, 335);
             lblMessage.Name = "lblMessage";
             lblMessage.Size = new Size(440, 44);
@@ -107,7 +107,7 @@
             // 
             // btnLookup
             // 
-            btnLookup.BackColor = Color.FromArgb(232, 137, 47);
+            btnLookup.BackColor = CinemaManagement.UI.Theme.AppColors.Primary;
             btnLookup.FlatAppearance.BorderSize = 0;
             btnLookup.FlatStyle = FlatStyle.Flat;
             btnLookup.ForeColor = Color.White;
@@ -120,7 +120,8 @@
             // 
             // txtCode
             // 
-            txtCode.BackColor = Color.FromArgb(251, 233, 231);
+            txtCode.BackColor = CinemaManagement.UI.Theme.AppColors.InputBackground;
+            txtCode.ForeColor = CinemaManagement.UI.Theme.AppColors.TextPrimary;
             txtCode.CharacterCasing = CharacterCasing.Upper;
             txtCode.Location = new Point(40, 286);
             txtCode.MaxLength = 40;
@@ -133,7 +134,7 @@
             // 
             lblManualCaption.AutoSize = true;
             lblManualCaption.Font = new Font("Segoe UI", 10F);
-            lblManualCaption.ForeColor = Color.FromArgb(141, 110, 99);
+            lblManualCaption.ForeColor = CinemaManagement.UI.Theme.AppColors.TextMuted;
             lblManualCaption.Location = new Point(40, 262);
             lblManualCaption.Name = "lblManualCaption";
             lblManualCaption.Size = new Size(164, 23);
@@ -142,7 +143,7 @@
             // 
             // pnlScanZone
             // 
-            pnlScanZone.BackColor = Color.FromArgb(251, 233, 231);
+            pnlScanZone.BackColor = CinemaManagement.UI.Theme.AppColors.InputBackground;
             pnlScanZone.Controls.Add(lblScanHint);
             pnlScanZone.Location = new Point(40, 30);
             pnlScanZone.Name = "pnlScanZone";
@@ -152,6 +153,7 @@
             // lblScanHint
             // 
             lblScanHint.BackColor = Color.Transparent;
+            lblScanHint.ForeColor = CinemaManagement.UI.Theme.AppColors.TextSecondary;
             lblScanHint.Dock = DockStyle.Fill;
             lblScanHint.Location = new Point(0, 0);
             lblScanHint.Name = "lblScanHint";
@@ -163,7 +165,7 @@
             // lblPageSubtitle
             // 
             lblPageSubtitle.Font = new Font("Segoe UI", 12F);
-            lblPageSubtitle.ForeColor = Color.FromArgb(141, 110, 99);
+            lblPageSubtitle.ForeColor = CinemaManagement.UI.Theme.AppColors.TextSecondary;
             lblPageSubtitle.Location = new Point(0, 40);
             lblPageSubtitle.Name = "lblPageSubtitle";
             lblPageSubtitle.Size = new Size(520, 31);
@@ -203,14 +205,14 @@
         private Panel pnlCenter;
         private Label lblPageTitle;
         private Label lblPageSubtitle;
-        private Panel pnlCard;
+        private CinemaManagement.UI.Theme.CardPanel pnlCard;
         private Panel pnlScanZone;
         private Label lblScanHint;
         private Label lblManualCaption;
         private TextBox txtCode;
         private Label lblMessage;
-        private Button btnLookup;
-        private Panel pnlLast;
+        private CinemaManagement.UI.Theme.PillButton btnLookup;
+        private CinemaManagement.UI.Theme.CardPanel pnlLast;
         private Label lblLast;
     }
 }
