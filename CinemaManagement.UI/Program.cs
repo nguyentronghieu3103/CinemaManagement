@@ -53,7 +53,14 @@ namespace CinemaManagement.UI
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex, "Ứng dụng bị crash ngay lúc khởi động");
+                MessageBox.Show(
+                    ex.ToString(),
+                    "Lỗi khởi động",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+
+                throw;
             }
             finally
             {

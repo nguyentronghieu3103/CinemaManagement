@@ -8,15 +8,18 @@ namespace CinemaManagement.UI.Forms.Staff.CheckIn
         public CheckInResultForm(CheckInTicketDto ticket)
         {
             InitializeComponent();
-            BackColor = Color.White;
+            // viền mảnh quanh popup: nền form là màu viền, pnlRoot (Fill) chừa lại 1px
+            BackColor = AppColors.BorderStrong;
+            ForeColor = AppColors.TextPrimary;
+            Padding = new Padding(1);
 
             btnConfirm.DialogResult = DialogResult.OK;       // OK = nhân viên muốn check-in
             btnClose.DialogResult = DialogResult.Cancel;     // Esc cũng đóng popup
             CancelButton = btnClose;
             AcceptButton = ticket.CoTheCheckIn ? btnConfirm : btnClose;   // Enter = nút chính
 
-            StyleButton(btnConfirm, AppColors.HeaderBackground, Color.White);
-            StyleButton(btnClose, AppColors.InputBackground, AppColors.TextDark);
+            StyleButton(btnConfirm, AppColors.Primary, Color.White);
+            StyleButton(btnClose, AppColors.Surface2, AppColors.TextPrimary);
 
             Bind(ticket);
         }
@@ -43,10 +46,11 @@ namespace CinemaManagement.UI.Forms.Staff.CheckIn
                 btnConfirm.Visible = false;       // vé không hợp lệ thì không có nút xác nhận
             }
         }
-        private static void StyleButton(Button b, Color back, Color fore)
+        private static void StyleButton(PillButton b, Color back, Color fore)
         {
             b.FlatStyle = FlatStyle.Flat;
-            b.FlatAppearance.BorderSize = 0;
+            b.FlatAppearance.BorderSize = back == AppColors.Surface2 ? 1 : 0;
+            b.FlatAppearance.BorderColor = AppColors.BorderStrong;
             b.BackColor = back;
             b.ForeColor = fore;
             b.Cursor = Cursors.Hand;
