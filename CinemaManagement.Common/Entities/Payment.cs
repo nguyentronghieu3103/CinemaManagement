@@ -11,8 +11,9 @@ namespace CinemaManagement.Common.Entities
 
         public string? MaGiaoDichSeepay { get; set; }
         public decimal SoTien { get; set; }
-        public string? MaPhanHoi { get; set; }         // Seepay ResponseCode trả về
-        public string? NoiDungIPN { get; set; }         // lưu raw callback để tra soát khi có tranh chấp
+
+        public string? MaPhanHoi { get; set; }        
+        public string? NoiDungIPN { get; set; }        
         public TransactionStatus TrangThai { get; set; } = TransactionStatus.Pending;
         public DateTime ThoiGianTao { get; set; } = DateTime.Now;
         public DateTime? ThoiGianCapNhat { get; set; }
