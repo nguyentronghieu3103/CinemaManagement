@@ -42,16 +42,16 @@
             lblShowtime = new Label();
             lblSeat = new Label();
             lblSameInvoice = new Label();
-            btnConfirm = new Button();
-            btnClose = new Button();
+            btnConfirm = new CinemaManagement.UI.Theme.PillButton();
+            btnClose = new CinemaManagement.UI.Theme.PillButton();
             pnlRoot.SuspendLayout();
             tblInfo.SuspendLayout();
             SuspendLayout();
             // 
             // pnlRoot
             // 
-            pnlRoot.BackColor = Color.White;
-            pnlRoot.BorderStyle = BorderStyle.FixedSingle;
+            pnlRoot.BackColor = CinemaManagement.UI.Theme.AppColors.CardBackground;
+            pnlRoot.BorderStyle = BorderStyle.None;
             pnlRoot.Controls.Add(btnClose);
             pnlRoot.Controls.Add(btnConfirm);
             pnlRoot.Controls.Add(lblSameInvoice);
@@ -93,7 +93,7 @@
             lblMovieCaption.AutoSize = true;
             lblMovieCaption.Dock = DockStyle.Fill;
             lblMovieCaption.Font = new Font("Segoe UI", 8F);
-            lblMovieCaption.ForeColor = Color.FromArgb(141, 110, 99);
+            lblMovieCaption.ForeColor = CinemaManagement.UI.Theme.AppColors.TextMuted;
             lblMovieCaption.Location = new Point(3, 0);
             lblMovieCaption.Name = "lblMovieCaption";
             lblMovieCaption.Size = new Size(128, 44);
@@ -113,7 +113,7 @@
             // 
             // lblTicketCode
             // 
-            lblTicketCode.ForeColor = Color.FromArgb(141, 110, 99);
+            lblTicketCode.ForeColor = CinemaManagement.UI.Theme.AppColors.TextMuted;
             lblTicketCode.Location = new Point(290, 24);
             lblTicketCode.Name = "lblTicketCode";
             lblTicketCode.Size = new Size(145, 22);
@@ -136,7 +136,7 @@
             lblRoomCaption.AutoSize = true;
             lblRoomCaption.Dock = DockStyle.Fill;
             lblRoomCaption.Font = new Font("Segoe UI", 8F);
-            lblRoomCaption.ForeColor = Color.FromArgb(141, 110, 99);
+            lblRoomCaption.ForeColor = CinemaManagement.UI.Theme.AppColors.TextMuted;
             lblRoomCaption.Location = new Point(3, 44);
             lblRoomCaption.Name = "lblRoomCaption";
             lblRoomCaption.Size = new Size(128, 40);
@@ -149,7 +149,7 @@
             lblShowtimeCaption.AutoSize = true;
             lblShowtimeCaption.Dock = DockStyle.Fill;
             lblShowtimeCaption.Font = new Font("Segoe UI", 8F);
-            lblShowtimeCaption.ForeColor = Color.FromArgb(141, 110, 99);
+            lblShowtimeCaption.ForeColor = CinemaManagement.UI.Theme.AppColors.TextMuted;
             lblShowtimeCaption.Location = new Point(3, 84);
             lblShowtimeCaption.Name = "lblShowtimeCaption";
             lblShowtimeCaption.Size = new Size(128, 46);
@@ -162,7 +162,7 @@
             lblSeatCaption.AutoSize = true;
             lblSeatCaption.Dock = DockStyle.Fill;
             lblSeatCaption.Font = new Font("Segoe UI", 8F);
-            lblSeatCaption.ForeColor = Color.FromArgb(141, 110, 99);
+            lblSeatCaption.ForeColor = CinemaManagement.UI.Theme.AppColors.TextMuted;
             lblSeatCaption.Location = new Point(3, 130);
             lblSeatCaption.Name = "lblSeatCaption";
             lblSeatCaption.Size = new Size(128, 40);
@@ -220,7 +220,7 @@
             // 
             // lblSameInvoice
             // 
-            lblSameInvoice.ForeColor = Color.FromArgb(141, 110, 99);
+            lblSameInvoice.ForeColor = CinemaManagement.UI.Theme.AppColors.TextMuted;
             lblSameInvoice.Location = new Point(25, 320);
             lblSameInvoice.Name = "lblSameInvoice";
             lblSameInvoice.Size = new Size(410, 22);
@@ -279,7 +279,7 @@
         private Label lblRoom;
         private Label lblShowtime;
         private Label lblSeat;
-        private Button btnConfirm;
-        private Button btnClose;
+        private CinemaManagement.UI.Theme.PillButton btnConfirm;
+        private CinemaManagement.UI.Theme.PillButton btnClose;
     }
 }

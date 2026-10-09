@@ -10,7 +10,7 @@ namespace CinemaApp.DAL.Context
         {
             var optionsBuilder = new DbContextOptionsBuilder<CinemaDbContext>();
             optionsBuilder.UseNpgsql(
-                "Host=localhost;Port=5432;Database=CinemaManagement;Username=postgres;Password=Hieu2006#");
+                "Host=localhost;Port=5432;Database=CinemaManagement;Username=postgres;Password=123456");
             return new CinemaDbContext(optionsBuilder.Options);
         }
     }

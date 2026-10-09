@@ -15,6 +15,7 @@ namespace CinemaManagement.UI.Forms.Staff.CheckIn
     {
         private readonly StaffHeaderControl _header = new() { ActivePage = StaffPage.CheckIn };
         private bool _busy;
+        private readonly CinemaBackdropPanel _stage = new() { Dock = DockStyle.Fill };    // nền glow điện ảnh
 
         public StaffPage NextPage { get; private set; } = StaffPage.Home;
 
@@ -25,7 +26,9 @@ namespace CinemaManagement.UI.Forms.Staff.CheckIn
 
             InitializeComponent();
             BackColor = AppColors.PageBackground;
-            pnlCenter.BackColor = AppColors.PageBackground;
+            pnlCenter.BackColor = Color.Transparent;
+            _stage.Controls.Add(pnlCenter);       // nội dung nằm trên nền glow
+            Controls.Add(_stage);
 
             _header.NavigateRequested += page => { NextPage = page; Close(); };
             _header.LogoutRequested += () => { NextPage = StaffPage.SignOut; Close(); };
@@ -109,8 +112,8 @@ namespace CinemaManagement.UI.Forms.Staff.CheckIn
 
         private void CenterContent()
         {
-            pnlCenter.Left = Math.Max(0, (ClientSize.Width - pnlCenter.Width) / 2);
-            pnlCenter.Top = _header.Height + 30;
+            pnlCenter.Left = Math.Max(0, (_stage.ClientSize.Width - pnlCenter.Width) / 2);
+            pnlCenter.Top = 30;                  // _stage nằm ngay dưới header nên không cần cộng chiều cao header
         }
 
         // Vẽ 4 góc khung quét bằng GDI+
