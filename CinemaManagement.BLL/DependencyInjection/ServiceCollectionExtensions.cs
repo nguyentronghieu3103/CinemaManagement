@@ -1,4 +1,4 @@
-﻿using CinemaManagement.BLL.Services.Auth;
+using CinemaManagement.BLL.Services.Auth;
 using CinemaManagement.BLL.Services.Dashboard;
 using CinemaManagement.BLL.Services.Tickets;
 using CinemaManagement.BLL.Services.Sales;
@@ -14,6 +14,7 @@ namespace CinemaManagement.BLL.DependencyInjection
             services.AddScoped<IDashboardService, DashboardService>();
             services.AddSingleton<ITicketCodeService>(new TicketCodeService(qrSecret));
             services.AddScoped<ICheckInService, CheckInService>();
+            services.AddScoped<ITicketService, TicketService>();
             services.AddScoped<ISaleCatalogService, SaleCatalogService>();
             services.AddScoped<ISeatHoldService, SeatHoldService>();
             services.AddScoped<ICartService, CartService>();

@@ -494,7 +494,8 @@ namespace CinemaManagement.UI.Forms.Staff
         {
             StaffPage.Booking => new BookingForm(),
             StaffPage.CheckIn => new CheckInForm(),
-            _ => null              // Lookup: bổ sung khi code tới
+            StaffPage.Lookup => new CinemaManagement.UI.Forms.Staff.Lookup.LookupForm(),
+            _ => null
         };
 
         private async Task LogoutAsync()
