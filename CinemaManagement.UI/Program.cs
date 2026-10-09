@@ -25,6 +25,7 @@ namespace CinemaManagement.UI
             Configuration = new ConfigurationBuilder()
                 .SetBasePath(AppContext.BaseDirectory)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
                 .Build();
 
             // Cấu hình Serilog đọc section "Serilog" từ appsettings.json
@@ -50,6 +51,7 @@ namespace CinemaManagement.UI
                 }
                 ApplicationConfiguration.Initialize();
                 Application.Run(new LoginForm());
+
             }
             catch (Exception ex)
             {
