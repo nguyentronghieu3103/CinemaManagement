@@ -2,6 +2,7 @@
 using CinemaManagement.UI.Forms.Admin;
 using CinemaManagement.UI.Forms.Staff;
 using CinemaManagement.UI.Session;
+using CinemaManagement.UI.Theme;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System;
@@ -19,7 +20,7 @@ namespace CinemaManagement.UI.Forms.Auth
     {
         public LoginForm()
         {
-            InitializeComponent();
+            BuildUi();
         }
 
         private void lblBadgeText_Click(object sender, EventArgs e)
@@ -66,7 +67,7 @@ namespace CinemaManagement.UI.Forms.Auth
             if (!result.IsSuccess)
             {
                 lblStatus.Text = result.ErrorMessage;
-                lblStatus.ForeColor = Color.Red;
+                lblStatus.ForeColor = AppColors.StatusRed;
                 txtPassword.Clear();
                 txtPassword.Focus();
                 return;
@@ -106,8 +107,8 @@ namespace CinemaManagement.UI.Forms.Auth
                        && txtPassword.Text.Any(char.IsDigit);
 
             txtPassword.BackColor = hopLe || txtPassword.Text.Length == 0
-                ? SystemColors.Window
-                : Color.MistyRose;
+                ? AppColors.InputBackground
+                : AppColors.DangerSoft;
         }
 
         private bool ValidateInput()

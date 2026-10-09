@@ -1,4 +1,5 @@
 ﻿
+using CinemaApp.Common.Entities;
 using CinemaManagement.Common.Entities;
 using CinemaManagement.Common.Interfaces.Repositories;
 using CinemaManagement.DAL.Context;
@@ -28,6 +29,8 @@ namespace CinemaManagement.DAL.UnitOfWork
         private IRepository<Invoice>? _invoices;
         private IRepository<Ticket>? _tickets;
         private IRepository<Payment>? _payments;
+        private IRepository<SeatShowtimeStatus>? _seatShowtimeStatuses;
+        private IRepository<SeatTypeSurcharge>? _seatTypeSurcharges;
         private IRepository<EmailLog>? _emailLogs;
         private IRepository<AuditLog>? _auditLogs;
         public UnitOfWork(CinemaDbContext context) => _context = context;
@@ -50,6 +53,8 @@ namespace CinemaManagement.DAL.UnitOfWork
 
         public IRepository<Ticket> Tickets => _tickets ??= new Repository<Ticket>(_context);
         public IRepository<Payment> Payments => _payments ??= new Repository<Payment>(_context);
+        public IRepository<SeatShowtimeStatus> SeatShowtimeStatuses => _seatShowtimeStatuses ??= new Repository<SeatShowtimeStatus>(_context);
+        public IRepository<SeatTypeSurcharge> SeatTypeSurcharges => _seatTypeSurcharges ??= new Repository<SeatTypeSurcharge>(_context);
 
         public IRepository<EmailLog> EmailLogs => _emailLogs ??= new Repository<EmailLog>(_context);
         public IRepository<AuditLog> AuditLogs => _auditLogs ??= new Repository<AuditLog>(_context);
