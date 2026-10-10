@@ -59,6 +59,7 @@ namespace CinemaManagement.UI.Forms.Staff.Lookup
                 if (result.IsSuccess && result.Data != null && result.Data.Count > 0)
                 {
                     _lblResultsTag.Text = $"{result.Data.Count} bản ghi khớp";
+                    _lblResultsTag.Visible = false;
                     foreach (var dto in result.Data)
                     {
                         var row = CreateResultRow(dto);
@@ -69,6 +70,7 @@ namespace CinemaManagement.UI.Forms.Staff.Lookup
                 else
                 {
                     _lblResultsTag.Text = "0 bản ghi khớp";
+                    _lblResultsTag.Visible = false;
                     _pnlResults.Visible = true;
                     var lblNoData = new Label { Text = "Không tìm thấy kết quả nào phù hợp.", ForeColor = AppColors.TextMuted, AutoSize = true, Margin = new Padding(20) };
                     _flpResultItems.Controls.Add(lblNoData);
@@ -85,7 +87,7 @@ namespace CinemaManagement.UI.Forms.Staff.Lookup
         {
             if (_selectedRow != null)
             {
-                _selectedRow.BorderColor = Color.FromArgb(230, 220, 220); // default border
+                _selectedRow.BorderColor = Color.FromArgb(220, 220, 220); // default border
                 _selectedRow.Refresh();
             }
 

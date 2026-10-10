@@ -82,7 +82,7 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
                     Width = 310,
                     Height = height,
                     Font = new Font("Segoe UI", strong ? 13F : 10F, FontStyle.Bold),
-                    ForeColor = strong ? AppColors.HeaderBackground : AppColors.TextDark,
+                    ForeColor = strong ? AppColors.Accent : AppColors.TextDark,
                     TextAlign = ContentAlignment.TopRight,
                     AutoEllipsis = true
                 });
@@ -136,12 +136,17 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
 
         private Panel CreateTicketCard(int index, IssuedTicketDto ticket)
         {
-            var card = new Panel { Width = 250, Height = 360, Margin = new Padding(10), BackColor = Color.White };
+            var card = new Panel { Width = 250, Height = 360, Margin = new Padding(10), BackColor = AppColors.CardBackground };
+            card.Paint += (s, e) =>
+            {
+                using var pen = new Pen(AppColors.Border, 1);
+                e.Graphics.DrawRectangle(pen, 0, 0, card.Width - 1, card.Height - 1);
+            };
 
             card.Controls.Add(new Label { Text = $"Vé {index}", Left = 12, Top = 8, AutoSize = true, Font = new Font("Segoe UI", 10F, FontStyle.Bold), ForeColor = AppColors.TextMuted });
-            card.Controls.Add(new Label { Text = ticket.MaVe, Left = 12, Top = 30, Width = 226, Height = 30, Font = new Font("Segoe UI", 16F, FontStyle.Bold), ForeColor = AppColors.HeaderBackground });
+            card.Controls.Add(new Label { Text = ticket.MaVe, Left = 12, Top = 30, Width = 226, Height = 30, Font = new Font("Segoe UI", 16F, FontStyle.Bold), ForeColor = AppColors.Accent });
             card.Controls.Add(new Label { Text = $"Ghế {ticket.ViTriGhe} ({ticket.LoaiGhe})", Left = 12, Top = 64, Width = 226, Height = 24, Font = new Font("Segoe UI", 11F, FontStyle.Bold), ForeColor = AppColors.TextDark });
-            card.Controls.Add(new Label { Text = $"Giá vé: {ticket.GiaVe:N0} đ", Left = 12, Top = 90, Width = 226, Height = 22, Font = new Font("Segoe UI", 10F), ForeColor = AppColors.TextDark });
+            card.Controls.Add(new Label { Text = $"Giá vé: {ticket.GiaVe:N0} đ", Left = 12, Top = 90, Width = 226, Height = 22, Font = new Font("Segoe UI", 10F), ForeColor = AppColors.TextSecondary });
 
             var pic = new PictureBox
             {
@@ -179,7 +184,7 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
             var pnl = new Panel { Dock = DockStyle.Bottom, Height = 88, BackColor = AppColors.InputBackground };
 
             var btnNew = MakeButton("BÁN ĐƠN MỚI", AppColors.Success, Color.White, 240);
-            var btnClose = MakeButton("Đóng", Color.White, AppColors.TextDark, 140);
+            var btnClose = MakeButton("Đóng", AppColors.Surface2, AppColors.TextDark, 140);
             btnNew.Click += (s, e) => NewSaleRequested?.Invoke();
             btnClose.Click += (s, e) => CloseRequested?.Invoke();
             pnl.Controls.Add(btnNew);
@@ -218,8 +223,8 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
                 FlatStyle = FlatStyle.Flat,
                 Cursor = Cursors.Hand
             };
-            b.FlatAppearance.BorderSize = back == Color.White ? 1 : 0;
-            b.FlatAppearance.BorderColor = AppColors.TextMuted;
+            b.FlatAppearance.BorderSize = back == AppColors.Surface2 ? 1 : 0;
+            b.FlatAppearance.BorderColor = AppColors.Border;
             return b;
         }
 

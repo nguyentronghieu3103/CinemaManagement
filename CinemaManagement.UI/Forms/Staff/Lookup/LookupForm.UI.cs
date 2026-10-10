@@ -157,7 +157,7 @@ namespace CinemaManagement.UI.Forms.Staff.Lookup
             
             // Dummy suggestions
             var suggestions = new AutoCompleteStringCollection();
-            suggestions.AddRange(new string[] { "VE000325", "0908 123 456", "HD-2026-9082", "VE000400", "0987654321" });
+            suggestions.AddRange(new string[] { "VE000001", "0901234567", "HD1", "VE000002", "0988888888", "HD2" });
             _txtSearch.AutoCompleteCustomSource = suggestions;
 
             _txtSearch.KeyDown += async (s, e) => { if (e.KeyCode == Keys.Enter) await PerformSearch(); };
@@ -191,7 +191,7 @@ namespace CinemaManagement.UI.Forms.Staff.Lookup
             _pnlSearchCard.Controls.Add(lblTips);
             
             int tipX = 130;
-            string[] tips = { "VE000325", "0908 123 456", "HD-2026-9082" };
+            string[] tips = { "VE000001", "0901234567", "HD1" };
             foreach (var t in tips)
             {
                 var btn = new PillButton
@@ -200,14 +200,14 @@ namespace CinemaManagement.UI.Forms.Staff.Lookup
                     GhostStyle = true,
                     NormalColor = Color.FromArgb(240, 240, 240),
                     ForeColor = AppColors.TextDark,
-                    Font = new Font("Segoe UI", 9F),
+                    Font = new Font("Segoe UI", 9F, FontStyle.Bold),
                     Location = new Point(tipX, 105),
-                    Size = new Size(100, 30),
+                    Size = new Size(110, 30),
                     Radius = 15
                 };
                 btn.Click += (s, e) => { _txtSearch.Text = t; _btnSearch.PerformClick(); };
                 _pnlSearchCard.Controls.Add(btn);
-                tipX += 110;
+                tipX += 120;
             }
         }
 
@@ -230,6 +230,7 @@ namespace CinemaManagement.UI.Forms.Staff.Lookup
             _lblResultsTag = new Label
             {
                 Text = "0 bản ghi khớp",
+                Visible = false, // Ẩn badge bản ghi khớp theo yêu cầu
                 BackColor = Color.FromArgb(250, 230, 210),
                 ForeColor = AppColors.Primary,
                 Font = new Font("Segoe UI", 9F, FontStyle.Bold),
@@ -251,10 +252,8 @@ namespace CinemaManagement.UI.Forms.Staff.Lookup
             
             pnlHeader.Resize += (s, e) => lblHint.Left = pnlHeader.Width - lblHint.Width;
 
-            _pnlResults.Controls.Add(pnlHeader);
-
-            // Columns Header
-            var pnlCols = new Panel { Dock = DockStyle.Top, Height = 40, BackColor = Color.FromArgb(250, 245, 245) };
+            // Columns Header: Nền trắng, Tiêu đề màu đỏ
+            var pnlCols = new Panel { Dock = DockStyle.Top, Height = 40, BackColor = Color.White };
             string[] cols = { "MÃ VÉ", "PHIM", "SUẤT CHIẾU", "GHẾ", "THANH TOÁN", "CHECK-IN" };
             int[] colX = { 20, 200, 400, 570, 700, 850 };
             
@@ -263,13 +262,12 @@ namespace CinemaManagement.UI.Forms.Staff.Lookup
                 pnlCols.Controls.Add(new Label
                 {
                     Text = cols[i],
-                    Font = new Font("Segoe UI", 9F, FontStyle.Bold),
-                    ForeColor = AppColors.TextMuted,
+                    Font = new Font("Segoe UI", 9.5F, FontStyle.Bold),
+                    ForeColor = AppColors.Primary, // Màu đỏ theo yêu cầu
                     AutoSize = true,
                     Location = new Point(colX[i], 12)
                 });
             }
-            _pnlResults.Controls.Add(pnlCols);
 
             _flpResultItems = new FlowLayoutPanel
             {
@@ -279,7 +277,14 @@ namespace CinemaManagement.UI.Forms.Staff.Lookup
                 WrapContents = false,
                 Padding = new Padding(0, 10, 0, 10)
             };
+
+            // Thứ tự Dock Top: pnlHeader trên cùng -> pnlCols tiếp theo -> _flpResultItems dưới cùng
             _pnlResults.Controls.Add(_flpResultItems);
+            _pnlResults.Controls.Add(pnlCols);
+            _pnlResults.Controls.Add(pnlHeader);
+            _flpResultItems.SendToBack();
+            pnlCols.BringToFront();
+            pnlHeader.BringToFront();
         }
 
         private void BuildDetailsSection()
@@ -300,8 +305,8 @@ namespace CinemaManagement.UI.Forms.Staff.Lookup
             pnlActions.Controls.Add(lblHighlight);
 
             var btnCancel = new PillButton { Text = "⊗ HỦY VÉ", NormalColor = Color.FromArgb(255, 220, 220), ForeColor = Color.Maroon, Location = new Point(pnlActions.Width - 120, 0), Size = new Size(100, 40), Anchor = AnchorStyles.Top | AnchorStyles.Right, Radius = 6 };
-            var btnPrint = new PillButton { Text = "🖨 IN LẠI", NormalColor = Color.FromArgb(160, 60, 60), ForeColor = Color.White, Location = new Point(pnlActions.Width - 230, 0), Size = new Size(100, 40), Anchor = AnchorStyles.Top | AnchorStyles.Right, Radius = 6 };
-            var btnView = new PillButton { Text = "👁 XEM CHI TIẾT", NormalColor = Color.White, ForeColor = AppColors.TextDark, Location = new Point(pnlActions.Width - 370, 0), Size = new Size(130, 40), Anchor = AnchorStyles.Top | AnchorStyles.Right, Radius = 6 };
+            var btnPrint = new PillButton { Text = "🖨 IN LẠI", NormalColor = AppColors.Primary, ForeColor = Color.White, Location = new Point(pnlActions.Width - 230, 0), Size = new Size(100, 40), Anchor = AnchorStyles.Top | AnchorStyles.Right, Radius = 6 };
+            var btnView = new PillButton { Text = "👁 XEM CHI TIẾT", NormalColor = Color.White, ForeColor = Color.Black, BorderColor = Color.FromArgb(200, 200, 200), Location = new Point(pnlActions.Width - 370, 0), Size = new Size(130, 40), Anchor = AnchorStyles.Top | AnchorStyles.Right, Radius = 6 };
             
             pnlActions.Controls.Add(btnCancel);
             pnlActions.Controls.Add(btnPrint);
@@ -309,10 +314,10 @@ namespace CinemaManagement.UI.Forms.Staff.Lookup
             
             _pnlDetails.Controls.Add(pnlActions);
 
-            var pnlDetailCard = new CardPanel { Dock = DockStyle.Top, AutoSize = true, Padding = new Padding(20), Margin = new Padding(0, 20, 0, 20) };
+            var pnlDetailCard = new CardPanel { Dock = DockStyle.Top, AutoSize = true, Padding = new Padding(20), Margin = new Padding(0, 20, 0, 20), FillColor = Color.White, BorderColor = Color.FromArgb(220, 220, 220) };
             
-            var lblTitle = new Label { Text = "🧾 THÔNG TIN CHI TIẾT VÉ ĐANG CHỌN", Font = new Font("Segoe UI", 12F, FontStyle.Bold), ForeColor = AppColors.TextDark, AutoSize = true, Location = new Point(20, 20) };
-            _lblBarcode = new Label { Text = "MÃ BARCODE: -", BackColor = Color.FromArgb(250, 240, 240), Font = new Font("Segoe UI", 9F), ForeColor = AppColors.TextDark, AutoSize = true, Location = new Point(pnlDetailCard.Width - 250, 20), Anchor = AnchorStyles.Top | AnchorStyles.Right, Padding = new Padding(5) };
+            var lblTitle = new Label { Text = "🧾 THÔNG TIN CHI TIẾT VÉ ĐANG CHỌN", Font = new Font("Segoe UI", 12F, FontStyle.Bold), ForeColor = AppColors.Primary, AutoSize = true, Location = new Point(20, 20) };
+            _lblBarcode = new Label { Text = "MÃ BARCODE: -", BackColor = Color.FromArgb(245, 245, 245), Font = new Font("Segoe UI", 9F, FontStyle.Bold), ForeColor = Color.Black, AutoSize = true, Location = new Point(pnlDetailCard.Width - 250, 20), Anchor = AnchorStyles.Top | AnchorStyles.Right, Padding = new Padding(5) };
             
             pnlDetailCard.Controls.Add(lblTitle);
             pnlDetailCard.Controls.Add(_lblBarcode);
@@ -339,7 +344,7 @@ namespace CinemaManagement.UI.Forms.Staff.Lookup
 
         private Panel CreateDetailBox(string title, out Label line1, out Label line2, out Label line3)
         {
-            var pnl = new Panel { Dock = DockStyle.Fill, Margin = new Padding(10), BackColor = Color.FromArgb(250, 245, 245), Height = 120 };
+            var pnl = new Panel { Dock = DockStyle.Fill, Margin = new Padding(10), BackColor = Color.White, Height = 120 };
             pnl.Paint += (s, e) =>
             {
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
@@ -347,12 +352,15 @@ namespace CinemaManagement.UI.Forms.Staff.Lookup
                 using var path = UiKit.RoundRect(r, 8);
                 using var brush = new SolidBrush(pnl.BackColor);
                 e.Graphics.FillPath(brush, path);
+                using var pen = new Pen(Color.FromArgb(220, 220, 220));
+                e.Graphics.DrawPath(pen, path);
             };
 
-            var lblTitle = new Label { Text = title, Font = new Font("Segoe UI", 8F, FontStyle.Bold), ForeColor = AppColors.TextMuted, AutoSize = true, Location = new Point(15, 15) };
-            line1 = new Label { Text = "-", Font = new Font("Segoe UI", 11F, FontStyle.Bold), ForeColor = AppColors.TextDark, AutoSize = true, Location = new Point(15, 40) };
-            line2 = new Label { Text = "-", Font = new Font("Segoe UI", 9F), ForeColor = AppColors.TextDark, AutoSize = true, Location = new Point(15, 65) };
-            line3 = new Label { Text = "-", Font = new Font("Segoe UI", 9F), ForeColor = AppColors.TextMuted, AutoSize = true, Location = new Point(15, 85) };
+            // Tiêu đề màu đỏ, nội dung màu đen và nền trắng
+            var lblTitle = new Label { Text = title, Font = new Font("Segoe UI", 9F, FontStyle.Bold), ForeColor = AppColors.Primary, AutoSize = true, Location = new Point(15, 15) };
+            line1 = new Label { Text = "-", Font = new Font("Segoe UI", 11F, FontStyle.Bold), ForeColor = Color.Black, AutoSize = true, Location = new Point(15, 40) };
+            line2 = new Label { Text = "-", Font = new Font("Segoe UI", 9F), ForeColor = Color.FromArgb(35, 35, 35), AutoSize = true, Location = new Point(15, 65) };
+            line3 = new Label { Text = "-", Font = new Font("Segoe UI", 9F), ForeColor = Color.FromArgb(75, 75, 75), AutoSize = true, Location = new Point(15, 85) };
             
             pnl.Controls.Add(lblTitle);
             pnl.Controls.Add(line1);
@@ -368,37 +376,39 @@ namespace CinemaManagement.UI.Forms.Staff.Lookup
             {
                 Size = new Size(_flpResultItems.Width - 20, 80),
                 Margin = new Padding(10, 5, 10, 5),
-                Cursor = Cursors.Hand
+                Cursor = Cursors.Hand,
+                FillColor = Color.White, // Nền trắng cho kết quả
+                BorderColor = Color.FromArgb(220, 220, 220)
             };
             
             row.Click += (s, e) => SelectRow(row, dto);
 
             int[] colX = { 20, 200, 400, 570, 700, 850 };
 
-            // Col 1: Mã vé
+            // Col 1: Mã vé (Đỏ + đen xám)
             row.Controls.Add(new Label { Text = "🎟 " + dto.RepresentativeTicketCode, Font = new Font("Segoe UI", 12F, FontStyle.Bold), ForeColor = AppColors.Primary, AutoSize = true, Location = new Point(colX[0], 20) });
-            row.Controls.Add(new Label { Text = "Mã HĐ: " + dto.InvoiceCode, Font = new Font("Segoe UI", 9F), ForeColor = AppColors.TextMuted, AutoSize = true, Location = new Point(colX[0], 45) });
+            row.Controls.Add(new Label { Text = "Mã HĐ: " + dto.InvoiceCode, Font = new Font("Segoe UI", 9F), ForeColor = Color.FromArgb(75, 75, 75), AutoSize = true, Location = new Point(colX[0], 45) });
 
-            // Col 2: Phim
-            row.Controls.Add(new Label { Text = dto.MovieName, Font = new Font("Segoe UI", 11F), ForeColor = AppColors.TextDark, AutoSize = true, Location = new Point(colX[1], 20) });
-            row.Controls.Add(new Label { Text = $"{dto.Genre} • {dto.Format}", Font = new Font("Segoe UI", 9F), ForeColor = AppColors.TextMuted, AutoSize = true, Location = new Point(colX[1], 45) });
+            // Col 2: Phim (Chữ màu đen + đen xám)
+            row.Controls.Add(new Label { Text = dto.MovieName, Font = new Font("Segoe UI", 11F, FontStyle.Bold), ForeColor = Color.Black, AutoSize = true, Location = new Point(colX[1], 20) });
+            row.Controls.Add(new Label { Text = $"{dto.Genre} • {dto.Format}", Font = new Font("Segoe UI", 9F), ForeColor = Color.FromArgb(75, 75, 75), AutoSize = true, Location = new Point(colX[1], 45) });
 
-            // Col 3: Suất chiếu
-            row.Controls.Add(new Label { Text = $"🕒 {dto.GioBatDau:hh\\:mm}", Font = new Font("Segoe UI", 11F), ForeColor = AppColors.TextDark, AutoSize = true, Location = new Point(colX[2], 20) });
-            row.Controls.Add(new Label { Text = $"{dto.NgayChieu:dd/MM/yyyy} • {dto.RoomName}", Font = new Font("Segoe UI", 9F), ForeColor = AppColors.TextMuted, AutoSize = true, Location = new Point(colX[2], 45) });
+            // Col 3: Suất chiếu (Chữ màu đen + đen xám)
+            row.Controls.Add(new Label { Text = $"🕒 {dto.GioBatDau:hh\\:mm}", Font = new Font("Segoe UI", 11F, FontStyle.Bold), ForeColor = Color.Black, AutoSize = true, Location = new Point(colX[2], 20) });
+            row.Controls.Add(new Label { Text = $"{dto.NgayChieu:dd/MM/yyyy} • {dto.RoomName}", Font = new Font("Segoe UI", 9F), ForeColor = Color.FromArgb(75, 75, 75), AutoSize = true, Location = new Point(colX[2], 45) });
 
-            // Col 4: Ghế
-            row.Controls.Add(new Label { Text = dto.Seats, Font = new Font("Segoe UI", 11F, FontStyle.Bold), ForeColor = Color.Maroon, AutoSize = true, Location = new Point(colX[3], 20) });
-            row.Controls.Add(new Label { Text = dto.SeatType, Font = new Font("Segoe UI", 9F), ForeColor = AppColors.TextMuted, AutoSize = true, Location = new Point(colX[3], 45) });
+            // Col 4: Ghế (Màu đỏ + đen xám)
+            row.Controls.Add(new Label { Text = dto.Seats, Font = new Font("Segoe UI", 11F, FontStyle.Bold), ForeColor = AppColors.Primary, AutoSize = true, Location = new Point(colX[3], 20) });
+            row.Controls.Add(new Label { Text = dto.SeatType, Font = new Font("Segoe UI", 9F), ForeColor = Color.FromArgb(75, 75, 75), AutoSize = true, Location = new Point(colX[3], 45) });
 
-            // Col 5: Thanh toán
-            row.Controls.Add(new Label { Text = $"✔ {dto.TrangThaiThanhToan}", Font = new Font("Segoe UI", 10F, FontStyle.Bold), ForeColor = dto.TrangThaiThanhToan == "ĐÃ TT" ? Color.Green : Color.Orange, AutoSize = true, Location = new Point(colX[4], 15) });
-            row.Controls.Add(new Label { Text = $"{dto.TongTien:N0}đ\n{dto.PhuongThucThanhToan}", Font = new Font("Segoe UI", 9F), ForeColor = AppColors.TextMuted, AutoSize = true, Location = new Point(colX[4], 35) });
+            // Col 5: Thanh toán (Chữ đen)
+            row.Controls.Add(new Label { Text = $"✔ {dto.TrangThaiThanhToan}", Font = new Font("Segoe UI", 10F, FontStyle.Bold), ForeColor = dto.TrangThaiThanhToan == "ĐÃ TT" ? AppColors.SuccessStrong : Color.FromArgb(200, 100, 0), AutoSize = true, Location = new Point(colX[4], 15) });
+            row.Controls.Add(new Label { Text = $"{dto.TongTien:N0}đ\n{dto.PhuongThucThanhToan}", Font = new Font("Segoe UI", 9F, FontStyle.Bold), ForeColor = Color.Black, AutoSize = true, Location = new Point(colX[4], 35) });
 
             // Col 6: Check-in
-            row.Controls.Add(new Label { Text = dto.TrangThaiCheckIn, Font = new Font("Segoe UI", 10F, FontStyle.Bold), ForeColor = Color.White, BackColor = dto.TrangThaiCheckIn == "ĐÃ CHECK-IN" ? Color.Maroon : Color.Gray, AutoSize = true, Location = new Point(colX[5], 20), Padding = new Padding(5) });
+            row.Controls.Add(new Label { Text = dto.TrangThaiCheckIn, Font = new Font("Segoe UI", 10F, FontStyle.Bold), ForeColor = Color.White, BackColor = dto.TrangThaiCheckIn == "ĐÃ CHECK-IN" ? AppColors.Primary : Color.Gray, AutoSize = true, Location = new Point(colX[5], 20), Padding = new Padding(5) });
             if (!string.IsNullOrEmpty(dto.CheckInTimeStr))
-                row.Controls.Add(new Label { Text = dto.CheckInTimeStr, Font = new Font("Segoe UI", 9F), ForeColor = AppColors.TextMuted, AutoSize = true, Location = new Point(colX[5], 50) });
+                row.Controls.Add(new Label { Text = dto.CheckInTimeStr, Font = new Font("Segoe UI", 9F), ForeColor = Color.FromArgb(75, 75, 75), AutoSize = true, Location = new Point(colX[5], 50) });
 
             // Assign click event to all children to bubble up
             foreach (Control c in row.Controls)

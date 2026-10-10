@@ -3,14 +3,15 @@ using CinemaManagement.BLL.Services.Dashboard;
 using CinemaManagement.Common.DTOs.Dashboard;
 using CinemaManagement.UI.Forms.Staff.Booking;
 using CinemaManagement.UI.Forms.Staff.CheckIn;
-using CinemaManagement.UI.Forms.Staff.Booking;
 using CinemaManagement.UI.Navigation;
 using CinemaManagement.UI.Session;
 using CinemaManagement.UI.Theme;
 using CinemaManagement.UI.UserControls.Common;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace CinemaManagement.UI.Forms.Staff
 {
@@ -21,14 +22,28 @@ namespace CinemaManagement.UI.Forms.Staff
         private GradientPanel _hero = null!;
         private Label _lblWelcome = null!, _lblSub = null!, _lblTime = null!, _lblDate = null!;
         private StatCard _cardVe = null!, _cardSuat = null!, _cardCheckIn = null!, _cardDoanhThu = null!;
-        private Label _lblUpdated = null!, _lblEmpty = null!;
-        private DataGridView _grid = null!;
+        private Label _lblUpdated = null!;
+        private CardPanel _cardShowtimes = null!;
+        private Panel _rowsPanel = null!;
+        private List<UpcomingShowtimeDto> _showtimes = new();
+        private int _showtimeScrollY;
+        private bool _isDraggingScroll;
+        private int _dragStartY, _dragStartScroll;
         private PillButton _btnBanVe = null!, _btnCheckIn = null!, _btnTraCuu = null!;
 
         private System.Windows.Forms.Timer _clockTimer = null!;
         private System.Windows.Forms.Timer _refreshTimer = null!;
         private bool _loading;
         private readonly CultureInfo _vi = new("vi-VN");
+
+        // Cache font để tránh cấp phát và huỷ liên tục trong sự kiện OnPaint
+        private static readonly Font FontHeader = new("Segoe UI", 9.5F, FontStyle.Bold);
+        private static readonly Font FontTime = new("Segoe UI", 12F, FontStyle.Bold);
+        private static readonly Font FontMovie = new("Segoe UI", 11F, FontStyle.Bold);
+        private static readonly Font FontRoom = new("Segoe UI", 10F);
+        private static readonly Font FontCount = new("Segoe UI", 10.5F, FontStyle.Bold);
+        private static readonly Font FontBadge = new("Segoe UI", 9.5F, FontStyle.Bold);
+        private static readonly Font FontEmpty = new("Segoe UI", 12F);
 
         public StaffDashboardForm()
         {
@@ -43,12 +58,12 @@ namespace CinemaManagement.UI.Forms.Staff
             SuspendLayout();
             Text = "Storyline Cinema — Trang chủ";
             StartPosition = FormStartPosition.CenterScreen;
-            // Cỡ cửa sổ mặc định, nhưng không bao giờ vượt quá vùng làm việc của màn hình (tránh tràn khi DPI 150%)
+            WindowState = FormWindowState.Maximized;
+
             var work = Screen.FromPoint(Cursor.Position).WorkingArea;
-            ClientSize = new Size(Math.Min(this.S(1280), work.Width - this.S(60)),
-                                  Math.Min(this.S(800), work.Height - this.S(100)));
-            MinimumSize = new Size(Math.Min(this.S(960), work.Width - this.S(60)),
-                                   Math.Min(this.S(660), work.Height - this.S(100)));
+            ClientSize = new Size(Math.Min(this.S(1366), work.Width - this.S(40)),
+                                  Math.Min(this.S(820), work.Height - this.S(60)));
+            MinimumSize = new Size(this.S(1024), this.S(680));
             BackColor = AppColors.PageBackground;
             Font = new Font("Segoe UI", 10F);
             DoubleBuffered = true;
@@ -56,8 +71,8 @@ namespace CinemaManagement.UI.Forms.Staff
             var body = new CinemaBackdropPanel
             {
                 Dock = DockStyle.Fill,
-                Animate = true,      // glow đỏ/xanh/tím trôi cực chậm (tắt toàn cục: UiKit.AnimateBackground = false)
-                Padding = new Padding(this.S(32), this.S(22), this.S(32), this.S(24))
+                Animate = false,     // Tắt hoạt ảnh nền để triệt tiêu hoàn toàn Timer 100ms gây giật
+                Padding = new Padding(this.S(28), this.S(14), this.S(28), this.S(14))
             };
 
             var table = new TableLayoutPanel
@@ -67,11 +82,12 @@ namespace CinemaManagement.UI.Forms.Staff
                 RowCount = 4,
                 BackColor = Color.Transparent
             };
+            UiKit.DoubleBuffer(table);
             table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            table.RowStyles.Add(new RowStyle(SizeType.Absolute, this.S(124) + this.S(18)));   // banner
-            table.RowStyles.Add(new RowStyle(SizeType.Absolute, this.S(118) + this.S(18)));   // 4 thẻ số liệu
-            table.RowStyles.Add(new RowStyle(SizeType.Percent, 100));                         // bảng suất chiếu
-            table.RowStyles.Add(new RowStyle(SizeType.Absolute, this.S(76) + this.S(8)));     // 3 nút nhanh
+            table.RowStyles.Add(new RowStyle(SizeType.Absolute, this.S(94) + this.S(10)));   // 1. Banner chào mừng
+            table.RowStyles.Add(new RowStyle(SizeType.Absolute, this.S(98) + this.S(10)));   // 2. 4 thẻ số liệu
+            table.RowStyles.Add(new RowStyle(SizeType.Percent, 100));                         // 3. Bảng suất chiếu (chiếm trọn không gian)
+            table.RowStyles.Add(new RowStyle(SizeType.Absolute, this.S(60) + this.S(6)));     // 4. 3 nút nhanh
 
             table.Controls.Add(BuildHero(), 0, 0);
             table.Controls.Add(BuildStats(), 0, 1);
@@ -90,8 +106,8 @@ namespace CinemaManagement.UI.Forms.Staff
             _hero = new GradientPanel
             {
                 Dock = DockStyle.Fill,
-                Margin = new Padding(0, 0, 0, this.S(18)),
-                Radius = 20
+                Margin = new Padding(0, 0, 0, this.S(10)),
+                Radius = 18
             };
 
             _lblWelcome = new Label
@@ -99,34 +115,34 @@ namespace CinemaManagement.UI.Forms.Staff
                 AutoSize = true,
                 BackColor = Color.Transparent,
                 ForeColor = AppColors.TextPrimary,
-                Font = new Font("Segoe UI", 21F, FontStyle.Bold),
-                Left = this.S(32),
-                Top = this.S(22)
+                Font = new Font("Segoe UI", 18F, FontStyle.Bold),
+                Left = this.S(28),
+                Top = this.S(16)
             };
             _lblSub = new Label
             {
                 AutoSize = true,
                 BackColor = Color.Transparent,
                 ForeColor = AppColors.TextSecondary,
-                Font = new Font("Segoe UI", 11.5F),
-                Left = this.S(34),
-                Top = this.S(70)
+                Font = new Font("Segoe UI", 10.5F),
+                Left = this.S(30),
+                Top = this.S(54)
             };
             _lblTime = new Label
             {
                 AutoSize = true,
                 BackColor = Color.Transparent,
                 ForeColor = AppColors.TextPrimary,
-                Font = new Font("Segoe UI", 28F, FontStyle.Bold),
-                Top = this.S(14)
+                Font = new Font("Segoe UI", 22F, FontStyle.Bold),
+                Top = this.S(12)
             };
             _lblDate = new Label
             {
                 AutoSize = true,
                 BackColor = Color.Transparent,
                 ForeColor = AppColors.TextSecondary,
-                Font = new Font("Segoe UI", 11F),
-                Top = this.S(74)
+                Font = new Font("Segoe UI", 10.5F),
+                Top = this.S(54)
             };
 
             _hero.Controls.AddRange(new Control[] { _lblWelcome, _lblSub, _lblTime, _lblDate });
@@ -142,8 +158,9 @@ namespace CinemaManagement.UI.Forms.Staff
                 ColumnCount = 4,
                 RowCount = 1,
                 BackColor = Color.Transparent,
-                Margin = new Padding(0)
+                Margin = new Padding(0, 0, 0, this.S(10))
             };
+            UiKit.DoubleBuffer(row);
             for (int i = 0; i < 4; i++) row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
             row.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
 
@@ -157,7 +174,6 @@ namespace CinemaManagement.UI.Forms.Staff
             row.Controls.Add(_cardSuat, 1, 0);
             row.Controls.Add(_cardCheckIn, 2, 0);
             row.Controls.Add(_cardDoanhThu, 3, 0);
-            row.Margin = new Padding(0, 0, 0, this.S(18));
             return row;
         }
 
@@ -168,7 +184,7 @@ namespace CinemaManagement.UI.Forms.Staff
             AccentColor = accent,
             IconBack = soft,
             Dock = DockStyle.Fill,
-            Margin = new Padding(0, 0, this.S(16), this.S(8))
+            Margin = new Padding(0, 0, this.S(12), 0)
         };
 
         private Control BuildShowtimeCard()
@@ -176,21 +192,37 @@ namespace CinemaManagement.UI.Forms.Staff
             var card = new CardPanel
             {
                 Dock = DockStyle.Fill,
-                Margin = new Padding(0, 0, 0, this.S(18)),
-                Padding = new Padding(this.S(20), this.S(16), this.S(25), this.S(25))
+                Margin = new Padding(0, 0, 0, this.S(10)),
+                Padding = new Padding(this.S(24), this.S(14), this.S(24), this.S(14))
             };
+            UiKit.DoubleBuffer(card);
 
-            // dòng tiêu đề của thẻ
-            var titleRow = new Panel { Dock = DockStyle.Top, Height = this.S(46), BackColor = Color.Transparent };
+            var cardTable = new TableLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                ColumnCount = 1,
+                RowCount = 3,
+                BackColor = Color.Transparent,
+                Margin = new Padding(0),
+                Padding = new Padding(0)
+            };
+            UiKit.DoubleBuffer(cardTable);
+            cardTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f));
+            cardTable.RowStyles.Add(new RowStyle(SizeType.Absolute, this.S(38))); // Hàng 0: Tiêu đề
+            cardTable.RowStyles.Add(new RowStyle(SizeType.Absolute, this.S(36))); // Hàng 1: Tiêu đề cột (Sticky Header riêng biệt)
+            cardTable.RowStyles.Add(new RowStyle(SizeType.Percent, 100f));        // Hàng 2: Vùng dữ liệu cuộn
+
+            // 1. Dòng tiêu đề thẻ
+            var titleRow = new Panel { Dock = DockStyle.Fill, BackColor = Color.Transparent, Margin = new Padding(0) };
             var lblTitle = new Label
             {
                 Text = "🎞  Suất chiếu sắp diễn ra",
                 AutoSize = true,
                 BackColor = Color.Transparent,
                 ForeColor = AppColors.TextDark,
-                Font = new Font("Segoe UI", 14F, FontStyle.Bold),
+                Font = new Font("Segoe UI", 13.5F, FontStyle.Bold),
                 Left = 0,
-                Top = this.S(4)
+                Top = this.S(2)
             };
             _lblUpdated = new Label
             {
@@ -198,47 +230,266 @@ namespace CinemaManagement.UI.Forms.Staff
                 BackColor = Color.Transparent,
                 ForeColor = AppColors.TextMuted,
                 Font = new Font("Segoe UI", 9.5F),
-                Top = this.S(10)
+                Top = this.S(6)
             };
             titleRow.Controls.Add(lblTitle);
             titleRow.Controls.Add(_lblUpdated);
-            titleRow.Resize += (s, e) => _lblUpdated.Left = titleRow.Width - _lblUpdated.Width;
+            titleRow.Resize += (s, e) => _lblUpdated.Left = Math.Max(lblTitle.Right + 20, titleRow.Width - _lblUpdated.Width);
 
-            _grid = new DataGridView { Dock = DockStyle.Fill };
-            UiKit.StyleGrid(_grid);
-            _grid.Columns.Add(MakeColumn("Gio", "GIỜ", 11));
-            _grid.Columns.Add(MakeColumn("Phim", "PHIM", 36));
-            _grid.Columns.Add(MakeColumn("Phong", "PHÒNG", 11));
-            _grid.Columns.Add(MakeColumn("DaBan", "ĐÃ BÁN", 24));
-            _grid.Columns.Add(MakeColumn("TrangThai", "TRẠNG THÁI", 18));
-            _grid.Columns["Phim"]!.DefaultCellStyle.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            _grid.CellPainting += Grid_CellPainting;
-
-            _lblEmpty = new Label
+            // 2. Tiêu đề cột cố định (Sticky Header) - nằm trên Panel độc lập, không bao giờ bị chữ hàng đè lên
+            var headerPanel = new Panel { Dock = DockStyle.Fill, BackColor = Color.Transparent, Margin = new Padding(0) };
+            UiKit.DoubleBuffer(headerPanel);
+            headerPanel.Paint += (s, e) =>
             {
-                Text = "🎬  Hôm nay chưa có suất chiếu nào sắp diễn ra",
-                Dock = DockStyle.Fill,
-                TextAlign = ContentAlignment.MiddleCenter,
-                ForeColor = AppColors.TextMuted,
-                BackColor = AppColors.CardBackground,
-                Font = new Font("Segoe UI", 12F),
-                Visible = false
+                var g = e.Graphics;
+                UiKit.HighQuality(g);
+                var (cols, wCols) = CalcColumns(headerPanel.Width);
+                string[] headers = { "GIỜ", "PHIM", "PHÒNG", "ĐÃ BÁN", "TRẠNG THÁI" };
+                int padX = this.S(10);
+                for (int i = 0; i < 5; i++)
+                {
+                    var rHeader = new Rectangle(cols[i] + padX, 0, wCols[i] - padX, headerPanel.Height);
+                    TextRenderer.DrawText(g, headers[i], FontHeader, rHeader, AppColors.TextSecondary,
+                        TextFormatFlags.VerticalCenter | TextFormatFlags.Left | TextFormatFlags.NoPadding);
+                }
+                using var pBorder = new Pen(AppColors.Border);
+                g.DrawLine(pBorder, 0, headerPanel.Height - 1, headerPanel.Width, headerPanel.Height - 1);
+            };
+            headerPanel.Resize += (s, e) => headerPanel.Invalidate();
+
+            // 3. Vùng danh sách các hàng có thể cuộn - được hệ điều hành giới hạn clip riêng, triệt tiêu lỗi tràn text
+            _rowsPanel = new Panel { Dock = DockStyle.Fill, BackColor = Color.Transparent, Margin = new Padding(0) };
+            UiKit.DoubleBuffer(_rowsPanel);
+            _rowsPanel.Paint += (s, e) => DrawShowtimesRows(e.Graphics, _rowsPanel);
+
+            // Xử lý lăn chuột đồng bộ cho toàn thẻ
+            card.MouseWheel += (s, e) => ScrollShowtimes(e.Delta);
+            cardTable.MouseWheel += (s, e) => ScrollShowtimes(e.Delta);
+            titleRow.MouseWheel += (s, e) => ScrollShowtimes(e.Delta);
+            headerPanel.MouseWheel += (s, e) => ScrollShowtimes(e.Delta);
+            _rowsPanel.MouseWheel += (s, e) => ScrollShowtimes(e.Delta);
+
+            _rowsPanel.MouseEnter += (s, e) => { if (!_rowsPanel.Focused) _rowsPanel.Focus(); };
+            card.MouseEnter += (s, e) => { if (!_rowsPanel.Focused) _rowsPanel.Focus(); };
+
+            // Kéo thanh cuộn bằng chuột
+            _rowsPanel.MouseDown += (s, e) =>
+            {
+                int hRow = this.S(48);
+                int totalHeight = _showtimes.Count * hRow;
+                int maxScroll = Math.Max(0, totalHeight - _rowsPanel.Height);
+                if (maxScroll <= 0) return;
+
+                int trackW = this.S(6);
+                int trackX = _rowsPanel.Width - trackW - this.S(2);
+                int trackY = this.S(4);
+                int trackH = Math.Max(this.S(20), _rowsPanel.Height - this.S(8));
+
+                if (e.X >= trackX - this.S(10) && e.X <= _rowsPanel.Width && e.Y >= trackY && e.Y <= trackY + trackH)
+                {
+                    _isDraggingScroll = true;
+                    _dragStartY = e.Y;
+                    _dragStartScroll = _showtimeScrollY;
+                    _rowsPanel.Capture = true;
+                }
             };
 
-            card.Controls.Add(_lblEmpty);
-            card.Controls.Add(_grid);
-            card.Controls.Add(titleRow);
-            titleRow.SendToBack();
+            _rowsPanel.MouseMove += (s, e) =>
+            {
+                if (!_isDraggingScroll) return;
+                int hRow = this.S(48);
+                int totalHeight = _showtimes.Count * hRow;
+                int maxScroll = Math.Max(0, totalHeight - _rowsPanel.Height);
+                if (maxScroll <= 0) return;
+
+                int trackH = Math.Max(this.S(20), _rowsPanel.Height - this.S(8));
+                int thumbH = Math.Max(this.S(24), (int)((float)_rowsPanel.Height / totalHeight * trackH));
+                int scrollRange = trackH - thumbH;
+                if (scrollRange > 0)
+                {
+                    float ratio = (float)(e.Y - _dragStartY) / scrollRange;
+                    _showtimeScrollY = Math.Clamp(_dragStartScroll + (int)(ratio * maxScroll), 0, maxScroll);
+                    _rowsPanel.Invalidate();
+                }
+            };
+
+            _rowsPanel.MouseUp += (s, e) =>
+            {
+                if (_isDraggingScroll)
+                {
+                    _isDraggingScroll = false;
+                    _rowsPanel.Capture = false;
+                }
+            };
+
+            _rowsPanel.Resize += (s, e) =>
+            {
+                int hRow = this.S(48);
+                int totalHeight = _showtimes.Count * hRow;
+                int maxScroll = Math.Max(0, totalHeight - _rowsPanel.Height);
+                _showtimeScrollY = Math.Clamp(_showtimeScrollY, 0, maxScroll);
+                _rowsPanel.Invalidate();
+            };
+
+            cardTable.Controls.Add(titleRow, 0, 0);
+            cardTable.Controls.Add(headerPanel, 0, 1);
+            cardTable.Controls.Add(_rowsPanel, 0, 2);
+
+            card.Controls.Add(cardTable);
+            _cardShowtimes = card;
             return card;
         }
 
-        private static DataGridViewTextBoxColumn MakeColumn(string name, string header, float weight) => new()
+        private void ScrollShowtimes(int delta)
         {
-            Name = name,
-            HeaderText = header,
-            FillWeight = weight,
-            SortMode = DataGridViewColumnSortMode.NotSortable
-        };
+            if (_rowsPanel == null) return;
+            int hRow = this.S(48);
+            int totalHeight = _showtimes.Count * hRow;
+            int maxScroll = Math.Max(0, totalHeight - _rowsPanel.Height);
+            if (maxScroll <= 0) return;
+
+            _showtimeScrollY = Math.Clamp(_showtimeScrollY - Math.Sign(delta) * (hRow * 2), 0, maxScroll);
+            _rowsPanel.Invalidate();
+        }
+
+        private static (int[] cols, int[] wCols) CalcColumns(int width)
+        {
+            // Tỉ lệ phân bổ 5 cột: 11% - 37% - 13% - 22% - 17% (Tổng = 100%)
+            int x1 = 0;
+            int x2 = (int)(width * 0.11f);
+            int x3 = x2 + (int)(width * 0.37f);
+            int x4 = x3 + (int)(width * 0.13f);
+            int x5 = x4 + (int)(width * 0.22f);
+
+            int[] cols = { x1, x2, x3, x4, x5 };
+            int[] wCols = { x2 - x1, x3 - x2, x4 - x3, x5 - x4, width - x5 };
+            return (cols, wCols);
+        }
+
+        private void DrawShowtimesRows(Graphics g, Panel panel)
+        {
+            UiKit.HighQuality(g);
+            int width = panel.Width;
+            int height = panel.Height;
+
+            if (_showtimes.Count == 0)
+            {
+                string text = "🎬  Hôm nay chưa có suất chiếu nào sắp diễn ra";
+                var rectEmpty = new Rectangle(0, 0, width, height);
+                TextRenderer.DrawText(g, text, FontEmpty, rectEmpty, AppColors.TextMuted,
+                    TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding);
+                return;
+            }
+
+            int hRow = this.S(48);
+            int totalHeight = _showtimes.Count * hRow;
+            int maxScroll = Math.Max(0, totalHeight - height);
+            _showtimeScrollY = Math.Clamp(_showtimeScrollY, 0, maxScroll);
+
+            var (cols, wCols) = CalcColumns(width);
+            int padX = this.S(10);
+            using var pBorder = new Pen(AppColors.Border);
+
+            for (int i = 0; i < _showtimes.Count; i++)
+            {
+                var dto = _showtimes[i];
+                int y = (i * hRow) - _showtimeScrollY;
+
+                // Bỏ qua dòng nằm ngoài khung nhìn
+                if (y + hRow < 0 || y > height) continue;
+
+                // Xen kẽ nền hàng lẻ nhẹ nhàng để dễ phân biệt
+                if (i % 2 == 1)
+                {
+                    using var brAlt = new SolidBrush(Color.FromArgb(16, 255, 255, 255));
+                    g.FillRectangle(brAlt, 0, y, width, hRow);
+                }
+
+                // 1. Giờ
+                var rTime = new Rectangle(cols[0] + padX, y, wCols[0] - padX, hRow);
+                TextRenderer.DrawText(g, dto.GioBatDau.ToString(@"hh\:mm"), FontTime, rTime, AppColors.TextPrimary,
+                    TextFormatFlags.VerticalCenter | TextFormatFlags.Left | TextFormatFlags.NoPadding);
+
+                // 2. Phim
+                var rMovie = new Rectangle(cols[1] + padX, y, wCols[1] - padX, hRow);
+                TextRenderer.DrawText(g, dto.TenPhim, FontMovie, rMovie, AppColors.TextPrimary,
+                    TextFormatFlags.VerticalCenter | TextFormatFlags.Left | TextFormatFlags.EndEllipsis | TextFormatFlags.NoPadding);
+
+                // 3. Phòng
+                var rRoom = new Rectangle(cols[2] + padX, y, wCols[2] - padX, hRow);
+                TextRenderer.DrawText(g, dto.TenPhong, FontRoom, rRoom, AppColors.TextSecondary,
+                    TextFormatFlags.VerticalCenter | TextFormatFlags.Left | TextFormatFlags.NoPadding);
+
+                // 4. Đã bán (Text + Thanh tiến độ)
+                double ratio = dto.TongGhe > 0 ? Math.Min(1.0, (double)dto.DaBan / dto.TongGhe) : 0;
+                Color tone = ratio >= 1 ? AppColors.StatusRed
+                           : ratio >= 0.85 ? AppColors.StatusOrange
+                           : AppColors.Success;
+
+                string txtCount = $"{dto.DaBan}/{dto.TongGhe}";
+                int textW = this.S(54);
+                var rCount = new Rectangle(cols[3] + padX, y, textW, hRow);
+                TextRenderer.DrawText(g, txtCount, FontCount, rCount, AppColors.TextPrimary,
+                    TextFormatFlags.VerticalCenter | TextFormatFlags.Left | TextFormatFlags.NoPadding);
+
+                int barX = cols[3] + padX + textW;
+                int barW = Math.Max(this.S(20), wCols[3] - padX - textW - this.S(16));
+                int barH = this.S(6);
+                var track = new Rectangle(barX, y + (hRow - barH) / 2, barW, barH);
+                using (var pTrack = UiKit.RoundRect(track, barH / 2))
+                using (var brTrack = new SolidBrush(AppColors.Surface2))
+                    g.FillPath(brTrack, pTrack);
+
+                int fillW = (int)(barW * ratio);
+                if (fillW > 0)
+                {
+                    var fill = new Rectangle(track.X, track.Y, Math.Max(fillW, barH), barH);
+                    using var pFill = UiKit.RoundRect(fill, barH / 2);
+                    using var brFill = new SolidBrush(tone);
+                    g.FillPath(brFill, pFill);
+                }
+
+                // 5. Trạng thái (Pill Badge)
+                (Color fore, Color back) = dto.TrangThai switch
+                {
+                    "Đang bán" => (AppColors.Success, AppColors.SuccessSoft),
+                    "Gần đầy" => (AppColors.Warning, AppColors.WarnSoft),
+                    "Đã đầy" => (AppColors.StatusRed, AppColors.DangerSoft),
+                    _ => (AppColors.TextMuted, AppColors.InputBackground)
+                };
+
+                var size = TextRenderer.MeasureText(dto.TrangThai, FontBadge);
+                int pillW = size.Width + this.S(24), pillH = this.S(26);
+                var pill = new Rectangle(cols[4] + padX, y + (hRow - pillH) / 2, pillW, pillH);
+                using (var pPill = UiKit.RoundRect(pill, pillH / 2))
+                using (var brPill = new SolidBrush(back))
+                    g.FillPath(brPill, pPill);
+                TextRenderer.DrawText(g, dto.TrangThai, FontBadge, pill, fore,
+                    TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding);
+
+                // Đường phân cách hàng
+                g.DrawLine(pBorder, 0, y + hRow, width, y + hRow);
+            }
+
+            // Vẽ thanh cuộn nếu tổng số dòng dài hơn chiều cao hiển thị
+            if (maxScroll > 0 && height > this.S(30))
+            {
+                int trackW = this.S(6);
+                int trackX = width - trackW - this.S(2);
+                int trackY = this.S(4);
+                int trackH = height - this.S(8);
+
+                using var pTrackBg = UiKit.RoundRect(new Rectangle(trackX, trackY, trackW, trackH), trackW / 2);
+                using var brTrackBg = new SolidBrush(AppColors.Surface2);
+                g.FillPath(brTrackBg, pTrackBg);
+
+                int thumbH = Math.Max(this.S(24), (int)((float)height / totalHeight * trackH));
+                int thumbY = trackY + (int)((float)_showtimeScrollY / maxScroll * (trackH - thumbH));
+                using var pThumb = UiKit.RoundRect(new Rectangle(trackX, thumbY, trackW, thumbH), trackW / 2);
+                using var brThumb = new SolidBrush(AppColors.BorderStrong);
+                g.FillPath(brThumb, pThumb);
+            }
+        }
 
         private Control BuildActions()
         {
@@ -248,8 +499,9 @@ namespace CinemaManagement.UI.Forms.Staff
                 ColumnCount = 3,
                 RowCount = 1,
                 BackColor = Color.Transparent,
-                Margin = new Padding(0)
+                Margin = new Padding(0, this.S(4), 0, 0)
             };
+            UiKit.DoubleBuffer(row);
             for (int i = 0; i < 3; i++) row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f / 3));
             row.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
 
@@ -272,10 +524,10 @@ namespace CinemaManagement.UI.Forms.Staff
             Text = text,
             NormalColor = back,
             ForeColor = fore,
-            Radius = 16,
+            Radius = 14,
             Dock = DockStyle.Fill,
-            Margin = new Padding(0, 0, this.S(16), this.S(8)),
-            Font = new Font("Segoe UI", 13F, FontStyle.Bold)
+            Margin = new Padding(0, 0, this.S(12), 0),
+            Font = new Font("Segoe UI", 12F, FontStyle.Bold)
         };
 
         // ================== ĐỒNG HỒ + TIMER ==================
@@ -317,7 +569,7 @@ namespace CinemaManagement.UI.Forms.Staff
         private void PositionClock()
         {
             if (_hero == null) return;
-            int right = _hero.Width - this.S(36);
+            int right = _hero.Width - this.S(30);
             _lblTime.Left = right - _lblTime.Width;
             _lblDate.Left = right - _lblDate.Width;
         }
@@ -337,24 +589,9 @@ namespace CinemaManagement.UI.Forms.Staff
                 _cardCheckIn.SetValue(data.SoLuotCheckInHomNay, animate);
                 _cardDoanhThu.SetValue(data.DoanhThuHomNay, animate);
 
-                _grid.Rows.Clear();
-                foreach (var s in data.SuatChieuSapDienRa)
-                {
-                    int i = _grid.Rows.Add(
-                        s.GioBatDau.ToString(@"hh\:mm"),
-                        s.TenPhim,
-                        s.TenPhong,
-                        $"{s.DaBan}/{s.TongGhe}",
-                        s.TrangThai);
-                    _grid.Rows[i].Tag = s;        // CellPainting cần số liệu gốc để vẽ thanh tiến độ
-                }
-                _grid.ClearSelection();
-                _grid.CurrentCell = null;
-
-                bool empty = data.SuatChieuSapDienRa.Count == 0;
-                _lblEmpty.Visible = empty;
-                _lblEmpty.BringToFront();
-                _grid.Visible = !empty;
+                _showtimes = data.SuatChieuSapDienRa.ToList();
+                _showtimeScrollY = 0;
+                _rowsPanel?.Invalidate();
 
                 _lblUpdated.ForeColor = AppColors.TextMuted;
                 _lblUpdated.Text = $"Cập nhật lúc {DateTime.Now:HH:mm:ss}";
@@ -368,89 +605,13 @@ namespace CinemaManagement.UI.Forms.Staff
             finally
             {
                 _loading = false;
-                _lblUpdated.Left = _lblUpdated.Parent!.Width - _lblUpdated.Width;
+                if (_lblUpdated?.Parent != null)
+                {
+                    var lblTitle = _lblUpdated.Parent.Controls.Count > 0 ? _lblUpdated.Parent.Controls[0] : null;
+                    int minLeft = (lblTitle != null) ? lblTitle.Right + 20 : 0;
+                    _lblUpdated.Left = Math.Max(minLeft, _lblUpdated.Parent.Width - _lblUpdated.Width);
+                }
             }
-        }
-
-        // Vẽ riêng 3 cột: giờ (to, đậm), đã bán (số + thanh tiến độ), trạng thái (huy hiệu bo tròn)
-        private void Grid_CellPainting(object? sender, DataGridViewCellPaintingEventArgs e)
-        {
-            if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
-            string col = _grid.Columns[e.ColumnIndex].Name;
-            if (col is not ("Gio" or "DaBan" or "TrangThai")) return;
-            if (_grid.Rows[e.RowIndex].Tag is not UpcomingShowtimeDto dto) return;
-
-            e.Paint(e.ClipBounds, DataGridViewPaintParts.Background | DataGridViewPaintParts.Border |
-                                  DataGridViewPaintParts.SelectionBackground);
-            var g = e.Graphics!;
-            UiKit.HighQuality(g);
-            var cell = e.CellBounds;
-            int padX = this.S(12);
-
-            double ratio = dto.TongGhe > 0 ? Math.Min(1.0, (double)dto.DaBan / dto.TongGhe) : 0;
-            Color tone = ratio >= 1 ? AppColors.StatusRed
-                       : ratio >= 0.85 ? AppColors.StatusOrange
-                       : AppColors.Success;
-
-            switch (col)
-            {
-                case "Gio":
-                    using (var f = new Font("Segoe UI", 12F, FontStyle.Bold))
-                        TextRenderer.DrawText(g, dto.GioBatDau.ToString(@"hh\:mm"), f,
-                            new Rectangle(cell.X + padX, cell.Y, cell.Width - padX, cell.Height),
-                            AppColors.TextPrimary,
-                            TextFormatFlags.VerticalCenter | TextFormatFlags.Left | TextFormatFlags.NoPadding);
-                    break;
-
-                case "DaBan":
-                    {
-                        string txt = $"{dto.DaBan}/{dto.TongGhe}";
-                        int textW = this.S(58);
-                        using (var f = new Font("Segoe UI", 10.5F, FontStyle.Bold))
-                            TextRenderer.DrawText(g, txt, f,
-                                new Rectangle(cell.X + padX, cell.Y, textW, cell.Height), AppColors.TextDark,
-                                TextFormatFlags.VerticalCenter | TextFormatFlags.Left | TextFormatFlags.NoPadding);
-
-                        int barX = cell.X + padX + textW;
-                        int barW = Math.Max(this.S(20), cell.Width - padX - textW - this.S(18));
-                        int barH = this.S(8);
-                        var track = new Rectangle(barX, cell.Y + (cell.Height - barH) / 2, barW, barH);
-                        using (var p = UiKit.RoundRect(track, barH / 2))
-                        using (var br = new SolidBrush(AppColors.Border))
-                            g.FillPath(br, p);
-                        int fillW = (int)(barW * ratio);
-                        if (fillW > 0)
-                        {
-                            var fill = new Rectangle(track.X, track.Y, Math.Max(fillW, barH), barH);
-                            using var p = UiKit.RoundRect(fill, barH / 2);
-                            using var br = new SolidBrush(tone);
-                            g.FillPath(br, p);
-                        }
-                        break;
-                    }
-
-                case "TrangThai":
-                    {
-                        (Color fore, Color back) = dto.TrangThai switch
-                        {
-                            "Đang bán" => (AppColors.Success, AppColors.SuccessSoft),
-                            "Gần đầy" => (AppColors.Warning, AppColors.WarnSoft),
-                            "Đã đầy" => (AppColors.StatusRed, AppColors.DangerSoft),
-                            _ => (AppColors.TextMuted, AppColors.InputBackground)
-                        };
-                        using var f = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-                        var size = TextRenderer.MeasureText(dto.TrangThai, f);
-                        int w = size.Width + this.S(28), h = this.S(28);
-                        var pill = new Rectangle(cell.X + padX, cell.Y + (cell.Height - h) / 2, w, h);
-                        using (var p = UiKit.RoundRect(pill, h / 2))
-                        using (var br = new SolidBrush(back))
-                            g.FillPath(br, p);
-                        TextRenderer.DrawText(g, dto.TrangThai, f, pill, fore,
-                            TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding);
-                        break;
-                    }
-            }
-            e.Handled = true;
         }
 
         // ================== ĐIỀU HƯỚNG ==================

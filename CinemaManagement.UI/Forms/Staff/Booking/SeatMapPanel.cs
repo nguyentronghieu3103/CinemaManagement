@@ -113,11 +113,11 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
             }
             else if (selected)
             {
-                fill = AppColors.Primary; border = AppColors.HeaderBackground; text = Color.White; borderWidth = 2;
+                fill = AppColors.Primary; border = AppColors.Accent; text = Color.White; borderWidth = 2;
             }
             else
             {
-                fill = Color.White;
+                fill = AppColors.Surface2;
                 border = TypeBorderColor(seat.LoaiGhe);
                 text = AppColors.TextDark;
                 borderWidth = seat.LoaiGhe == SeatType.Thuong ? 1 : 2;
@@ -143,10 +143,10 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
         {
             var items = new (Color Fill, Color Border, string Text)[]
             {
-                (Color.White, AppColors.TextMuted, "Thường"),
-                (Color.White, VipBorder, "VIP"),
-                (Color.White, CoupleBorder, "Đôi"),
-                (AppColors.Primary, AppColors.HeaderBackground, "Đang chọn"),
+                (AppColors.Surface2, AppColors.TextMuted, "Thường"),
+                (AppColors.Surface2, VipBorder, "VIP"),
+                (AppColors.Surface2, CoupleBorder, "Đôi"),
+                (AppColors.Primary, AppColors.Accent, "Đang chọn"),
                 (AppColors.Success, AppColors.Success, "Bạn đang giữ"),
                 (SeatHeldByOther, SeatHeldByOtherBorder, "Người khác giữ"),
                 (SeatBooked, SeatBooked, "Đã đặt")
