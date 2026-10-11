@@ -356,17 +356,20 @@ namespace CinemaManagement.DAL.Seed
                     PhuongThuc = PaymentMethod.TienMat
                 };
 
+                int seatIdx = 0;
                 foreach (var sId in validSeats1)
                 {
+                    bool alreadyCheckedIn = seatIdx == 0;
                     inv1.Tickets.Add(new Ticket
                     {
                         ShowtimeId = st1.Id,
                         SeatId = sId,
                         GiaVe = st1.GiaVeCoSo,
                         MaQR = qrPayloadFactory(),
-                        TrangThaiCheckIn = CheckInStatus.DaCheckIn,
-                        ThoiGianCheckIn = DateTime.Now.AddMinutes(-30)
+                        TrangThaiCheckIn = alreadyCheckedIn ? CheckInStatus.DaCheckIn : CheckInStatus.ChuaCheckIn,
+                        ThoiGianCheckIn = alreadyCheckedIn ? DateTime.Now.AddMinutes(-10) : null
                     });
+                    seatIdx++;
                 }
                 if (comboSolo != null)
                 {
