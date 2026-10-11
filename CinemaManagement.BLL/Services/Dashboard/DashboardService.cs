@@ -1,4 +1,4 @@
-﻿using CinemaManagement.Common.DTOs.Dashboard;
+using CinemaManagement.Common.DTOs.Dashboard;
 using CinemaManagement.Common.Enums;
 using CinemaManagement.Common.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -41,7 +41,7 @@ namespace CinemaManagement.BLL.Services.Dashboard
                 .Include(s => s.CinemaRoom).ThenInclude(r => r.Seats)
                 .Where(s => s.NgayChieu.Date == today && s.GioBatDau >= now)
                 .OrderBy(s => s.GioBatDau)
-                .Take(5)
+                .Take(25)
                 .ToListAsync();
 
             var danhSach = new List<UpcomingShowtimeDto>();

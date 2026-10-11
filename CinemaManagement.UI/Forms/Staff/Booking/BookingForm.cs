@@ -37,7 +37,7 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
         private SaleCustomerDto? _selectedCustomer;  // khách đã chọn ở bước Thanh toán; giữ lại khi nhân viên quay lại Combo rồi vào lại
         private CheckoutResultDto? _checkoutResult;  // kết quả thanh toán tiền mặt thành công; Phase 6 (Tạo vé + QR) sẽ dùng
 
-        private readonly DateTimePicker _dtpDate = new();
+        private readonly CinemaDatePicker _dtpDate = new();
         private readonly TextBox _txtSearch = new();
         private readonly Label _lblCount = new();
         private readonly FlowLayoutPanel _flowMovies = new();
@@ -122,19 +122,30 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
             {
                 Text = "Tìm phim:",
                 Font = new Font("Segoe UI", 11F),
-                ForeColor = AppColors.TextDark,
+                ForeColor = Color.White,
                 AutoSize = true,
                 Left = 260,
                 Top = 62
             });
 
-            _txtSearch.Font = new Font("Segoe UI", 11F);
-            _txtSearch.Width = 280;
-            _txtSearch.Left = 350;
-            _txtSearch.Top = 58;
+            var pnlSearch = new Panel
+            {
+                Left = 350,
+                Top = 56,
+                Width = 280,
+                Height = 34,
+                BackColor = AppColors.InputBackground,
+                BorderStyle = BorderStyle.FixedSingle
+            };
+            _txtSearch.Font = new Font("Segoe UI", 10.5F);
+            _txtSearch.Width = 264;
+            _txtSearch.Location = new Point(6, 6);
             _txtSearch.BackColor = AppColors.InputBackground;
+            _txtSearch.ForeColor = Color.White;
+            _txtSearch.BorderStyle = BorderStyle.None;
             _txtSearch.PlaceholderText = "Nhập tên phim...";
-            pnl.Controls.Add(_txtSearch);
+            pnlSearch.Controls.Add(_txtSearch);
+            pnl.Controls.Add(pnlSearch);
 
             _lblCount.AutoSize = true;
             _lblCount.Font = new Font("Segoe UI", 10F);
@@ -261,9 +272,15 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
                 Width = 230,
                 Height = 400,
                 Margin = new Padding(10),
-                BackColor = Color.White,
+                BackColor = AppColors.CardBackground,
                 Cursor = Cursors.Hand,
                 Tag = movie
+            };
+            card.Paint += (s, e) =>
+            {
+                bool isSelected = _selectedMovie?.MovieId == movie.MovieId;
+                using var pen = new Pen(isSelected ? AppColors.Primary : AppColors.Border, isSelected ? 2 : 1);
+                e.Graphics.DrawRectangle(pen, 0, 0, card.Width - 1, card.Height - 1);
             };
 
             var pic = new PictureBox
@@ -298,7 +315,7 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
                 Width = 210,
                 Height = 22,
                 Font = new Font("Segoe UI", 9.5F),
-                ForeColor = AppColors.TextMuted,
+                ForeColor = AppColors.Accent,
                 AutoEllipsis = true
             });
 
@@ -310,7 +327,7 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
                 Width = 210,
                 Height = 22,
                 Font = new Font("Segoe UI", 9.5F),
-                ForeColor = AppColors.TextDark
+                ForeColor = AppColors.TextSecondary
             });
 
             AttachClickRecursive(card, () => SelectMovie(movie));
@@ -363,7 +380,10 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
             _selectedMovie = movie;
 
             foreach (var (id, card) in _cards)
-                card.BackColor = id == movie?.MovieId ? AppColors.InputBackground : Color.White;
+            {
+                card.BackColor = id == movie?.MovieId ? AppColors.Surface2 : AppColors.CardBackground;
+                card.Invalidate();
+            }
 
             _btnChoose.Enabled = movie != null;
             _lblSelected.Text = movie == null

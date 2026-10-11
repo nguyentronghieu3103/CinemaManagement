@@ -40,7 +40,7 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
 
         // Khách hàng
         private readonly Label _lblCustomer = new();
-        private readonly Button _btnClearCustomer = new();
+        private readonly PillButton _btnClearCustomer = new();
         private readonly TextBox _txtSearch = new();
         private readonly Button _btnSearch = new();
         private readonly ListView _lvCustomers = new();
@@ -135,7 +135,7 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
             {
                 Text = $"{_movie.TenPhim}   •   {_showtime.NgayChieu:dd/MM/yyyy}   •   {_showtime.GioBatDau:hh\\:mm} - {_showtime.GioKetThuc:hh\\:mm}   •   {_showtime.TenPhong}",
                 Font = new Font("Segoe UI", 11.5F, FontStyle.Bold),
-                ForeColor = AppColors.HeaderBackground,
+                ForeColor = AppColors.TextSecondary,
                 AutoSize = true,
                 Left = 24,
                 Top = 62
@@ -219,7 +219,7 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
             AddSummaryRow(pnl, "Tiền vé", _lblTicketTotal, 8, 12F, FontStyle.Regular, AppColors.TextDark);
             AddSummaryRow(pnl, "Tiền Combo", _lblComboTotal, 38, 12F, FontStyle.Regular, AppColors.TextDark);
             pnl.Controls.Add(new Panel { Left = 16, Top = 72, Width = 438, Height = 1, BackColor = AppColors.TextMuted });
-            AddSummaryRow(pnl, "TỔNG TIỀN", _lblGrandTotal, 82, 18F, FontStyle.Bold, AppColors.HeaderBackground);
+            AddSummaryRow(pnl, "TỔNG TIỀN", _lblGrandTotal, 82, 18F, FontStyle.Bold, AppColors.Accent);
             return pnl;
         }
 
@@ -259,15 +259,21 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
             _lblCustomer.AutoEllipsis = true;
             pnl.Controls.Add(_lblCustomer);
 
-            StyleButton(_btnClearCustomer, Color.White, AppColors.StatusRed);
             _btnClearCustomer.Text = "Bỏ chọn";
-            _btnClearCustomer.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            _btnClearCustomer.NormalColor = AppColors.Surface2;
+            _btnClearCustomer.ForeColor = AppColors.Danger;
+            _btnClearCustomer.BorderColor = AppColors.Danger;
+            _btnClearCustomer.DisabledColor = AppColors.Surface2;
+            _btnClearCustomer.Radius = 6;
+            _btnClearCustomer.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
             _btnClearCustomer.Size = new Size(110, 30);
             _btnClearCustomer.Location = new Point(434, 60);
+            _btnClearCustomer.Enabled = false;
             pnl.Controls.Add(_btnClearCustomer);
 
             _txtSearch.Font = new Font("Segoe UI", 11F);
             _txtSearch.BackColor = AppColors.InputBackground;
+            _txtSearch.ForeColor = Color.White;
             _txtSearch.PlaceholderText = "Nhập SĐT hoặc tên khách hàng...";
             _txtSearch.MaxLength = 100;
             _txtSearch.Location = new Point(24, 100);
@@ -295,7 +301,7 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
             _lblSearchStatus.ForeColor = AppColors.TextMuted;
             pnl.Controls.Add(_lblSearchStatus);
 
-            StyleButton(_btnPick, AppColors.Success, Color.White);
+            StyleButton(_btnPick, AppColors.SuccessStrong, Color.White);
             _btnPick.Text = "Chọn khách này";
             _btnPick.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             _btnPick.Size = new Size(160, 32);
@@ -326,6 +332,7 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
             foreach (TextBox t in new[] { _txtName, _txtPhone, _txtEmail })
             {
                 t.BackColor = AppColors.InputBackground;
+                t.ForeColor = Color.White;
                 pnl.Controls.Add(t);
             }
 
@@ -364,6 +371,7 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
 
             _txtReceived.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
             _txtReceived.BackColor = AppColors.InputBackground;
+            _txtReceived.ForeColor = AppColors.Accent;
             _txtReceived.TextAlign = HorizontalAlignment.Right;
             _txtReceived.MaxLength = 15;
             _txtReceived.Location = new Point(24, 554);
@@ -403,12 +411,12 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
                 Location = new Point(x, 602),
                 Font = new Font("Segoe UI", 10F, FontStyle.Bold),
                 ForeColor = AppColors.TextDark,
-                BackColor = Color.White,
+                BackColor = AppColors.Surface2,
                 FlatStyle = FlatStyle.Flat,
                 Cursor = Cursors.Hand
             };
             b.FlatAppearance.BorderSize = 1;
-            b.FlatAppearance.BorderColor = AppColors.TextMuted;
+            b.FlatAppearance.BorderColor = AppColors.Border;
             decimal? value = amount;
             b.Click += (s, e) =>
             {
@@ -468,7 +476,7 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
             lv.BorderStyle = BorderStyle.None;
             lv.HeaderStyle = ColumnHeaderStyle.Nonclickable;
             lv.Font = new Font("Segoe UI", 10F);
-            lv.BackColor = Color.White;
+            lv.BackColor = AppColors.CardBackground;
             lv.ForeColor = AppColors.TextDark;
         }
 
@@ -488,8 +496,8 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
             b.BackColor = back;
             b.ForeColor = fore;
             b.FlatStyle = FlatStyle.Flat;
-            b.FlatAppearance.BorderSize = fore == AppColors.StatusRed ? 1 : 0;
-            b.FlatAppearance.BorderColor = AppColors.StatusRed;
+            b.FlatAppearance.BorderSize = back == AppColors.Surface2 ? 1 : 0;
+            b.FlatAppearance.BorderColor = fore == AppColors.Danger ? AppColors.Danger : AppColors.Border;
             b.Cursor = Cursors.Hand;
         }
 

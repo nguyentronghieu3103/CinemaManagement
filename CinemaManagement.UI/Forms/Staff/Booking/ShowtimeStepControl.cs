@@ -11,7 +11,7 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
     {
         private readonly SaleMovieDto _movie;
 
-        private readonly DateTimePicker _dtpDate = new();
+        private readonly CinemaDatePicker _dtpDate = new();
         private readonly Label _lblStatus = new();
         private readonly FlowLayoutPanel _flowShowtimes = new();
         private readonly Label _lblSelected = new();
@@ -81,7 +81,7 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
             {
                 Text = _movie.TenPhim,
                 Font = new Font("Segoe UI", 14F, FontStyle.Bold),
-                ForeColor = AppColors.HeaderBackground,
+                ForeColor = AppColors.Accent,
                 AutoSize = true,
                 Left = 24,
                 Top = 66
@@ -222,8 +222,14 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
                 Width = 300,
                 Height = 150,
                 Margin = new Padding(10),
-                BackColor = Color.White,
+                BackColor = soldOut ? AppColors.InputBackground : AppColors.CardBackground,
                 Cursor = soldOut ? Cursors.No : Cursors.Hand
+            };
+            card.Paint += (s, e) =>
+            {
+                bool isSelected = _selectedShowtime?.ShowtimeId == st.ShowtimeId;
+                using var pen = new Pen(isSelected ? AppColors.Primary : AppColors.Border, isSelected ? 2 : 1);
+                e.Graphics.DrawRectangle(pen, 0, 0, card.Width - 1, card.Height - 1);
             };
 
             card.Controls.Add(new Label
@@ -244,9 +250,9 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
                 Width = 106,
                 Height = 24,
                 TextAlign = ContentAlignment.MiddleCenter,
-                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
-                ForeColor = AppColors.HeaderBackground,
-                BackColor = AppColors.InputBackground,
+                Font = new Font("Segoe UI", 9.5F, FontStyle.Bold),
+                ForeColor = AppColors.Accent,
+                BackColor = AppColors.Surface2,
                 AutoEllipsis = true
             });
 
@@ -276,7 +282,7 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
             else
             {
                 seatText = $"Còn {st.GheConTrong}/{st.TongGhe} ghế";
-                seatColor = AppColors.TextDark;
+                seatColor = AppColors.Success;
             }
 
             card.Controls.Add(new Label
@@ -296,14 +302,10 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
                 Top = 120,
                 AutoSize = true,
                 Font = new Font("Segoe UI", 9.5F),
-                ForeColor = AppColors.TextMuted
+                ForeColor = AppColors.TextSecondary
             });
 
-            if (soldOut)
-            {
-                card.BackColor = Color.FromArgb(238, 238, 238);   // suất hết chỗ: xám, không cho chọn
-            }
-            else
+            if (!soldOut)
             {
                 AttachClickRecursive(card, () => SelectShowtime(st));
                 AttachDoubleClickRecursive(card, () => { SelectShowtime(st); _btnNext.PerformClick(); });
@@ -330,9 +332,10 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
             foreach (var (id, card) in _cards)
             {
                 bool isSelected = id == st?.ShowtimeId;
-                // Chỉ đổi màu thẻ còn chỗ; thẻ hết chỗ giữ màu xám
+                // Chỉ đổi màu thẻ còn chỗ; thẻ hết chỗ giữ màu tối
                 if (card.Cursor == Cursors.No) continue;
-                card.BackColor = isSelected ? AppColors.InputBackground : Color.White;
+                card.BackColor = isSelected ? AppColors.Surface2 : AppColors.CardBackground;
+                card.Invalidate();
             }
 
             _btnNext.Enabled = st != null;

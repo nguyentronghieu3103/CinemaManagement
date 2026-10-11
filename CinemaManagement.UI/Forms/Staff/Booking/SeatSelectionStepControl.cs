@@ -87,7 +87,7 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
             {
                 Text = $"{_movie.TenPhim}   •   {_showtime.NgayChieu:dd/MM/yyyy}   •   {_showtime.GioBatDau:hh\\:mm} - {_showtime.GioKetThuc:hh\\:mm}   •   {_showtime.TenPhong}",
                 Font = new Font("Segoe UI", 11.5F, FontStyle.Bold),
-                ForeColor = AppColors.HeaderBackground,
+                ForeColor = AppColors.TextSecondary,
                 AutoSize = true,
                 Left = 24,
                 Top = 62
@@ -111,7 +111,7 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
 
             _lblTotal.Left = 20; _lblTotal.Top = 130; _lblTotal.Width = 300; _lblTotal.Height = 38;
             _lblTotal.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
-            _lblTotal.ForeColor = AppColors.HeaderBackground;
+            _lblTotal.ForeColor = AppColors.Accent;
             pnl.Controls.Add(_lblTotal);
 
             pnl.Controls.Add(MakeCaption("Thời gian giữ ghế còn lại", 184));
@@ -128,7 +128,7 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
             _btnHold.Location = new Point(20, 270);
             pnl.Controls.Add(_btnHold);
 
-            StyleButton(_btnRelease, Color.White, AppColors.StatusRed);
+            StyleButton(_btnRelease, AppColors.Surface2, AppColors.Danger);
             _btnRelease.Text = "HỦY GIỮ GHẾ / CHỌN LẠI";
             _btnRelease.Size = new Size(300, 48);
             _btnRelease.Location = new Point(20, 270);
@@ -166,8 +166,8 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
             b.BackColor = back;
             b.ForeColor = fore;
             b.FlatStyle = FlatStyle.Flat;
-            b.FlatAppearance.BorderSize = fore == AppColors.StatusRed ? 1 : 0;
-            b.FlatAppearance.BorderColor = AppColors.StatusRed;
+            b.FlatAppearance.BorderSize = back == AppColors.Surface2 ? 1 : 0;
+            b.FlatAppearance.BorderColor = fore == AppColors.Danger || fore == AppColors.StatusRed ? AppColors.Danger : AppColors.Border;
             b.Cursor = Cursors.Hand;
         }
 

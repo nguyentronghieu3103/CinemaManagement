@@ -329,7 +329,7 @@ namespace CinemaManagement.UI.Theme
                 if (!Visible || form == null || form.WindowState == FormWindowState.Minimized || !form.Visible) return;
                 _phase = (float)((DateTime.UtcNow - _t0).TotalSeconds / PeriodSeconds * Math.PI * 2);
                 _dirty = true;
-                Invalidate(true);      // true: để các control trong suốt bên trong vẽ lại phần nền phía sau
+                Invalidate();      // Chỉ vẽ lại chính panel nền, tránh ép toàn bộ control con cháu invalidate lặp lại
             };
         }
 
@@ -496,6 +496,8 @@ namespace CinemaManagement.UI.Theme
             }
             using var pen = new Pen(BorderColor);
             g.DrawPath(pen, path);
+
+            base.OnPaint(e);
         }
     }
 
@@ -535,6 +537,8 @@ namespace CinemaManagement.UI.Theme
 
             using var pen = new Pen(Color.FromArgb(150, AppColors.Border));
             g.DrawPath(pen, path);
+
+            base.OnPaint(e);
         }
     }
 
@@ -684,9 +688,10 @@ namespace CinemaManagement.UI.Theme
                          : FlatAppearance.BorderSize > 0
                              ? (FlatAppearance.BorderColor.IsEmpty ? AppColors.Border : FlatAppearance.BorderColor)
                              : Color.Empty;
-            if (!border.IsEmpty && Enabled)
+            if (!border.IsEmpty)
             {
-                using var pen = new Pen(border, 1.5f);
+                Color borderToDraw = Enabled ? border : AppColors.Border;
+                using var pen = new Pen(borderToDraw, Enabled ? 1.5f : 1f);
                 g.DrawPath(pen, path);
             }
 
@@ -704,6 +709,49 @@ namespace CinemaManagement.UI.Theme
                 TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter |
                 TextFormatFlags.EndEllipsis | TextFormatFlags.SingleLine | TextFormatFlags.NoPrefix);
             if (!ReferenceEquals(font, Font)) font.Dispose();
+        }
+    }
+
+    /// <summary>DateTimePicker phong cách Dark Cinema: nền tối hòa hợp với khung, chữ trắng, viền mảnh.</summary>
+    public class CinemaDatePicker : DateTimePicker
+    {
+        private const int WM_PAINT = 0x000F;
+
+        public CinemaDatePicker()
+        {
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            CalendarMonthBackground = AppColors.CardBackground;
+            CalendarForeColor = AppColors.TextPrimary;
+            CalendarTitleBackColor = AppColors.Primary;
+            CalendarTitleForeColor = Color.White;
+            CalendarTrailingForeColor = AppColors.TextMuted;
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            base.WndProc(ref m);
+            if (m.Msg == WM_PAINT)
+            {
+                using var g = Graphics.FromHwnd(Handle);
+                UiKit.HighQuality(g);
+
+                var r = new Rectangle(0, 0, Width, Height);
+                using (var bg = new SolidBrush(AppColors.InputBackground))
+                    g.FillRectangle(bg, r);
+
+                using (var pen = new Pen(AppColors.Border))
+                    g.DrawRectangle(pen, 0, 0, Width - 1, Height - 1);
+
+                int pad = this.S(8);
+                int iconW = this.S(24);
+                var tr = new Rectangle(pad, 0, Math.Max(1, Width - iconW - pad), Height);
+                TextRenderer.DrawText(g, Text, Font, tr, Color.White,
+                    TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine);
+
+                var ir = new Rectangle(Width - iconW, 0, iconW, Height);
+                TextRenderer.DrawText(g, "📅", new Font("Segoe UI", 9F), ir, AppColors.TextSecondary,
+                    TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+            }
         }
     }
 }

@@ -35,7 +35,7 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
         private readonly FlowLayoutPanel _flowCombos = new();
 
         private readonly ListView _lvCart = new();
-        private readonly Button _btnRemoveCombo = new();
+        private readonly PillButton _btnRemoveCombo = new();
         private readonly Label _lblTicketTotal = new();
         private readonly Label _lblComboTotal = new();
         private readonly Label _lblGrandTotal = new();
@@ -106,7 +106,7 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
             {
                 Text = $"{_movie.TenPhim}   •   {_showtime.NgayChieu:dd/MM/yyyy}   •   {_showtime.GioBatDau:hh\\:mm} - {_showtime.GioKetThuc:hh\\:mm}   •   {_showtime.TenPhong}",
                 Font = new Font("Segoe UI", 11.5F, FontStyle.Bold),
-                ForeColor = AppColors.HeaderBackground,
+                ForeColor = AppColors.TextSecondary,
                 AutoSize = true,
                 Left = 24,
                 Top = 62
@@ -188,7 +188,7 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
             _lvCart.BorderStyle = BorderStyle.None;
             _lvCart.HeaderStyle = ColumnHeaderStyle.Nonclickable;
             _lvCart.Font = new Font("Segoe UI", 10F);
-            _lvCart.BackColor = Color.White;
+            _lvCart.BackColor = AppColors.CardBackground;
             _lvCart.ForeColor = AppColors.TextDark;
 
             _lvCart.Columns.Add(new ColumnHeader { Text = "Mục", Width = 170 });
@@ -201,9 +201,13 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
         {
             var pnl = new Panel { Dock = DockStyle.Bottom, Height = 330, BackColor = AppColors.InputBackground };
 
-            StyleButton(_btnRemoveCombo, Color.White, AppColors.StatusRed);
             _btnRemoveCombo.Text = "Xóa combo đã chọn";
-            _btnRemoveCombo.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            _btnRemoveCombo.NormalColor = AppColors.Surface2;
+            _btnRemoveCombo.ForeColor = AppColors.Danger;
+            _btnRemoveCombo.BorderColor = AppColors.Danger;
+            _btnRemoveCombo.DisabledColor = AppColors.Surface2;
+            _btnRemoveCombo.Radius = 6;
+            _btnRemoveCombo.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
             _btnRemoveCombo.Size = new Size(200, 32);
             _btnRemoveCombo.Location = new Point(16, 4);
             _btnRemoveCombo.Enabled = false;
@@ -214,7 +218,7 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
 
             pnl.Controls.Add(new Panel { Left = 16, Top = 112, Width = 438, Height = 1, BackColor = AppColors.TextMuted });
 
-            AddSummaryRow(pnl, "TỔNG CỘNG", _lblGrandTotal, 122, 18F, FontStyle.Bold, AppColors.HeaderBackground);
+            AddSummaryRow(pnl, "TỔNG CỘNG", _lblGrandTotal, 122, 18F, FontStyle.Bold, AppColors.Accent);
 
             pnl.Controls.Add(MakeCaption("Giữ ghế còn lại", 172, 10F));
             _lblCountdown.Left = 200; _lblCountdown.Top = 166; _lblCountdown.Width = 254; _lblCountdown.Height = 30;
@@ -377,7 +381,12 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
 
         private Panel CreateComboCard(ComboDto combo, out ComboCardRef refs)
         {
-            var card = new Panel { Width = 300, Height = 150, Margin = new Padding(10), BackColor = Color.White };
+            var card = new Panel { Width = 300, Height = 150, Margin = new Padding(10), BackColor = AppColors.CardBackground };
+            card.Paint += (s, e) =>
+            {
+                using var pen = new Pen(AppColors.Border, 1);
+                e.Graphics.DrawRectangle(pen, 0, 0, card.Width - 1, card.Height - 1);
+            };
 
             card.Controls.Add(new Label
             {
@@ -410,7 +419,7 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
                 Top = 106,
                 AutoSize = true,
                 Font = new Font("Segoe UI", 13F, FontStyle.Bold),
-                ForeColor = AppColors.Primary
+                ForeColor = AppColors.Accent
             });
 
             Button minus = MakeStepButton("−");
@@ -448,13 +457,13 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
                 Text = text,
                 Size = new Size(34, 34),
                 Font = new Font("Segoe UI", 13F, FontStyle.Bold),
-                ForeColor = AppColors.TextDark,
-                BackColor = Color.White,
+                ForeColor = Color.White,
+                BackColor = AppColors.Surface2,
                 FlatStyle = FlatStyle.Flat,
                 Cursor = Cursors.Hand
             };
             b.FlatAppearance.BorderSize = 1;
-            b.FlatAppearance.BorderColor = AppColors.TextMuted;
+            b.FlatAppearance.BorderColor = AppColors.Border;
             return b;
         }
 
@@ -494,7 +503,7 @@ namespace CinemaManagement.UI.Forms.Staff.Booking
 
             int qty = GetQuantity(comboId);
             c.Qty.Text = qty.ToString();
-            c.Card.BackColor = qty > 0 ? AppColors.InputBackground : Color.White;
+            c.Card.BackColor = qty > 0 ? AppColors.Surface2 : AppColors.CardBackground;
             c.Minus.Enabled = !_busy && !_expired && qty > CartConstants.MinComboQuantity;
             c.Plus.Enabled = !_busy && !_expired && qty < CartConstants.MaxComboQuantity;
         }
