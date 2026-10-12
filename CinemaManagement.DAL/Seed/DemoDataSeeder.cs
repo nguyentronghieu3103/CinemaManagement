@@ -12,6 +12,7 @@ namespace CinemaManagement.DAL.Seed
         {
             qrPayloadFactory ??= () => $"{Guid.NewGuid():N}"[..16] + "." + $"{Guid.NewGuid():N}"[..8];
 
+            await CleanAndResetDemoDataIfNeededAsync(context);
             await SeedSeatSurchargesAsync(context);
             await SeedGenresAsync(context);
             await SeedCombosAsync(context);
@@ -21,6 +22,163 @@ namespace CinemaManagement.DAL.Seed
             await SeedShowtimesAsync(context);
             await SeedShowtimeSeatStatusesAsync(context);
             await SeedSampleTicketsAsync(context, qrPayloadFactory);
+        }
+
+        private static async Task CleanAndResetDemoDataIfNeededAsync(CinemaDbContext context)
+        {
+            var today = DateTime.Today;
+            var nowTime = DateTime.Now.TimeOfDay;
+
+            // 1. Dọn dẹp toàn bộ dữ liệu demo của các ngày cũ trước hôm nay
+            await CleanPastDemoDataAsync(context);
+
+            // 2. Kiểm tra tính toàn vẹn của dữ liệu demo hôm nay
+            int todayShowtimesCount = await context.SuatChieus.CountAsync(s => s.NgayChieu.Date == today);
+            int upcomingCount = await context.SuatChieus.CountAsync(s => s.NgayChieu.Date == today && s.GioBatDau >= nowTime);
+            int todayTicketsCount = await context.Ves.CountAsync(v => v.Showtime.NgayChieu.Date == today);
+            int todayCheckInCount = await context.Ves.CountAsync(v => v.Showtime.NgayChieu.Date == today && v.TrangThaiCheckIn == CheckInStatus.DaCheckIn);
+
+            // Nếu dữ liệu hôm nay trên máy hiện tại không đúng chuẩn demo:
+            // (khác 6 suất, ít hơn 3 suất sắp tới, vé khác 219, hoặc chưa có check-in)
+            // -> Thực hiện dọn sạch hôm nay để nạp lại đúng 6 suất từ thời điểm hiện tại, 219 vé và 1 check-in
+            bool isDemoClean = todayShowtimesCount == 6
+                            && upcomingCount >= 3
+                            && todayTicketsCount == 219
+                            && todayCheckInCount == 1;
+
+            if (!isDemoClean)
+            {
+                var todayShowtimes = await context.SuatChieus
+                    .Where(s => s.NgayChieu.Date == today)
+                    .ToListAsync();
+
+                if (todayShowtimes.Count > 0)
+                {
+                    var todayShowtimeIds = todayShowtimes.Select(s => s.Id).ToList();
+
+                    var todayTickets = await context.Ves
+                        .Where(v => todayShowtimeIds.Contains(v.ShowtimeId))
+                        .ToListAsync();
+
+                    var invoiceIds = todayTickets.Select(v => v.InvoiceId).Distinct().ToList();
+
+                    if (todayTickets.Count > 0)
+                    {
+                        context.Ves.RemoveRange(todayTickets);
+                        await context.SaveChangesAsync();
+                    }
+
+                    if (invoiceIds.Count > 0)
+                    {
+                        var invoicesToDelete = await context.HoaDons
+                            .Where(i => invoiceIds.Contains(i.Id))
+                            .ToListAsync();
+
+                        var delInvIds = invoicesToDelete.Select(i => i.Id).ToList();
+
+                        var payments = await context.GiaoDichThanhToans.Where(p => delInvIds.Contains(p.InvoiceId)).ToListAsync();
+                        if (payments.Count > 0) context.GiaoDichThanhToans.RemoveRange(payments);
+
+                        var combos = await context.HoaDonCombos.Where(c => delInvIds.Contains(c.InvoiceId)).ToListAsync();
+                        if (combos.Count > 0) context.HoaDonCombos.RemoveRange(combos);
+
+                        var emailLogs = await context.LichSuGuiEmails.Where(e => delInvIds.Contains(e.InvoiceId)).ToListAsync();
+                        if (emailLogs.Count > 0) context.LichSuGuiEmails.RemoveRange(emailLogs);
+
+                        if (invoicesToDelete.Count > 0) context.HoaDons.RemoveRange(invoicesToDelete);
+
+                        await context.SaveChangesAsync();
+                    }
+
+                    var seatStatuses = await context.TrangThaiGheTheoSuats
+                        .Where(x => todayShowtimeIds.Contains(x.ShowtimeId))
+                        .ToListAsync();
+                    if (seatStatuses.Count > 0)
+                    {
+                        context.TrangThaiGheTheoSuats.RemoveRange(seatStatuses);
+                        await context.SaveChangesAsync();
+                    }
+
+                    context.SuatChieus.RemoveRange(todayShowtimes);
+                    await context.SaveChangesAsync();
+                }
+
+                // Dọn dẹp các hóa đơn rác không có vé còn sót lại của ngày hôm nay
+                var orphanedInvoices = await context.HoaDons
+                    .Where(i => i.NgayLap.Date == today && !context.Ves.Any(v => v.InvoiceId == i.Id))
+                    .ToListAsync();
+                if (orphanedInvoices.Count > 0)
+                {
+                    var orphanIds = orphanedInvoices.Select(i => i.Id).ToList();
+                    var orphanPayments = await context.GiaoDichThanhToans.Where(p => orphanIds.Contains(p.InvoiceId)).ToListAsync();
+                    if (orphanPayments.Count > 0) context.GiaoDichThanhToans.RemoveRange(orphanPayments);
+                    var orphanCombos = await context.HoaDonCombos.Where(c => orphanIds.Contains(c.InvoiceId)).ToListAsync();
+                    if (orphanCombos.Count > 0) context.HoaDonCombos.RemoveRange(orphanCombos);
+                    context.HoaDons.RemoveRange(orphanedInvoices);
+                    await context.SaveChangesAsync();
+                }
+            }
+        }
+
+        private static async Task CleanPastDemoDataAsync(CinemaDbContext context)
+        {
+            var today = DateTime.Today;
+
+            // Dọn dẹp toàn bộ dữ liệu demo của các ngày cũ trước hôm nay
+            var pastShowtimes = await context.SuatChieus
+                .Where(s => s.NgayChieu.Date < today)
+                .ToListAsync();
+
+            if (pastShowtimes.Count > 0)
+            {
+                var pastShowtimeIds = pastShowtimes.Select(s => s.Id).ToList();
+
+                var pastTickets = await context.Ves
+                    .Where(v => pastShowtimeIds.Contains(v.ShowtimeId))
+                    .ToListAsync();
+
+                var invoiceIds = pastTickets.Select(v => v.InvoiceId).Distinct().ToList();
+
+                if (pastTickets.Count > 0)
+                {
+                    context.Ves.RemoveRange(pastTickets);
+                    await context.SaveChangesAsync();
+                }
+
+                if (invoiceIds.Count > 0)
+                {
+                    var invoicesToDelete = await context.HoaDons
+                        .Where(i => invoiceIds.Contains(i.Id) && !context.Ves.Any(v => v.InvoiceId == i.Id && !pastShowtimeIds.Contains(v.ShowtimeId)))
+                        .ToListAsync();
+
+                    var delInvIds = invoicesToDelete.Select(i => i.Id).ToList();
+
+                    var payments = await context.GiaoDichThanhToans.Where(p => delInvIds.Contains(p.InvoiceId)).ToListAsync();
+                    if (payments.Count > 0) context.GiaoDichThanhToans.RemoveRange(payments);
+
+                    var combos = await context.HoaDonCombos.Where(c => delInvIds.Contains(c.InvoiceId)).ToListAsync();
+                    if (combos.Count > 0) context.HoaDonCombos.RemoveRange(combos);
+
+                    var emailLogs = await context.LichSuGuiEmails.Where(e => delInvIds.Contains(e.InvoiceId)).ToListAsync();
+                    if (emailLogs.Count > 0) context.LichSuGuiEmails.RemoveRange(emailLogs);
+
+                    if (invoicesToDelete.Count > 0) context.HoaDons.RemoveRange(invoicesToDelete);
+
+                    await context.SaveChangesAsync();
+                }
+
+                var pastSeatStatuses = await context.TrangThaiGheTheoSuats
+                    .Where(x => pastShowtimeIds.Contains(x.ShowtimeId))
+                    .ToListAsync();
+                if (pastSeatStatuses.Count > 0)
+                {
+                    context.TrangThaiGheTheoSuats.RemoveRange(pastSeatStatuses);
+                    await context.SaveChangesAsync();
+                }
+
+                context.SuatChieus.RemoveRange(pastShowtimes);
+                await context.SaveChangesAsync();
+            }
         }
 
         private static async Task SeedSeatSurchargesAsync(CinemaDbContext context)
@@ -176,25 +334,68 @@ namespace CinemaManagement.DAL.Seed
             var getMovie = (string title) => movies.FirstOrDefault(m => m.TenPhim.Contains(title)) ?? movies[0];
 
             var today = DateTime.Today;
-            int countToday = await context.SuatChieus.CountAsync(s => s.NgayChieu.Date == today);
-            if (countToday < 5)
+            var nowTime = DateTime.Now.TimeOfDay;
+            var now = DateTime.Now;
+
+            // Kiểm tra xem hôm nay còn bao nhiêu suất chiếu sắp tới (chưa hết giờ)
+            int upcomingCount = await context.SuatChieus.CountAsync(s => s.NgayChieu.Date == today && s.GioBatDau >= nowTime);
+
+            var todayShowtimes = await context.SuatChieus
+                .Where(s => s.NgayChieu.Date == today)
+                .OrderBy(s => s.GioBatDau)
+                .ToListAsync();
+
+            // Nếu các suất chiếu hôm nay đã trôi qua trong quá khứ (ít hơn 3 suất sắp tới):
+            // Tự động điều chỉnh giờ chiếu của các suất hôm nay từ thời điểm hiện tại trở đi để luôn sẵn sàng phục vụ
+            if (upcomingCount < 3 && todayShowtimes.Count >= 6)
             {
-                // Tạo các suất chiếu hôm nay: Trải dài từ thời điểm hiện tại trở đi để luôn lọt vào danh sách "Sắp diễn ra"
-                var now = DateTime.Now;
+                int[] minuteOffsets = { 15, 90, 160, 240, 320, 400 };
+                for (int i = 0; i < Math.Min(todayShowtimes.Count, minuteOffsets.Length); i++)
+                {
+                    var st = todayShowtimes[i];
+                    var startDt = now.AddMinutes(minuteOffsets[i]);
+                    var startSpan = new TimeSpan(startDt.Hour, startDt.Minute, 0);
+                    if (startDt.Date > today) startSpan = new TimeSpan(23, 45, 0);
+                    var endSpan = startSpan.Add(TimeSpan.FromMinutes(120 + 15));
+                    if (endSpan.Days > 0) endSpan = new TimeSpan(23, 59, 0);
+
+                    st.GioBatDau = startSpan;
+                    st.GioKetThuc = endSpan;
+                }
+                await context.SaveChangesAsync();
+            }
+            else if (todayShowtimes.Count < 6)
+            {
+                // Nếu hôm nay chưa có đủ suất chiếu: dọn các suất cũ chưa có vé và tạo mới bộ 6 suất
+                var todayShowtimesWithoutTickets = await context.SuatChieus
+                    .Where(s => s.NgayChieu.Date == today && !context.Ves.Any(v => v.ShowtimeId == s.Id))
+                    .ToListAsync();
+
+                if (todayShowtimesWithoutTickets.Count > 0)
+                {
+                    var stIds = todayShowtimesWithoutTickets.Select(s => s.Id).ToList();
+                    var oldStatuses = await context.TrangThaiGheTheoSuats
+                        .Where(x => stIds.Contains(x.ShowtimeId))
+                        .ToListAsync();
+                    context.TrangThaiGheTheoSuats.RemoveRange(oldStatuses);
+                    context.SuatChieus.RemoveRange(todayShowtimesWithoutTickets);
+                    await context.SaveChangesAsync();
+                }
+
                 var schedulesToday = new[]
                 {
-                    (getMovie("Kung Fu Panda"), r1, now.AddMinutes(20), 85000m),
-                    (getMovie("Godzilla x Kong"), r1, now.AddMinutes(85), 95000m),
+                    (getMovie("Kung Fu Panda"), r1, now.AddMinutes(15), 85000m),   // Trong khung 30p để test check-in ngay
+                    (getMovie("Godzilla x Kong"), r1, now.AddMinutes(90), 95000m),
                     (getMovie("Dune"), r2, now.AddMinutes(160), 110000m),
-                    (getMovie("Mai"), r2, now.AddMinutes(250), 100000m),
-                    (getMovie("Exhuma"), r3, now.AddMinutes(340), 120000m),
-                    (getMovie("Lật Mặt 7"), r1, now.AddMinutes(440), 90000m)
+                    (getMovie("Mai"), r2, now.AddMinutes(240), 100000m),
+                    (getMovie("Exhuma"), r3, now.AddMinutes(320), 120000m),
+                    (getMovie("Lật Mặt 7"), r1, now.AddMinutes(400), 90000m)
                 };
 
                 foreach (var (m, r, startDt, price) in schedulesToday)
                 {
                     var startSpan = new TimeSpan(startDt.Hour, startDt.Minute, 0);
-                    if (startDt.Date > today) startSpan = new TimeSpan(23, 45, 0); // nếu vượt quá nửa đêm thì ghim cuối ngày
+                    if (startDt.Date > today) startSpan = new TimeSpan(23, 45, 0);
                     var endSpan = startSpan.Add(TimeSpan.FromMinutes(m.ThoiLuong + 15));
                     if (endSpan.Days > 0) endSpan = new TimeSpan(23, 59, 0);
 
@@ -264,26 +465,31 @@ namespace CinemaManagement.DAL.Seed
 
         private static async Task SeedShowtimeSeatStatusesAsync(CinemaDbContext context)
         {
-            var showtimes = await context.SuatChieus
+            var today = DateTime.Today;
+
+            // 1. Đối với suất chiếu hôm nay: Thiết lập tỷ lệ ghế đa dạng để test trạng thái Dashboard và Bán vé
+            var todayShowtimes = await context.SuatChieus
+                .Where(s => s.NgayChieu.Date == today)
                 .Include(s => s.CinemaRoom).ThenInclude(r => r.Seats)
+                .OrderBy(s => s.GioBatDau)
                 .ToListAsync();
 
             int index = 0;
-            foreach (var st in showtimes)
+            foreach (var st in todayShowtimes)
             {
                 bool hasSeats = await context.TrangThaiGheTheoSuats.AnyAsync(x => x.ShowtimeId == st.Id);
-                if (hasSeats) continue;
+                if (hasSeats) { index++; continue; }
 
                 var seats = st.CinemaRoom.Seats.OrderBy(s => s.Hang).ThenBy(s => s.Cot).ToList();
                 int totalSeats = seats.Count;
 
-                // Xác định tỷ lệ ghế đặt trước để test các trạng thái trên Dashboard:
-                // Suất 0: ~20% (Đang bán - xanh)
+                // Tỷ lệ ghế đặt trước:
+                // Suất 0: 10 ghế (Đang bán - xanh)
                 // Suất 1: ~88% (Gần đầy - cam)
                 // Suất 2: 100% (Đã đầy - đỏ)
                 // Suất 3: ~85% (Gần đầy - cam)
-                // Suất 4: ~35% (Đang bán - xanh)
-                // Suất 5: 0% (Đang bán - rạp mới mở)
+                // Suất 4: 12 ghế (Đang bán - xanh)
+                // Suất 5: 0 ghế (Đang bán - mới mở)
                 int bookedTarget = (index % 6) switch
                 {
                     0 => Math.Min(10, totalSeats),
@@ -306,23 +512,74 @@ namespace CinemaManagement.DAL.Seed
                     });
                 }
             }
+
+            // 2. Đối với các suất chiếu tương lai (ngày mai, ngày mốt): Đảm bảo tất cả ghế là TRỐNG để nhân viên test bán vé trước
+            var futureStatuses = await context.TrangThaiGheTheoSuats
+                .Where(x => x.Showtime.NgayChieu.Date > today && x.TrangThai == SeatStatus.DaDat)
+                .ToListAsync();
+            foreach (var s in futureStatuses) s.TrangThai = SeatStatus.Trong;
+
+            var futureShowtimes = await context.SuatChieus
+                .Where(s => s.NgayChieu.Date > today)
+                .Include(s => s.CinemaRoom).ThenInclude(r => r.Seats)
+                .ToListAsync();
+
+            foreach (var st in futureShowtimes)
+            {
+                bool hasSeats = await context.TrangThaiGheTheoSuats.AnyAsync(x => x.ShowtimeId == st.Id);
+                if (hasSeats) continue;
+
+                var seats = st.CinemaRoom.Seats.OrderBy(s => s.Hang).ThenBy(s => s.Cot).ToList();
+                for (int i = 0; i < seats.Count; i++)
+                {
+                    context.TrangThaiGheTheoSuats.Add(new SeatShowtimeStatus
+                    {
+                        ShowtimeId = st.Id,
+                        SeatId = seats[i].Id,
+                        TrangThai = SeatStatus.Trong,
+                        ThoiGianGiu = null
+                    });
+                }
+            }
+
             await context.SaveChangesAsync();
         }
 
         private static async Task SeedSampleTicketsAsync(CinemaDbContext context, Func<string> qrPayloadFactory)
         {
-            if (await context.Ves.CountAsync() >= 6) return;
+            var today = DateTime.Today;
+
+            // Đảm bảo có ít nhất 1 vé đã check-in cho ngày hôm nay để card Check-in trên Dashboard hiển thị đúng
+            bool hasCheckedInToday = await context.Ves.AnyAsync(v => v.Showtime.NgayChieu.Date == today && v.TrangThaiCheckIn == CheckInStatus.DaCheckIn);
+            if (!hasCheckedInToday)
+            {
+                var firstTicketToday = await context.Ves
+                    .Where(v => v.Showtime.NgayChieu.Date == today)
+                    .OrderBy(v => v.Id)
+                    .FirstOrDefaultAsync();
+
+                if (firstTicketToday != null)
+                {
+                    firstTicketToday.TrangThaiCheckIn = CheckInStatus.DaCheckIn;
+                    firstTicketToday.ThoiGianCheckIn = DateTime.Now.AddMinutes(-5);
+                    await context.SaveChangesAsync();
+                }
+            }
+
+            // Nếu hôm nay đã có vé rồi thì không seed thêm để tránh trùng lặp
+            if (await context.Ves.AnyAsync(v => v.Showtime.NgayChieu.Date == today)) return;
 
             var cashier = await context.NguoiDungs.FirstOrDefaultAsync(u => u.Email == "cashier@cinemamanagement.local")
                        ?? await context.NguoiDungs.FirstAsync();
             var customers = await context.KhachHangs.OrderBy(c => c.Id).ToListAsync();
-            var showtimes = await context.SuatChieus
+            var showtimesToday = await context.SuatChieus
+                .Where(s => s.NgayChieu.Date == today)
                 .Include(s => s.CinemaRoom).ThenInclude(r => r.Seats)
-                .OrderBy(s => s.Id)
+                .OrderBy(s => s.GioBatDau)
                 .ToListAsync();
             var combos = await context.Combos.ToListAsync();
 
-            if (customers.Count == 0 || showtimes.Count == 0) return;
+            if (customers.Count == 0 || showtimesToday.Count == 0) return;
 
             var c1 = customers[0]; // Nguyễn Văn Khách
             var c2 = customers.Count > 1 ? customers[1] : c1; // Trần Thị Thu Trang
@@ -333,31 +590,29 @@ namespace CinemaManagement.DAL.Seed
             var comboCouple = combos.FirstOrDefault(c => c.TenCombo.Contains("Couple"));
             var comboFamily = combos.FirstOrDefault(c => c.TenCombo.Contains("Family"));
 
-            // HÓA ĐƠN 1: Tiền mặt - 2 vé - ĐÃ CHECK-IN - Kèm 1 Combo Solo (Khách: 0901234567)
-            var st1 = showtimes[0];
+            // HÓA ĐƠN 1: Tiền mặt - 2 vé - 1 vé ĐÃ CHECK-IN, 1 vé CHƯA CHECK-IN - Kèm 1 Combo Solo (Khách: 0901234567)
+            var st1 = showtimesToday[0];
             var seats1 = await context.TrangThaiGheTheoSuats
                 .Where(x => x.ShowtimeId == st1.Id && x.TrangThai == SeatStatus.DaDat)
+                .OrderBy(x => x.SeatId)
                 .Select(x => x.SeatId)
                 .Take(2)
                 .ToListAsync();
 
-            var existing1 = await context.Ves.Where(v => v.ShowtimeId == st1.Id).Select(v => v.SeatId).ToListAsync();
-            var validSeats1 = seats1.Except(existing1).ToList();
-
-            if (validSeats1.Count > 0)
+            if (seats1.Count > 0)
             {
                 var inv1 = new Invoice
                 {
                     UserId = cashier.Id,
                     CustomerId = c1.Id,
                     NgayLap = DateTime.Now,
-                    TongTien = (st1.GiaVeCoSo * validSeats1.Count) + (comboSolo?.Gia ?? 0),
+                    TongTien = (st1.GiaVeCoSo * seats1.Count) + (comboSolo?.Gia ?? 0),
                     TrangThaiThanhToan = InvoiceStatus.DaThanhToan,
                     PhuongThuc = PaymentMethod.TienMat
                 };
 
                 int seatIdx = 0;
-                foreach (var sId in validSeats1)
+                foreach (var sId in seats1)
                 {
                     bool alreadyCheckedIn = seatIdx == 0;
                     inv1.Tickets.Add(new Ticket
@@ -367,7 +622,7 @@ namespace CinemaManagement.DAL.Seed
                         GiaVe = st1.GiaVeCoSo,
                         MaQR = qrPayloadFactory(),
                         TrangThaiCheckIn = alreadyCheckedIn ? CheckInStatus.DaCheckIn : CheckInStatus.ChuaCheckIn,
-                        ThoiGianCheckIn = alreadyCheckedIn ? DateTime.Now.AddMinutes(-10) : null
+                        ThoiGianCheckIn = alreadyCheckedIn ? DateTime.Now.AddMinutes(-5) : null
                     });
                     seatIdx++;
                 }
@@ -380,9 +635,10 @@ namespace CinemaManagement.DAL.Seed
             }
 
             // HÓA ĐƠN 2: Chuyển khoản SePay - 2 vé VIP - CHƯA CHECK-IN - Kèm 1 Combo Couple (Khách: 0988888888)
-            var st2 = showtimes.Count > 1 ? showtimes[1] : st1;
+            var st2 = showtimesToday.Count > 1 ? showtimesToday[1] : st1;
             var seats2 = await context.TrangThaiGheTheoSuats
                 .Where(x => x.ShowtimeId == st2.Id && x.TrangThai == SeatStatus.DaDat)
+                .OrderBy(x => x.SeatId)
                 .Select(x => x.SeatId)
                 .Take(2)
                 .ToListAsync();
@@ -423,9 +679,10 @@ namespace CinemaManagement.DAL.Seed
             }
 
             // HÓA ĐƠN 3: Tiền mặt - 1 vé - CHƯA CHECK-IN - KHÔNG KÈM COMBO (Khách: 0912345678)
-            var st3 = showtimes.Count > 2 ? showtimes[2] : st1;
+            var st3 = showtimesToday.Count > 2 ? showtimesToday[2] : st1;
             var seats3 = await context.TrangThaiGheTheoSuats
                 .Where(x => x.ShowtimeId == st3.Id && x.TrangThai == SeatStatus.DaDat)
+                .OrderBy(x => x.SeatId)
                 .Select(x => x.SeatId)
                 .Take(1)
                 .ToListAsync();
@@ -462,9 +719,10 @@ namespace CinemaManagement.DAL.Seed
             }
 
             // HÓA ĐƠN 4: Chuyển khoản SePay - 4 vé Gia đình - CHƯA CHECK-IN - Kèm Combo Family (Khách: 0977112233)
-            var st4 = showtimes.Count > 3 ? showtimes[3] : st1;
+            var st4 = showtimesToday.Count > 3 ? showtimesToday[3] : st1;
             var seats4 = await context.TrangThaiGheTheoSuats
                 .Where(x => x.ShowtimeId == st4.Id && x.TrangThai == SeatStatus.DaDat)
+                .OrderBy(x => x.SeatId)
                 .Select(x => x.SeatId)
                 .Take(4)
                 .ToListAsync();
@@ -504,8 +762,8 @@ namespace CinemaManagement.DAL.Seed
                 await context.SaveChangesAsync();
             }
 
-            // Tạo thêm vé bán cho các ghế đã đặt của các suất hôm nay để số liệu dashboard và tiến độ thanh bar hiển thị đúng thực tế
-            foreach (var st in showtimes.Where(s => s.NgayChieu.Date == DateTime.Today))
+            // Cấp vé cho TẤT CẢ các ghế đã đặt còn lại của các suất hôm nay để số liệu dashboard và tiến độ thanh bar hiển thị đúng thực tế 100%
+            foreach (var st in showtimesToday)
             {
                 var bookedSeatIds = await context.TrangThaiGheTheoSuats
                     .Where(x => x.ShowtimeId == st.Id && x.TrangThai == SeatStatus.DaDat)
@@ -517,14 +775,8 @@ namespace CinemaManagement.DAL.Seed
                     .Select(v => v.SeatId)
                     .ToListAsync();
 
-                var localTicketSeatIds = context.ChangeTracker.Entries<Ticket>()
-                    .Where(e => e.Entity.ShowtimeId == st.Id)
-                    .Select(e => e.Entity.SeatId)
-                    .ToList();
-
                 var remainingSeats = bookedSeatIds
                     .Except(existingTicketSeatIds)
-                    .Except(localTicketSeatIds)
                     .Distinct()
                     .ToList();
 

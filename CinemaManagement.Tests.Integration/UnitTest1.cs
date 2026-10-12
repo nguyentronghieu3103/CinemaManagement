@@ -1,4 +1,4 @@
-﻿namespace CinemaManagement.Tests.Integration;
+namespace CinemaManagement.Tests.Integration;
 
 public class UnitTest1
 {

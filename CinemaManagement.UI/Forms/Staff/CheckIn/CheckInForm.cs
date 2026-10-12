@@ -1,4 +1,4 @@
-﻿using System.Drawing.Drawing2D;
+using System.Drawing.Drawing2D;
 using System.Media;
 using CinemaManagement.BLL.Services.Tickets;
 using CinemaManagement.Common.Constants;
@@ -18,6 +18,7 @@ namespace CinemaManagement.UI.Forms.Staff.CheckIn
         private readonly CinemaBackdropPanel _stage = new() { Dock = DockStyle.Fill };    // nền glow điện ảnh
 
         public StaffPage NextPage { get; private set; } = StaffPage.Home;
+        public object? NextParam { get; private set; }
 
         public CheckInForm()
         {
@@ -38,6 +39,28 @@ namespace CinemaManagement.UI.Forms.Staff.CheckIn
             pnlScanZone.Paint += pnlScanZone_Paint;
             btnLookup.Click += async (s, e) => await HandleScannedCodeAsync(txtCode.Text);
             AcceptButton = btnLookup;         // Enter = tra cứu (máy quét cầm tay tự gõ Enter sau khi quét)
+
+            var btnTodayList = new PillButton
+            {
+                Text = "📋  Danh sách vé check-in hôm nay",
+                NormalColor = AppColors.Surface2,
+                ForeColor = AppColors.TextPrimary,
+                BorderColor = AppColors.BorderStrong,
+                HoverColor = UiKit.Blend(AppColors.Surface2, AppColors.Primary, 0.25f),
+                Font = new Font("Segoe UI", 10.5F, FontStyle.Bold),
+                Size = new Size(300, 38),
+                Location = new Point((pnlCenter.Width - 300) / 2, 546),
+                Radius = 12,
+                Cursor = Cursors.Hand
+            };
+            btnTodayList.Click += (s, e) =>
+            {
+                NextPage = StaffPage.Lookup;
+                NextParam = CinemaManagement.Common.Enums.TicketFilterMode.TodayCheckIn;
+                Close();
+            };
+            pnlCenter.Height = 595;
+            pnlCenter.Controls.Add(btnTodayList);
 
             Resize += (s, e) => CenterContent();
             Shown += (s, e) => { CenterContent(); txtCode.Focus(); };

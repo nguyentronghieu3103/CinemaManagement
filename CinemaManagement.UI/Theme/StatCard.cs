@@ -16,6 +16,7 @@ namespace CinemaManagement.UI.Theme
 
         public StatCard()
         {
+            Cursor = Cursors.Hand;
             _timer.Tick += OnTick;
             MouseEnter += (s, e) => { if (!AccentColor.IsEmpty) { BorderColor = AccentColor; Invalidate(); } };
             MouseLeave += (s, e) => { BorderColor = AppColors.Border; Invalidate(); };
