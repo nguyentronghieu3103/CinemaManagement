@@ -21,14 +21,19 @@ namespace CinemaManagement.UI.Forms.Staff
 
         private GradientPanel _hero = null!;
         private Label _lblWelcome = null!, _lblSub = null!, _lblTime = null!, _lblDate = null!;
-        private StatCard _cardVe = null!, _cardSuat = null!, _cardCheckIn = null!, _cardDoanhThu = null!;
+        private StatCard _cardVe = null!, _cardSuat = null!, _cardCheckIn = null!;
         private Label _lblUpdated = null!;
         private CardPanel _cardShowtimes = null!;
         private Panel _rowsPanel = null!;
+        private Panel _paginationPanel = null!;
+        private Label _lblPageInfo = null!;
+        private FlowLayoutPanel _pnlPageButtons = null!;
+
         private List<UpcomingShowtimeDto> _showtimes = new();
-        private int _showtimeScrollY;
-        private bool _isDraggingScroll;
-        private int _dragStartY, _dragStartScroll;
+        private int _currentPage = 1;
+        private const int PageSize = 10;
+        private int TotalPages => Math.Max(1, (int)Math.Ceiling((double)_showtimes.Count / PageSize));
+
         private PillButton _btnBanVe = null!, _btnCheckIn = null!, _btnTraCuu = null!;
 
         private System.Windows.Forms.Timer _clockTimer = null!;
@@ -155,25 +160,23 @@ namespace CinemaManagement.UI.Forms.Staff
             var row = new TableLayoutPanel
             {
                 Dock = DockStyle.Fill,
-                ColumnCount = 4,
+                ColumnCount = 3,
                 RowCount = 1,
                 BackColor = Color.Transparent,
                 Margin = new Padding(0, 0, 0, this.S(10))
             };
             UiKit.DoubleBuffer(row);
-            for (int i = 0; i < 4; i++) row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
+            for (int i = 0; i < 3; i++) row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f / 3));
             row.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
 
-            _cardVe = MakeStat("Vé đã bán", "🎟", AppColors.Primary, AppColors.PrimarySoft);
-            _cardSuat = MakeStat("Suất hôm nay", "🎬", AppColors.SoftBlue, AppColors.InfoSoft);
-            _cardCheckIn = MakeStat("Check-in", "✅", AppColors.Success, AppColors.SuccessSoft);
-            _cardDoanhThu = MakeStat("Doanh thu hôm nay", "💰", AppColors.Purple, AppColors.PurpleSoft);
-            _cardDoanhThu.Suffix = " đ";
+            _cardVe = MakeStat("Vé bán hôm nay", "🎟", AppColors.Primary, AppColors.PrimarySoft);
+            _cardSuat = MakeStat("Suất chiếu hôm nay", "🎬", AppColors.SoftBlue, AppColors.InfoSoft);
+            _cardCheckIn = MakeStat("Check-in hôm nay", "✅", AppColors.Success, AppColors.SuccessSoft);
+            _cardCheckIn.Margin = Padding.Empty;
 
             row.Controls.Add(_cardVe, 0, 0);
             row.Controls.Add(_cardSuat, 1, 0);
             row.Controls.Add(_cardCheckIn, 2, 0);
-            row.Controls.Add(_cardDoanhThu, 3, 0);
             return row;
         }
 
@@ -193,7 +196,7 @@ namespace CinemaManagement.UI.Forms.Staff
             {
                 Dock = DockStyle.Fill,
                 Margin = new Padding(0, 0, 0, this.S(10)),
-                Padding = new Padding(this.S(24), this.S(14), this.S(24), this.S(14))
+                Padding = new Padding(this.S(24), this.S(14), this.S(24), this.S(12))
             };
             UiKit.DoubleBuffer(card);
 
@@ -201,7 +204,7 @@ namespace CinemaManagement.UI.Forms.Staff
             {
                 Dock = DockStyle.Fill,
                 ColumnCount = 1,
-                RowCount = 3,
+                RowCount = 4,
                 BackColor = Color.Transparent,
                 Margin = new Padding(0),
                 Padding = new Padding(0)
@@ -210,13 +213,14 @@ namespace CinemaManagement.UI.Forms.Staff
             cardTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f));
             cardTable.RowStyles.Add(new RowStyle(SizeType.Absolute, this.S(38))); // Hàng 0: Tiêu đề
             cardTable.RowStyles.Add(new RowStyle(SizeType.Absolute, this.S(36))); // Hàng 1: Tiêu đề cột (Sticky Header riêng biệt)
-            cardTable.RowStyles.Add(new RowStyle(SizeType.Percent, 100f));        // Hàng 2: Vùng dữ liệu cuộn
+            cardTable.RowStyles.Add(new RowStyle(SizeType.Percent, 100f));        // Hàng 2: Vùng dữ liệu 10 suất chiếu
+            cardTable.RowStyles.Add(new RowStyle(SizeType.Absolute, this.S(42))); // Hàng 3: Phân trang góc phải
 
             // 1. Dòng tiêu đề thẻ
             var titleRow = new Panel { Dock = DockStyle.Fill, BackColor = Color.Transparent, Margin = new Padding(0) };
             var lblTitle = new Label
             {
-                Text = "🎞  Suất chiếu sắp diễn ra",
+                Text = "🎞  Suất chiếu hôm nay",
                 AutoSize = true,
                 BackColor = Color.Transparent,
                 ForeColor = AppColors.TextDark,
@@ -257,99 +261,263 @@ namespace CinemaManagement.UI.Forms.Staff
             };
             headerPanel.Resize += (s, e) => headerPanel.Invalidate();
 
-            // 3. Vùng danh sách các hàng có thể cuộn - được hệ điều hành giới hạn clip riêng, triệt tiêu lỗi tràn text
+            // 3. Vùng danh sách các hàng (tối đa 10 hàng/trang)
             _rowsPanel = new Panel { Dock = DockStyle.Fill, BackColor = Color.Transparent, Margin = new Padding(0) };
             UiKit.DoubleBuffer(_rowsPanel);
             _rowsPanel.Paint += (s, e) => DrawShowtimesRows(e.Graphics, _rowsPanel);
+            _rowsPanel.Resize += (s, e) => _rowsPanel.Invalidate();
 
-            // Xử lý lăn chuột đồng bộ cho toàn thẻ
-            card.MouseWheel += (s, e) => ScrollShowtimes(e.Delta);
-            cardTable.MouseWheel += (s, e) => ScrollShowtimes(e.Delta);
-            titleRow.MouseWheel += (s, e) => ScrollShowtimes(e.Delta);
-            headerPanel.MouseWheel += (s, e) => ScrollShowtimes(e.Delta);
-            _rowsPanel.MouseWheel += (s, e) => ScrollShowtimes(e.Delta);
+            // 4. Thanh phân trang góc dưới
+            _paginationPanel = new Panel { Dock = DockStyle.Fill, BackColor = Color.Transparent, Margin = new Padding(0) };
+            UiKit.DoubleBuffer(_paginationPanel);
+            _paginationPanel.Paint += (s, e) =>
+            {
+                using var pBorder = new Pen(AppColors.Border);
+                e.Graphics.DrawLine(pBorder, 0, 0, _paginationPanel.Width, 0);
+            };
+
+            _lblPageInfo = new Label
+            {
+                AutoSize = true,
+                BackColor = Color.Transparent,
+                ForeColor = AppColors.TextMuted,
+                Font = new Font("Segoe UI", 9.5F),
+                Top = this.S(10),
+                Left = this.S(6)
+            };
+
+            _pnlPageButtons = new FlowLayoutPanel
+            {
+                AutoSize = true,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                FlowDirection = FlowDirection.LeftToRight,
+                WrapContents = false,
+                BackColor = Color.Transparent,
+                Margin = new Padding(0),
+                Padding = new Padding(0)
+            };
+            UiKit.DoubleBuffer(_pnlPageButtons);
+
+            _paginationPanel.Controls.Add(_lblPageInfo);
+            _paginationPanel.Controls.Add(_pnlPageButtons);
+            _paginationPanel.Resize += (s, e) => PositionPagination();
+            _pnlPageButtons.SizeChanged += (s, e) => PositionPagination();
+
+            // Xử lý lăn chuột để lướt trang
+            card.MouseWheel += (s, e) => HandleMouseWheelPagination(e.Delta);
+            cardTable.MouseWheel += (s, e) => HandleMouseWheelPagination(e.Delta);
+            titleRow.MouseWheel += (s, e) => HandleMouseWheelPagination(e.Delta);
+            headerPanel.MouseWheel += (s, e) => HandleMouseWheelPagination(e.Delta);
+            _rowsPanel.MouseWheel += (s, e) => HandleMouseWheelPagination(e.Delta);
+            _paginationPanel.MouseWheel += (s, e) => HandleMouseWheelPagination(e.Delta);
 
             _rowsPanel.MouseEnter += (s, e) => { if (!_rowsPanel.Focused) _rowsPanel.Focus(); };
             card.MouseEnter += (s, e) => { if (!_rowsPanel.Focused) _rowsPanel.Focus(); };
 
-            // Kéo thanh cuộn bằng chuột
-            _rowsPanel.MouseDown += (s, e) =>
-            {
-                int hRow = this.S(48);
-                int totalHeight = _showtimes.Count * hRow;
-                int maxScroll = Math.Max(0, totalHeight - _rowsPanel.Height);
-                if (maxScroll <= 0) return;
-
-                int trackW = this.S(6);
-                int trackX = _rowsPanel.Width - trackW - this.S(2);
-                int trackY = this.S(4);
-                int trackH = Math.Max(this.S(20), _rowsPanel.Height - this.S(8));
-
-                if (e.X >= trackX - this.S(10) && e.X <= _rowsPanel.Width && e.Y >= trackY && e.Y <= trackY + trackH)
-                {
-                    _isDraggingScroll = true;
-                    _dragStartY = e.Y;
-                    _dragStartScroll = _showtimeScrollY;
-                    _rowsPanel.Capture = true;
-                }
-            };
-
-            _rowsPanel.MouseMove += (s, e) =>
-            {
-                if (!_isDraggingScroll) return;
-                int hRow = this.S(48);
-                int totalHeight = _showtimes.Count * hRow;
-                int maxScroll = Math.Max(0, totalHeight - _rowsPanel.Height);
-                if (maxScroll <= 0) return;
-
-                int trackH = Math.Max(this.S(20), _rowsPanel.Height - this.S(8));
-                int thumbH = Math.Max(this.S(24), (int)((float)_rowsPanel.Height / totalHeight * trackH));
-                int scrollRange = trackH - thumbH;
-                if (scrollRange > 0)
-                {
-                    float ratio = (float)(e.Y - _dragStartY) / scrollRange;
-                    _showtimeScrollY = Math.Clamp(_dragStartScroll + (int)(ratio * maxScroll), 0, maxScroll);
-                    _rowsPanel.Invalidate();
-                }
-            };
-
-            _rowsPanel.MouseUp += (s, e) =>
-            {
-                if (_isDraggingScroll)
-                {
-                    _isDraggingScroll = false;
-                    _rowsPanel.Capture = false;
-                }
-            };
-
-            _rowsPanel.Resize += (s, e) =>
-            {
-                int hRow = this.S(48);
-                int totalHeight = _showtimes.Count * hRow;
-                int maxScroll = Math.Max(0, totalHeight - _rowsPanel.Height);
-                _showtimeScrollY = Math.Clamp(_showtimeScrollY, 0, maxScroll);
-                _rowsPanel.Invalidate();
-            };
-
             cardTable.Controls.Add(titleRow, 0, 0);
             cardTable.Controls.Add(headerPanel, 0, 1);
             cardTable.Controls.Add(_rowsPanel, 0, 2);
+            cardTable.Controls.Add(_paginationPanel, 0, 3);
 
             card.Controls.Add(cardTable);
             _cardShowtimes = card;
             return card;
         }
 
-        private void ScrollShowtimes(int delta)
+        private void PositionPagination()
         {
-            if (_rowsPanel == null) return;
-            int hRow = this.S(48);
-            int totalHeight = _showtimes.Count * hRow;
-            int maxScroll = Math.Max(0, totalHeight - _rowsPanel.Height);
-            if (maxScroll <= 0) return;
+            if (_paginationPanel == null || _lblPageInfo == null || _pnlPageButtons == null) return;
+            int padX = this.S(6);
+            _lblPageInfo.Location = new Point(padX, Math.Max(0, (_paginationPanel.Height - _lblPageInfo.Height) / 2));
+            _pnlPageButtons.Location = new Point(
+                Math.Max(_lblPageInfo.Right + padX, _paginationPanel.Width - _pnlPageButtons.Width - padX),
+                Math.Max(0, (_paginationPanel.Height - _pnlPageButtons.Height) / 2));
+        }
 
-            _showtimeScrollY = Math.Clamp(_showtimeScrollY - Math.Sign(delta) * (hRow * 2), 0, maxScroll);
-            _rowsPanel.Invalidate();
+        private void RenderPagination()
+        {
+            if (_paginationPanel == null || _pnlPageButtons == null) return;
+
+            int total = _showtimes.Count;
+            int totalPages = TotalPages;
+            if (_currentPage > totalPages) _currentPage = totalPages;
+            if (_currentPage < 1) _currentPage = 1;
+
+            if (total == 0)
+            {
+                _lblPageInfo.Text = "Hôm nay chưa có suất chiếu";
+            }
+            else
+            {
+                int start = (_currentPage - 1) * PageSize + 1;
+                int end = Math.Min(_currentPage * PageSize, total);
+                _lblPageInfo.Text = $"Hiển thị {start}–{end} / {total} suất chiếu (Trang {_currentPage}/{totalPages})";
+            }
+
+            _pnlPageButtons.SuspendLayout();
+            _pnlPageButtons.Controls.Clear();
+
+            // Nút lướt trang trước <
+            var btnPrev = CreateNavButton("<", _currentPage > 1, () => ChangePage(_currentPage - 1));
+            _pnlPageButtons.Controls.Add(btnPrev);
+
+            // Các nút số trang
+            var pageNumbers = GetPaginationList(_currentPage, totalPages);
+            foreach (var item in pageNumbers)
+            {
+                if (item == -1)
+                {
+                    var lblEllipsis = new Label
+                    {
+                        Text = "...",
+                        AutoSize = false,
+                        Size = new Size(this.S(24), this.S(30)),
+                        TextAlign = ContentAlignment.MiddleCenter,
+                        ForeColor = AppColors.TextMuted,
+                        Font = new Font("Segoe UI", 10F, FontStyle.Bold),
+                        Margin = new Padding(this.S(2), 0, this.S(2), 0),
+                        BackColor = Color.Transparent
+                    };
+                    _pnlPageButtons.Controls.Add(lblEllipsis);
+                }
+                else
+                {
+                    int p = item;
+                    bool isActive = p == _currentPage;
+                    var btnPage = CreatePageButton(p.ToString(), isActive, () => ChangePage(p));
+                    _pnlPageButtons.Controls.Add(btnPage);
+                }
+            }
+
+            // Nút lướt trang sau >
+            var btnNext = CreateNavButton(">", _currentPage < totalPages, () => ChangePage(_currentPage + 1));
+            _pnlPageButtons.Controls.Add(btnNext);
+
+            _pnlPageButtons.ResumeLayout(true);
+            PositionPagination();
+        }
+
+        private static List<int> GetPaginationList(int current, int total)
+        {
+            var list = new List<int>();
+            if (total <= 7)
+            {
+                for (int i = 1; i <= total; i++) list.Add(i);
+                return list;
+            }
+
+            if (current <= 4)
+            {
+                for (int i = 1; i <= 5; i++) list.Add(i);
+                list.Add(-1);
+                list.Add(total);
+            }
+            else if (current >= total - 3)
+            {
+                list.Add(1);
+                list.Add(-1);
+                for (int i = total - 4; i <= total; i++) list.Add(i);
+            }
+            else
+            {
+                list.Add(1);
+                list.Add(-1);
+                list.Add(current - 1);
+                list.Add(current);
+                list.Add(current + 1);
+                list.Add(-1);
+                list.Add(total);
+            }
+            return list;
+        }
+
+        private PillButton CreatePageButton(string text, bool isActive, Action onClick)
+        {
+            int btnW = Math.Max(this.S(32), text.Length * this.S(9) + this.S(16));
+            var btn = new PillButton
+            {
+                Text = text,
+                Size = new Size(btnW, this.S(30)),
+                Radius = 8,
+                Font = new Font("Segoe UI", 9.5F, FontStyle.Bold),
+                Margin = new Padding(this.S(2), 0, this.S(2), 0),
+                Cursor = Cursors.Hand
+            };
+
+            if (isActive)
+            {
+                btn.NormalColor = AppColors.Primary;
+                btn.HoverColor = AppColors.Primary;
+                btn.PressedColor = AppColors.Primary;
+                btn.BorderColor = AppColors.Primary;
+                btn.ForeColor = Color.White;
+            }
+            else
+            {
+                btn.NormalColor = AppColors.Surface2;
+                btn.HoverColor = UiKit.Blend(AppColors.Surface2, AppColors.Blue, 0.30f);
+                btn.PressedColor = AppColors.InputBackground;
+                btn.BorderColor = AppColors.Border;
+                btn.ForeColor = AppColors.TextSecondary;
+                btn.Click += (s, e) => onClick();
+            }
+
+            return btn;
+        }
+
+        private PillButton CreateNavButton(string text, bool enabled, Action onClick)
+        {
+            var btn = new PillButton
+            {
+                Text = text,
+                Size = new Size(this.S(32), this.S(30)),
+                Radius = 8,
+                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
+                Margin = new Padding(this.S(2), 0, this.S(2), 0),
+                Enabled = enabled,
+                Cursor = enabled ? Cursors.Hand : Cursors.Default
+            };
+
+            if (enabled)
+            {
+                btn.NormalColor = AppColors.Surface2;
+                btn.HoverColor = UiKit.Blend(AppColors.Surface2, AppColors.Primary, 0.35f);
+                btn.PressedColor = AppColors.InputBackground;
+                btn.BorderColor = AppColors.Border;
+                btn.ForeColor = AppColors.TextPrimary;
+                btn.Click += (s, e) => onClick();
+            }
+            else
+            {
+                btn.NormalColor = ColorTranslator.FromHtml("#161C2A");
+                btn.DisabledColor = ColorTranslator.FromHtml("#161C2A");
+                btn.BorderColor = ColorTranslator.FromHtml("#263045");
+                btn.ForeColor = ColorTranslator.FromHtml("#4E5D78");
+            }
+
+            return btn;
+        }
+
+        private void ChangePage(int newPage)
+        {
+            int totalPages = TotalPages;
+            int clamped = Math.Clamp(newPage, 1, totalPages);
+            if (clamped == _currentPage) return;
+            _currentPage = clamped;
+            RenderPagination();
+            _rowsPanel?.Invalidate();
+        }
+
+        private void HandleMouseWheelPagination(int delta)
+        {
+            if (delta < 0 && _currentPage < TotalPages)
+            {
+                ChangePage(_currentPage + 1);
+            }
+            else if (delta > 0 && _currentPage > 1)
+            {
+                ChangePage(_currentPage - 1);
+            }
         }
 
         private static (int[] cols, int[] wCols) CalcColumns(int width)
@@ -374,29 +542,31 @@ namespace CinemaManagement.UI.Forms.Staff
 
             if (_showtimes.Count == 0)
             {
-                string text = "🎬  Hôm nay chưa có suất chiếu nào sắp diễn ra";
+                string text = "🎬  Hôm nay chưa có suất chiếu nào";
                 var rectEmpty = new Rectangle(0, 0, width, height);
                 TextRenderer.DrawText(g, text, FontEmpty, rectEmpty, AppColors.TextMuted,
                     TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding);
                 return;
             }
 
-            int hRow = this.S(48);
-            int totalHeight = _showtimes.Count * hRow;
-            int maxScroll = Math.Max(0, totalHeight - height);
-            _showtimeScrollY = Math.Clamp(_showtimeScrollY, 0, maxScroll);
+            int totalPages = TotalPages;
+            if (_currentPage > totalPages) _currentPage = totalPages;
+            if (_currentPage < 1) _currentPage = 1;
+
+            int startIndex = (_currentPage - 1) * PageSize;
+            var pageItems = _showtimes.Skip(startIndex).Take(PageSize).ToList();
+            if (pageItems.Count == 0) return;
+
+            int hRow = Math.Max(this.S(36), height / PageSize);
 
             var (cols, wCols) = CalcColumns(width);
             int padX = this.S(10);
             using var pBorder = new Pen(AppColors.Border);
 
-            for (int i = 0; i < _showtimes.Count; i++)
+            for (int i = 0; i < pageItems.Count; i++)
             {
-                var dto = _showtimes[i];
-                int y = (i * hRow) - _showtimeScrollY;
-
-                // Bỏ qua dòng nằm ngoài khung nhìn
-                if (y + hRow < 0 || y > height) continue;
+                var dto = pageItems[i];
+                int y = i * hRow;
 
                 // Xen kẽ nền hàng lẻ nhẹ nhàng để dễ phân biệt
                 if (i % 2 == 1)
@@ -455,6 +625,8 @@ namespace CinemaManagement.UI.Forms.Staff
                     "Đang bán" => (AppColors.Success, AppColors.SuccessSoft),
                     "Gần đầy" => (AppColors.Warning, AppColors.WarnSoft),
                     "Đã đầy" => (AppColors.StatusRed, AppColors.DangerSoft),
+                    "Đang chiếu" => (AppColors.SoftBlue, AppColors.InfoSoft),
+                    "Đã chiếu" => (AppColors.TextMuted, AppColors.Surface2),
                     _ => (AppColors.TextMuted, AppColors.InputBackground)
                 };
 
@@ -469,25 +641,6 @@ namespace CinemaManagement.UI.Forms.Staff
 
                 // Đường phân cách hàng
                 g.DrawLine(pBorder, 0, y + hRow, width, y + hRow);
-            }
-
-            // Vẽ thanh cuộn nếu tổng số dòng dài hơn chiều cao hiển thị
-            if (maxScroll > 0 && height > this.S(30))
-            {
-                int trackW = this.S(6);
-                int trackX = width - trackW - this.S(2);
-                int trackY = this.S(4);
-                int trackH = height - this.S(8);
-
-                using var pTrackBg = UiKit.RoundRect(new Rectangle(trackX, trackY, trackW, trackH), trackW / 2);
-                using var brTrackBg = new SolidBrush(AppColors.Surface2);
-                g.FillPath(brTrackBg, pTrackBg);
-
-                int thumbH = Math.Max(this.S(24), (int)((float)height / totalHeight * trackH));
-                int thumbY = trackY + (int)((float)_showtimeScrollY / maxScroll * (trackH - thumbH));
-                using var pThumb = UiKit.RoundRect(new Rectangle(trackX, thumbY, trackW, thumbH), trackW / 2);
-                using var brThumb = new SolidBrush(AppColors.BorderStrong);
-                g.FillPath(brThumb, pThumb);
             }
         }
 
@@ -587,10 +740,10 @@ namespace CinemaManagement.UI.Forms.Staff
                 _cardVe.SetValue(data.VeDaBanHomNay, animate);
                 _cardSuat.SetValue(data.SoSuatChieuHomNay, animate);
                 _cardCheckIn.SetValue(data.SoLuotCheckInHomNay, animate);
-                _cardDoanhThu.SetValue(data.DoanhThuHomNay, animate);
 
                 _showtimes = data.SuatChieuSapDienRa.ToList();
-                _showtimeScrollY = 0;
+                _currentPage = 1;
+                RenderPagination();
                 _rowsPanel?.Invalidate();
 
                 _lblUpdated.ForeColor = AppColors.TextMuted;
@@ -623,23 +776,64 @@ namespace CinemaManagement.UI.Forms.Staff
             _btnBanVe.Click += (s, e) => NavigateTo(StaffPage.Booking);
             _btnCheckIn.Click += (s, e) => NavigateTo(StaffPage.CheckIn);
             _btnTraCuu.Click += (s, e) => NavigateTo(StaffPage.Lookup);
+
+            // Nghiệp vụ nhấn vào các Card thống kê
+            _cardSuat.Click += (s, e) => ScrollToShowtimes();
+            _cardCheckIn.Click += (s, e) => NavigateTo(StaffPage.CheckIn);
+            _cardVe.Click += (s, e) => NavigateTo(StaffPage.Lookup, CinemaManagement.Common.Enums.TicketFilterMode.TodaySales);
+
+            var tip = new ToolTip();
+            tip.SetToolTip(_cardSuat, "Danh sách suất chiếu hôm nay • Nhấp để xem danh sách");
+            tip.SetToolTip(_cardCheckIn, "Vé đã được check-in hôm nay • Nhấp để mở màn Check-in / xem danh sách vé hôm nay");
+            tip.SetToolTip(_cardVe, "Số vé của nghiệp vụ bán vé hôm nay • Nhấp để mở Tra cứu vé hôm nay");
         }
 
-        private async void NavigateTo(StaffPage page)
+        private void ScrollToShowtimes()
+        {
+            _currentPage = 1;
+            RenderPagination();
+            _rowsPanel?.Invalidate();
+            _rowsPanel?.Focus();
+
+            if (_cardShowtimes != null)
+            {
+                var originalBorder = _cardShowtimes.BorderColor;
+                _cardShowtimes.BorderColor = AppColors.SoftBlue;
+                _cardShowtimes.Invalidate();
+
+                var highlightTimer = new System.Windows.Forms.Timer { Interval = 700 };
+                highlightTimer.Tick += (s, e) =>
+                {
+                    highlightTimer.Stop();
+                    highlightTimer.Dispose();
+                    if (!_cardShowtimes.IsDisposed)
+                    {
+                        _cardShowtimes.BorderColor = originalBorder;
+                        _cardShowtimes.Invalidate();
+                    }
+                };
+                highlightTimer.Start();
+            }
+        }
+
+        private async void NavigateTo(StaffPage page, object? param = null)
         {
             Hide();
             try
             {
+                object? currentParam = param;
                 while (page is not (StaffPage.Home or StaffPage.SignOut))
                 {
-                    using var next = CreatePage(page);
+                    using var next = CreatePage(page, currentParam);
                     if (next is null)
                     {
                         MessageBox.Show("Chức năng này chưa được xây dựng.", "Thông báo");
                         break;
                     }
                     next.ShowDialog();
-                    page = (next as IStaffPage)?.NextPage ?? StaffPage.Home;
+                    var staffPage = next as IStaffPage;
+                    page = staffPage?.NextPage ?? StaffPage.Home;
+                    currentParam = staffPage?.NextParam;
                 }
             }
             finally
@@ -651,11 +845,13 @@ namespace CinemaManagement.UI.Forms.Staff
             else await LoadDashboardAsync();      // quay về thì làm mới số liệu
         }
 
-        private static Form? CreatePage(StaffPage page) => page switch
+        private static Form? CreatePage(StaffPage page, object? param = null) => page switch
         {
             StaffPage.Booking => new BookingForm(),
             StaffPage.CheckIn => new CheckInForm(),
-            StaffPage.Lookup => new CinemaManagement.UI.Forms.Staff.Lookup.LookupForm(),
+            StaffPage.Lookup => param is CinemaManagement.Common.Enums.TicketFilterMode mode
+                ? new CinemaManagement.UI.Forms.Staff.Lookup.LookupForm(mode)
+                : new CinemaManagement.UI.Forms.Staff.Lookup.LookupForm(),
             _ => null
         };
 

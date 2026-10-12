@@ -36,21 +36,26 @@ namespace CinemaManagement.BLL.Services.Dashboard
                 .Where(i => i.NgayLap.Date == today && i.TrangThaiThanhToan == InvoiceStatus.DaThanhToan)
                 .SumAsync(i => (decimal?)i.TongTien) ?? 0;
 
-            var suatSapToi = await _unitOfWork.Showtimes.Query()
+            var suatHomNay = await _unitOfWork.Showtimes.Query()
                 .Include(s => s.Movie)
                 .Include(s => s.CinemaRoom).ThenInclude(r => r.Seats)
-                .Where(s => s.NgayChieu.Date == today && s.GioBatDau >= now)
+                .Where(s => s.NgayChieu.Date == today)
                 .OrderBy(s => s.GioBatDau)
-                .Take(25)
                 .ToListAsync();
 
             var danhSach = new List<UpcomingShowtimeDto>();
-            foreach (var s in suatSapToi)
+            var currentTime = DateTime.Now;
+            foreach (var s in suatHomNay)
             {
                 int daBan = await _unitOfWork.Tickets.Query().CountAsync(t => t.ShowtimeId == s.Id);
                 int tongGhe = s.CinemaRoom.Seats.Count;
 
+                var startDt = s.NgayChieu.Date + s.GioBatDau;
+                var endDt = s.NgayChieu.Date + s.GioKetThuc;
+
                 string trangThai = tongGhe == 0 ? "Chưa có ghế"
+                    : currentTime > endDt ? "Đã chiếu"
+                    : currentTime >= startDt ? "Đang chiếu"
                     : daBan >= tongGhe ? "Đã đầy"
                     : daBan >= tongGhe * 0.85 ? "Gần đầy"
                     : "Đang bán";

@@ -22,23 +22,18 @@ namespace CinemaManagement.BLL.Services.Tickets
             _codes = codes;
         }
 
-        public async Task<Result<List<TicketDetailDto>>> SearchTicketsAsync(string query)
+        public Task<Result<List<TicketDetailDto>>> SearchTicketsAsync(string query)
         {
-            if (string.IsNullOrWhiteSpace(query))
+            return GetTicketsAsync(TicketFilterMode.All, query);
+        }
+
+        public async Task<Result<List<TicketDetailDto>>> GetTicketsAsync(TicketFilterMode mode, string? query = null)
+        {
+            query = query?.Trim();
+            if (mode == TicketFilterMode.All && string.IsNullOrWhiteSpace(query))
                 return Result<List<TicketDetailDto>>.Success(new List<TicketDetailDto>());
 
-            query = query.Trim().ToLower();
-
-            bool isTicketCode = _codes.TryParseDisplayCode(query.ToUpper(), out int ticketId);
-            
-            int invoiceIdSearch = 0;
-            bool isInvoiceCode = false;
-            if (query.StartsWith("hd"))
-            {
-                string numPart = new string(query.Where(char.IsDigit).ToArray());
-                if (!string.IsNullOrEmpty(numPart))
-                    isInvoiceCode = int.TryParse(numPart, out invoiceIdSearch);
-            }
+            var today = DateTime.Today;
 
             var invoicesQuery = _unitOfWork.Invoices.Query()
                 .Include(i => i.User)
@@ -49,29 +44,57 @@ namespace CinemaManagement.BLL.Services.Tickets
                 .Include(i => i.InvoiceCombos).ThenInclude(ic => ic.Combo)
                 .AsNoTracking();
 
-            List<CinemaManagement.Common.Entities.Invoice> invoices = new List<CinemaManagement.Common.Entities.Invoice>();
-
-            if (isTicketCode)
+            switch (mode)
             {
-                var ticket = await _unitOfWork.Tickets.Query().AsNoTracking().FirstOrDefaultAsync(t => t.Id == ticketId);
-                if (ticket != null)
+                case TicketFilterMode.TodaySales:
+                    invoicesQuery = invoicesQuery.Where(i => i.NgayLap.Date == today && i.TrangThaiThanhToan == InvoiceStatus.DaThanhToan);
+                    break;
+                case TicketFilterMode.TodayCheckIn:
+                    invoicesQuery = invoicesQuery.Where(i => i.Tickets.Any(t => t.TrangThaiCheckIn == CheckInStatus.DaCheckIn && t.ThoiGianCheckIn != null && t.ThoiGianCheckIn.Value.Date == today));
+                    break;
+                default:
+                    break;
+            }
+
+            if (!string.IsNullOrWhiteSpace(query))
+            {
+                string lowerQuery = query.ToLower();
+                bool isTicketCode = _codes.TryParseDisplayCode(query.ToUpper(), out int ticketId);
+                
+                int invoiceIdSearch = 0;
+                bool isInvoiceCode = false;
+                if (lowerQuery.StartsWith("hd"))
                 {
-                    invoices = await invoicesQuery.Where(i => i.Id == ticket.InvoiceId).ToListAsync();
+                    string numPart = new string(lowerQuery.Where(char.IsDigit).ToArray());
+                    if (!string.IsNullOrEmpty(numPart))
+                        isInvoiceCode = int.TryParse(numPart, out invoiceIdSearch);
+                }
+
+                if (isTicketCode)
+                {
+                    invoicesQuery = invoicesQuery.Where(i => i.Tickets.Any(t => t.Id == ticketId));
+                }
+                else if (isInvoiceCode)
+                {
+                    invoicesQuery = invoicesQuery.Where(i => i.Id == invoiceIdSearch);
+                }
+                else
+                {
+                    invoicesQuery = invoicesQuery.Where(i => 
+                        (i.Customer != null && i.Customer.SDT.Contains(lowerQuery)) ||
+                        (i.Customer != null && i.Customer.HoTen.ToLower().Contains(lowerQuery)) ||
+                        i.Tickets.Any(t => t.Showtime.Movie.TenPhim.ToLower().Contains(lowerQuery))
+                    );
                 }
             }
-            else if (isInvoiceCode)
-            {
-                invoices = await invoicesQuery.Where(i => i.Id == invoiceIdSearch).ToListAsync();
-            }
-            else
-            {
-                invoices = await invoicesQuery.Where(i => 
-                    (i.Customer != null && i.Customer.SDT.Contains(query)) ||
-                    (i.Customer != null && i.Customer.HoTen.ToLower().Contains(query)) ||
-                    i.Tickets.Any(t => t.Showtime.Movie.TenPhim.ToLower().Contains(query))
-                ).ToListAsync();
-            }
 
+            var invoices = await invoicesQuery.OrderByDescending(i => i.NgayLap).ToListAsync();
+            var result = MapInvoicesToDetailDtos(invoices);
+            return Result<List<TicketDetailDto>>.Success(result);
+        }
+
+        private List<TicketDetailDto> MapInvoicesToDetailDtos(List<CinemaManagement.Common.Entities.Invoice> invoices)
+        {
             var result = new List<TicketDetailDto>();
             foreach (var inv in invoices)
             {
@@ -126,8 +149,7 @@ namespace CinemaManagement.BLL.Services.Tickets
                 };
                 result.Add(dto);
             }
-
-            return Result<List<TicketDetailDto>>.Success(result);
+            return result;
         }
     }
 }

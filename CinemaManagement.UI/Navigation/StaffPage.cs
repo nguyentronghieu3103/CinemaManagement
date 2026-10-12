@@ -1,4 +1,4 @@
-﻿namespace CinemaManagement.UI.Navigation
+namespace CinemaManagement.UI.Navigation
 {
     public enum StaffPage { Home, Booking, CheckIn, Lookup, SignOut }
 
@@ -6,5 +6,6 @@
     public interface IStaffPage
     {
         StaffPage NextPage { get; }
+        object? NextParam => null;
     }
 }

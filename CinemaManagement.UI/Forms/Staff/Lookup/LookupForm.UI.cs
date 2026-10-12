@@ -8,6 +8,9 @@ namespace CinemaManagement.UI.Forms.Staff.Lookup
         private TableLayoutPanel _mainScroll;
         private TextBox _txtSearch;
         private PillButton _btnSearch;
+        private PillButton _btnFilterAll = null!;
+        private PillButton _btnFilterTodaySales = null!;
+        private PillButton _btnFilterTodayCheckIn = null!;
         
         private Panel _pnlTop;
         private CardPanel _pnlSearchCard;
@@ -108,7 +111,7 @@ namespace CinemaManagement.UI.Forms.Staff.Lookup
             _pnlSearchCard = new CardPanel
             {
                 Dock = DockStyle.Fill,
-                Height = 150,
+                Height = 165,
                 Padding = new Padding(20),
                 Margin = new Padding(0, 20, 0, 20)
             };
@@ -119,7 +122,7 @@ namespace CinemaManagement.UI.Forms.Staff.Lookup
                 Font = new Font("Segoe UI", 10F),
                 ForeColor = AppColors.TextMuted,
                 AutoSize = true,
-                Location = new Point(20, 20)
+                Location = new Point(20, 16)
             };
             _pnlSearchCard.Controls.Add(lblSearchPrompt);
 
@@ -127,7 +130,7 @@ namespace CinemaManagement.UI.Forms.Staff.Lookup
             var pnlInput = new Panel
             {
                 BackColor = Color.FromArgb(250, 245, 245),
-                Location = new Point(20, 50),
+                Location = new Point(20, 44),
                 Size = new Size(_pnlSearchCard.Width - 250, 45),
                 Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
             };
@@ -171,7 +174,7 @@ namespace CinemaManagement.UI.Forms.Staff.Lookup
                 HoverColor = UiKit.Blend(AppColors.Primary, Color.White, 0.2f),
                 ForeColor = Color.White,
                 Font = new Font("Segoe UI", 11F, FontStyle.Bold),
-                Location = new Point(_pnlSearchCard.Width - 210, 50),
+                Location = new Point(_pnlSearchCard.Width - 210, 44),
                 Size = new Size(180, 45),
                 Anchor = AnchorStyles.Top | AnchorStyles.Right,
                 Radius = 8
@@ -179,18 +182,73 @@ namespace CinemaManagement.UI.Forms.Staff.Lookup
             _btnSearch.Click += async (s, e) => await PerformSearch();
             _pnlSearchCard.Controls.Add(_btnSearch);
 
-            // Quick tips
+            // Flow layout cho Bộ lọc & Gợi ý
+            var flpFilter = new FlowLayoutPanel
+            {
+                Location = new Point(20, 106),
+                Size = new Size(_pnlSearchCard.Width - 40, 44),
+                Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
+                BackColor = Color.Transparent,
+                WrapContents = false,
+                AutoScroll = false
+            };
+
+            var lblFilter = new Label
+            {
+                Text = "Bộ lọc:",
+                Font = new Font("Segoe UI", 9.5F, FontStyle.Bold),
+                ForeColor = AppColors.TextDark,
+                AutoSize = true,
+                Margin = new Padding(0, 7, 8, 0)
+            };
+            flpFilter.Controls.Add(lblFilter);
+
+            _btnFilterTodaySales = new PillButton
+            {
+                Text = "🎟  Vé bán hôm nay",
+                Font = new Font("Segoe UI", 9F, FontStyle.Bold),
+                Size = new Size(160, 32),
+                Margin = new Padding(0, 0, 8, 0),
+                Radius = 16,
+                Cursor = Cursors.Hand
+            };
+            _btnFilterTodaySales.Click += async (s, e) => await SwitchFilterAsync(CinemaManagement.Common.Enums.TicketFilterMode.TodaySales);
+            flpFilter.Controls.Add(_btnFilterTodaySales);
+
+            _btnFilterTodayCheckIn = new PillButton
+            {
+                Text = "✅  Đã check-in hôm nay",
+                Font = new Font("Segoe UI", 9F, FontStyle.Bold),
+                Size = new Size(185, 32),
+                Margin = new Padding(0, 0, 8, 0),
+                Radius = 16,
+                Cursor = Cursors.Hand
+            };
+            _btnFilterTodayCheckIn.Click += async (s, e) => await SwitchFilterAsync(CinemaManagement.Common.Enums.TicketFilterMode.TodayCheckIn);
+            flpFilter.Controls.Add(_btnFilterTodayCheckIn);
+
+            _btnFilterAll = new PillButton
+            {
+                Text = "🔍  Tất cả",
+                Font = new Font("Segoe UI", 9F, FontStyle.Bold),
+                Size = new Size(95, 32),
+                Margin = new Padding(0, 0, 18, 0),
+                Radius = 16,
+                Cursor = Cursors.Hand
+            };
+            _btnFilterAll.Click += async (s, e) => await SwitchFilterAsync(CinemaManagement.Common.Enums.TicketFilterMode.All);
+            flpFilter.Controls.Add(_btnFilterAll);
+
             var lblTips = new Label
             {
-                Text = "Gợi ý tìm nhanh:",
+                Text = "Gợi ý:",
                 Font = new Font("Segoe UI", 9F),
                 ForeColor = AppColors.TextMuted,
                 AutoSize = true,
-                Location = new Point(20, 110)
+                Margin = new Padding(8, 7, 6, 0)
             };
-            _pnlSearchCard.Controls.Add(lblTips);
-            
-            int tipX = 130;
+            flpFilter.Controls.Add(lblTips);
+
             string[] tips = { "VE000001", "0901234567", "HD1" };
             foreach (var t in tips)
             {
@@ -201,14 +259,20 @@ namespace CinemaManagement.UI.Forms.Staff.Lookup
                     NormalColor = Color.FromArgb(240, 240, 240),
                     ForeColor = AppColors.TextDark,
                     Font = new Font("Segoe UI", 9F, FontStyle.Bold),
-                    Location = new Point(tipX, 105),
-                    Size = new Size(110, 30),
-                    Radius = 15
+                    Size = new Size(100, 30),
+                    Margin = new Padding(0, 1, 6, 0),
+                    Radius = 15,
+                    Cursor = Cursors.Hand
                 };
-                btn.Click += (s, e) => { _txtSearch.Text = t; _btnSearch.PerformClick(); };
-                _pnlSearchCard.Controls.Add(btn);
-                tipX += 120;
+                btn.Click += async (s, e) =>
+                {
+                    _txtSearch.Text = t;
+                    await PerformSearch();
+                };
+                flpFilter.Controls.Add(btn);
             }
+
+            _pnlSearchCard.Controls.Add(flpFilter);
         }
 
         private void BuildResultsSection()
