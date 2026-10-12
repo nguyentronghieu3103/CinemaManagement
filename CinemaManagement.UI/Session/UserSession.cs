@@ -1,4 +1,4 @@
-﻿using CinemaManagement.Common.DTOs.Auth;
+using CinemaManagement.Common.DTOs.Auth;
 
 namespace CinemaManagement.UI.Session
 {
@@ -24,6 +24,11 @@ namespace CinemaManagement.UI.Session
         }
         public static bool HasPermission(string permissionCode)   
             => Permissions.Contains(permissionCode);
+
+        public static void UpdateProfile(string hoTen)
+        {
+            HoTen = hoTen;
+        }
         public static void SignOut()
         {
             UserId = 0;

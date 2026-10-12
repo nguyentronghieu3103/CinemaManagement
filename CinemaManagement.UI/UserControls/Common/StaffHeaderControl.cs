@@ -178,6 +178,15 @@ namespace CinemaManagement.UI.UserControls.Common
                 TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding);
         }
 
+        public void RefreshUserInfo()
+        {
+            _btnUser.Text = $"{UserSession.HoTen}  ▾";
+            _btnUser.Width = Math.Max(this.S(190),
+                TextRenderer.MeasureText(_btnUser.Text, _btnUser.Font).Width + this.S(64));
+            LayoutItems();
+            Invalidate();
+        }
+
         private void ShowUserMenu(object? sender, EventArgs e)
         {
             var menu = new ContextMenuStrip
@@ -186,9 +195,14 @@ namespace CinemaManagement.UI.UserControls.Common
                 ShowImageMargin = false
             };
             UiKit.StyleMenu(menu);
-            menu.Items.Add("🔑  Đổi mật khẩu", null, (_, _) => MessageBox.Show("Chức năng này chưa được xây dựng.", "Thông báo"));
+            menu.Items.Add("👤  Hồ sơ cá nhân", null, (_, _) => NavigateRequested?.Invoke(StaffPage.Profile));
+            menu.Items.Add("🔒  Đổi mật khẩu", null, (_, _) =>
+            {
+                using var pwdForm = new Forms.Shared.ChangePasswordForm();
+                pwdForm.ShowDialog(FindForm());
+            });
             menu.Items.Add(new ToolStripSeparator());
-            menu.Items.Add("🚪  Đăng xuất", null, (_, _) => LogoutRequested?.Invoke());
+            menu.Items.Add("↪  Đăng xuất", null, (_, _) => LogoutRequested?.Invoke());
             menu.Show(_btnUser, new Point(0, _btnUser.Height + this.S(4)));
         }
 
