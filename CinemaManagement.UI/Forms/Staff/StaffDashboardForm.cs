@@ -842,7 +842,12 @@ namespace CinemaManagement.UI.Forms.Staff
             }
 
             if (page == StaffPage.SignOut) await LogoutAsync();
-            else await LoadDashboardAsync();      // quay về thì làm mới số liệu
+            else
+            {
+                _header.RefreshUserInfo();
+                _lblWelcome.Text = $"Xin chào, {UserSession.HoTen} 👋";
+                await LoadDashboardAsync();      // quay về thì làm mới số liệu
+            }
         }
 
         private static Form? CreatePage(StaffPage page, object? param = null) => page switch
@@ -852,6 +857,7 @@ namespace CinemaManagement.UI.Forms.Staff
             StaffPage.Lookup => param is CinemaManagement.Common.Enums.TicketFilterMode mode
                 ? new CinemaManagement.UI.Forms.Staff.Lookup.LookupForm(mode)
                 : new CinemaManagement.UI.Forms.Staff.Lookup.LookupForm(),
+            StaffPage.Profile => new CinemaManagement.UI.Forms.Shared.ProfileForm(),
             _ => null
         };
 

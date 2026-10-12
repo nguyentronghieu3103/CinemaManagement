@@ -1,9 +1,10 @@
-﻿using CinemaManagement.Common.Constants;
+using CinemaManagement.Common.Constants;
 using CinemaManagement.Common.DTOs.Auth;
 using CinemaManagement.Common.Entities;
 using CinemaManagement.Common.Enums;
 using CinemaManagement.Common.Interfaces.Repositories;
 using CinemaManagement.Common.Results;
+using Microsoft.EntityFrameworkCore;
 
 namespace CinemaManagement.BLL.Services.Auth
 {
@@ -102,6 +103,103 @@ namespace CinemaManagement.BLL.Services.Auth
         public async Task LogoutAsync(int userId)
         {
             await LogAuditAsync(userId, AuditAction.Logout, "Đăng xuất");
+        }
+
+        public async Task<UserProfileDto?> GetUserProfileAsync(int userId)
+        {
+            var user = await _unitOfWork.Users.Query()
+                .Include(u => u.Role)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null) return null;
+
+            var employee = await _unitOfWork.Employees.Query()
+                .FirstOrDefaultAsync(e => e.UserId == userId);
+
+            return new UserProfileDto
+            {
+                EmployeeId = employee?.Id ?? user.Id,
+                HoTen = !string.IsNullOrWhiteSpace(employee?.HoTen) ? employee.HoTen : (string.IsNullOrWhiteSpace(user.Email) ? "Nhân viên" : user.Email),
+                SDT = employee?.SDT ?? string.Empty,
+                Email = user.Email,
+                RoleName = user.Role?.TenVaiTro ?? "Nhân viên",
+                ChucVu = !string.IsNullOrWhiteSpace(employee?.ChucVu) ? employee.ChucVu : (user.Role?.TenVaiTro ?? "Nhân viên"),
+                NgayVaoLam = employee?.NgayVaoLam ?? user.NgayTao,
+                TrangThaiLamViec = employee?.TrangThaiLamViec ?? EmployeeStatus.DangLamViec,
+                TrangThaiLamViecText = employee?.TrangThaiLamViec switch
+                {
+                    EmployeeStatus.DangLamViec => "Đang làm việc",
+                    EmployeeStatus.DaNghiViec => "Đã nghỉ việc",
+                    EmployeeStatus.TamNghi => "Tạm nghỉ",
+                    _ => "Đang làm việc"
+                }
+            };
+        }
+
+        public async Task<Result<bool>> UpdateProfileAsync(int userId, string hoTen, string sdt)
+        {
+            if (string.IsNullOrWhiteSpace(hoTen))
+                return Result<bool>.Fail("Họ và tên không được để trống.");
+
+            hoTen = hoTen.Trim();
+            if (hoTen.Length > 100)
+                return Result<bool>.Fail("Họ và tên không được vượt quá 100 ký tự.");
+
+            sdt = sdt?.Trim() ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(sdt) || !System.Text.RegularExpressions.Regex.IsMatch(sdt, @"^0\d{9}$"))
+                return Result<bool>.Fail("Số điện thoại phải có đúng 10 chữ số và bắt đầu bằng số 0.");
+
+            var employee = await _unitOfWork.Employees.Query()
+                .FirstOrDefaultAsync(e => e.UserId == userId);
+
+            if (employee == null)
+            {
+                employee = new Employee
+                {
+                    UserId = userId,
+                    HoTen = hoTen,
+                    SDT = sdt,
+                    ChucVu = "Nhân viên",
+                    NgayVaoLam = DateTime.Now,
+                    TrangThaiLamViec = EmployeeStatus.DangLamViec
+                };
+                await _unitOfWork.Employees.AddAsync(employee);
+            }
+            else
+            {
+                employee.HoTen = hoTen;
+                employee.SDT = sdt;
+                _unitOfWork.Employees.Update(employee);
+            }
+
+            await _unitOfWork.SaveChangesAsync();
+            await LogAuditAsync(userId, AuditAction.Update, $"Cập nhật thông tin hồ sơ: Họ tên '{hoTen}', SĐT '{sdt}'");
+            return Result<bool>.Success(true);
+        }
+
+        public async Task<Result<bool>> ChangePasswordAsync(int userId, string oldPassword, string newPassword)
+        {
+            if (string.IsNullOrWhiteSpace(oldPassword))
+                return Result<bool>.Fail("Vui lòng nhập mật khẩu hiện tại.");
+
+            if (string.IsNullOrWhiteSpace(newPassword) || newPassword.Length < 6)
+                return Result<bool>.Fail("Mật khẩu mới phải có ít nhất 6 ký tự.");
+
+            if (oldPassword == newPassword)
+                return Result<bool>.Fail("Mật khẩu mới không được trùng mật khẩu cũ.");
+
+            var user = await _unitOfWork.Users.GetByIdAsync(userId);
+            if (user == null)
+                return Result<bool>.Fail("Người dùng không tồn tại.");
+
+            if (!BCrypt.Net.BCrypt.Verify(oldPassword, user.MatKhauHash))
+                return Result<bool>.Fail("Mật khẩu hiện tại không đúng.");
+
+            user.MatKhauHash = BCrypt.Net.BCrypt.HashPassword(newPassword);
+            _unitOfWork.Users.Update(user);
+            await _unitOfWork.SaveChangesAsync();
+
+            await LogAuditAsync(user.Id, AuditAction.Update, "Đổi mật khẩu thành công");
+            return Result<bool>.Success(true);
         }
 
         private async Task LogAuditAsync(int? userId, AuditAction action, string chiTiet)
