@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="src/Cinema.BLL/Cinema.BLL.csproj" Id="ba51d0ca-788e-41e6-ae69-f064c5e0f4cb" />
+  <Project Path="src/Cinema.DAL/Cinema.DAL.csproj" Id="cb6111eb-b775-48aa-9f3d-46bbd9582e09" />
+  <Project Path="src/Cinema.Shared/Cinema.Shared.csproj" Id="85808fdd-51cd-4382-9886-87d9a8f7adff" />
+  <Project Path="src/Cinema.Web/Cinema.Web.csproj" Id="33e3043f-efd1-4f51-b498-e9d8f06ea72f" />
+  <Project Path="src/Cinema.WinForms/Cinema.WinForms.csproj" />
+</Solution>
