@@ -25,6 +25,7 @@ namespace Cinema.WinForms.Forms
             this.pnlSidebar = new System.Windows.Forms.Panel();
             this.pnlLogo = new System.Windows.Forms.Panel();
             this.lblLogoBrand = new System.Windows.Forms.Label();
+            this.lblLogoSub = new System.Windows.Forms.Label();
             this.picLogoIcon = new System.Windows.Forms.PictureBox();
             this.pnlNavPos = new System.Windows.Forms.Panel();
             this.lblNavPos = new System.Windows.Forms.Label();
@@ -235,6 +236,7 @@ namespace Cinema.WinForms.Forms
 
             // Logo
             this.pnlLogo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(32)))), ((int)(((byte)(47)))));
+            this.pnlLogo.Controls.Add(this.lblLogoSub);
             this.pnlLogo.Controls.Add(this.lblLogoBrand);
             this.pnlLogo.Controls.Add(this.picLogoIcon);
             this.pnlLogo.Dock = System.Windows.Forms.DockStyle.Top;
@@ -243,21 +245,31 @@ namespace Cinema.WinForms.Forms
             this.pnlLogo.Size = new System.Drawing.Size(180, 60);
             this.pnlLogo.TabIndex = 0;
 
-            this.picLogoIcon.Location = new System.Drawing.Point(12, 12);
+            this.picLogoIcon.Location = new System.Drawing.Point(8, 8);
             this.picLogoIcon.Name = "picLogoIcon";
-            this.picLogoIcon.Size = new System.Drawing.Size(36, 36);
+            this.picLogoIcon.Size = new System.Drawing.Size(46, 44);
+            this.picLogoIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.picLogoIcon.TabIndex = 0;
             this.picLogoIcon.TabStop = false;
             this.picLogoIcon.Paint += new System.Windows.Forms.PaintEventHandler(this.picLogoIcon_Paint);
 
             this.lblLogoBrand.AutoSize = true;
-            this.lblLogoBrand.Font = new System.Drawing.Font("Segoe UI", 11.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblLogoBrand.Font = new System.Drawing.Font("Segoe UI", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblLogoBrand.ForeColor = System.Drawing.Color.White;
-            this.lblLogoBrand.Location = new System.Drawing.Point(54, 20);
+            this.lblLogoBrand.Location = new System.Drawing.Point(58, 12);
             this.lblLogoBrand.Name = "lblLogoBrand";
-            this.lblLogoBrand.Size = new System.Drawing.Size(74, 21);
+            this.lblLogoBrand.Size = new System.Drawing.Size(89, 19);
             this.lblLogoBrand.TabIndex = 1;
-            this.lblLogoBrand.Text = "CINEMA";
+            this.lblLogoBrand.Text = "STORYLINE";
+
+            this.lblLogoSub.AutoSize = true;
+            this.lblLogoSub.Font = new System.Drawing.Font("Segoe UI", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblLogoSub.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(217)))), ((int)(((byte)(119)))), ((int)(((byte)(6)))));
+            this.lblLogoSub.Location = new System.Drawing.Point(60, 33);
+            this.lblLogoSub.Name = "lblLogoSub";
+            this.lblLogoSub.Size = new System.Drawing.Size(53, 12);
+            this.lblLogoSub.TabIndex = 2;
+            this.lblLogoSub.Text = "C I N E M A";
 
             // Nav 1: Bán vé
             this.pnlNavPos.Controls.Add(this.lblNavPos);
@@ -1596,6 +1608,7 @@ namespace Cinema.WinForms.Forms
         private System.Windows.Forms.Panel pnlLogo;
         private System.Windows.Forms.PictureBox picLogoIcon;
         private System.Windows.Forms.Label lblLogoBrand;
+        private System.Windows.Forms.Label lblLogoSub;
         private System.Windows.Forms.Panel pnlNavPos;
         private System.Windows.Forms.Label lblNavPos;
         private System.Windows.Forms.Panel pnlNavCheckIn;

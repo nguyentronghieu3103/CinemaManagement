@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.IO;
 using System.Windows.Forms;
 
 namespace Cinema.WinForms.Forms
@@ -806,17 +807,70 @@ namespace Cinema.WinForms.Forms
         // =====================================================================
         // PAINT EVENTS VẼ ICON, KHUNG BO TRÒN VÀ VIỀN
         // =====================================================================
+        private static Image? _storylineLogoCache;
+
+        private static Image? LoadStorylineLogoImage()
+        {
+            try
+            {
+                string[] possiblePaths = new[]
+                {
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "storyline_logo.png"),
+                    Path.Combine(Application.StartupPath, "Resources", "storyline_logo.png"),
+                    Path.Combine(Application.StartupPath, "..", "..", "..", "Resources", "storyline_logo.png"),
+                    @"C:\Users\Admin\OneDrive\Documents\BTL_LTTQ\CinemaManagement\src\Cinema.WinForms\Resources\storyline_logo.png"
+                };
+
+                foreach (var path in possiblePaths)
+                {
+                    if (File.Exists(path))
+                    {
+                        byte[] bytes = File.ReadAllBytes(path);
+                        using (var ms = new MemoryStream(bytes))
+                        {
+                            return Image.FromStream(ms);
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                // Bỏ qua lỗi nếu có
+            }
+            return null;
+        }
+
         private void picLogoIcon_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            using (var b = new SolidBrush(COLOR_PRIMARY))
+            e.Graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+
+            if (_storylineLogoCache == null)
             {
-                e.Graphics.FillEllipse(b, 2, 2, 32, 32);
+                _storylineLogoCache = LoadStorylineLogoImage();
             }
-            using (var b = new SolidBrush(Color.White))
+
+            if (_storylineLogoCache != null)
             {
-                var font = new Font("Segoe UI", 12f, FontStyle.Bold);
-                e.Graphics.DrawString("S", font, b, new PointF(10, 6));
+                int w = picLogoIcon.Width;
+                int h = picLogoIcon.Height;
+                e.Graphics.DrawImage(_storylineLogoCache, new Rectangle(0, 0, w, h));
+            }
+            else
+            {
+                using (var b = new SolidBrush(COLOR_ACCENT))
+                {
+                    e.Graphics.FillEllipse(b, 2, 2, 38, 38);
+                }
+                using (var pen = new Pen(Color.White, 2f))
+                {
+                    e.Graphics.DrawEllipse(pen, 4, 4, 34, 34);
+                }
+                using (var b = new SolidBrush(Color.White))
+                {
+                    var font = new Font("Segoe UI", 11f, FontStyle.Bold);
+                    e.Graphics.DrawString("SL", font, b, new PointF(8, 8));
+                }
             }
         }
 
