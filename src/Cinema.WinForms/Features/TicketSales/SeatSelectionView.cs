@@ -15,7 +15,11 @@ public partial class SeatSelectionView : UserControl
         if (LicenseManager.UsageMode != LicenseUsageMode.Designtime)
         {
             ticketsBindingSource.DataSource = selectedSeats;
-            colPrice.DefaultCellStyle.FormatProvider = AuditoriumSeat.MoneyCulture;
+            if (gridSelectedSeats.Columns["colPrice"] is { } priceColumn)
+            {
+                priceColumn.DefaultCellStyle.FormatProvider = AuditoriumSeat.MoneyCulture;
+            }
+
             seatMap.SeatClicked += SeatMap_SeatClicked;
             layoutWorkArea.SizeChanged += LayoutWorkArea_SizeChanged;
             UpdateSummary();
