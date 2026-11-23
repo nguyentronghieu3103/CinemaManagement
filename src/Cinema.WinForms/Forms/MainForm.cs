@@ -1,4 +1,5 @@
 using Cinema.WinForms.Features.Members;
+using Cinema.WinForms.Features.Orders;
 using Cinema.WinForms.Features.TicketSales;
 
 namespace Cinema.WinForms.Forms;
@@ -8,6 +9,7 @@ public partial class MainForm : Form
     private const string PreviewOperator = "Nguyễn Văn A · POS-01";
 
     private Control? memberPageBeforeEdit;
+    private Control? checkInPageBeforeHistory;
 
     public MainForm()
     {
@@ -31,6 +33,18 @@ public partial class MainForm : Form
         memberDetailsView.EditRequested += member => ShowMemberEdit(member, memberDetailsView);
         memberEditView.CancelRequested += (_, _) => CloseMemberEdit();
         memberRegistrationView.BackRequested += (_, _) => ShowMemberList();
+        orderListView.DetailsRequested += ShowOrderDetails;
+        orderDetailsView.BackRequested += (_, _) => ShowOrderList();
+        orderDetailsView.RefundRequested += ShowRefundRequest;
+        refundRequestView.BackRequested += (_, _) => ReturnToOrderDetails();
+        checkInSessionView.ScannerRequested += (_, _) => ShowTicketScanner();
+        ticketScannerView.ChangeSessionRequested += (_, _) => ShowCheckInSessions();
+        ticketScannerView.CheckRequested += (_, _) => ShowTicketScanResult();
+        ticketScannerView.HistoryRequested += (_, _) => ShowCheckInHistory(ticketScannerView);
+        ticketScanResultView.ChangeSessionRequested += (_, _) => ShowCheckInSessions();
+        ticketScanResultView.BackRequested += (_, _) => ShowTicketScanner();
+        ticketScanResultView.HistoryRequested += (_, _) => ShowCheckInHistory(ticketScanResultView);
+        checkInHistoryView.BackRequested += (_, _) => CloseCheckInHistory();
     }
 
     protected override void OnLoad(EventArgs e)
@@ -56,7 +70,12 @@ public partial class MainForm : Form
             }
 
             menu.ResumeLayout();
-            ToolStripButton selectedItem = memberListView.Visible || memberDetailsView.Visible
+            ToolStripButton selectedItem = checkInSessionView.Visible || ticketScannerView.Visible
+                || ticketScanResultView.Visible || checkInHistoryView.Visible
+                ? navTicketCheck
+                : orderListView.Visible || orderDetailsView.Visible || refundRequestView.Visible
+                ? navInvoices
+                : memberListView.Visible || memberDetailsView.Visible
                 || memberEditView.Visible || memberRegistrationView.Visible
                 ? navMembers
                 : shiftManagementView.Visible || shiftHandoverView.Visible ? navShifts
@@ -75,6 +94,7 @@ public partial class MainForm : Form
         return saleCompletionView.HandleShortcut(keyData) || paymentView.HandleShortcut(keyData) ||
             (keyData == Keys.F2 && seatSelectionView.TryContinue()) ||
             memberListView.HandleShortcut(keyData) ||
+            ticketScannerView.HandleHistoryShortcut(keyData) || ticketScanResultView.HandleHistoryShortcut(keyData) ||
             base.ProcessCmdKey(ref msg, keyData);
     }
 
@@ -147,10 +167,9 @@ public partial class MainForm : Form
             return;
         }
 
-        memberRegistrationView.Hide();
-        memberEditView.Hide();
-        memberDetailsView.Hide();
-        memberListView.Hide();
+        HideCheckInViews();
+        HideOrderViews();
+        HideMemberViews();
         shiftHandoverView.Hide();
         shiftManagementView.Hide();
         pnlTicketSales.Show();
@@ -158,11 +177,70 @@ public partial class MainForm : Form
         SelectNavigationItem(navTicketSales);
     }
 
+    private void NavTicketCheck_Click(object? sender, EventArgs e) => ShowCheckInSessions();
+
+    private void ShowCheckInSessions()
+    {
+        pnlTicketSales.Hide();
+        HideOrderViews();
+        HideMemberViews();
+        shiftHandoverView.Hide();
+        shiftManagementView.Hide();
+        ticketScannerView.Hide();
+        ticketScanResultView.Hide();
+        checkInHistoryView.Hide();
+        checkInPageBeforeHistory = null;
+        checkInSessionView.Show();
+        lblOperator.Text = PreviewOperator;
+        SelectNavigationItem(navTicketCheck);
+    }
+
+    private void ShowTicketScanner()
+    {
+        checkInSessionView.Hide();
+        ticketScanResultView.Hide();
+        ticketScannerView.ResetInput();
+        ticketScannerView.Show();
+    }
+
+    private void ShowTicketScanResult()
+    {
+        ticketScannerView.Hide();
+        ticketScanResultView.ShowResult();
+        ticketScanResultView.Show();
+    }
+
+    private void ShowCheckInHistory(Control sourceView)
+    {
+        checkInPageBeforeHistory = sourceView;
+        checkInHistoryView.ShowFrom(sourceView == ticketScanResultView);
+        sourceView.Hide();
+        checkInHistoryView.Show();
+    }
+
+    private void CloseCheckInHistory()
+    {
+        checkInHistoryView.Hide();
+        checkInPageBeforeHistory?.Show();
+        checkInPageBeforeHistory = null;
+    }
+
+    private void HideCheckInViews()
+    {
+        checkInSessionView.Hide();
+        ticketScannerView.Hide();
+        ticketScanResultView.Hide();
+        checkInHistoryView.Hide();
+        checkInPageBeforeHistory = null;
+    }
+
     private void NavMembers_Click(object? sender, EventArgs e) => ShowMemberList();
 
     private void ShowMemberList()
     {
         pnlTicketSales.Hide();
+        HideCheckInViews();
+        HideOrderViews();
         shiftHandoverView.Hide();
         shiftManagementView.Hide();
         memberRegistrationView.Hide();
@@ -203,15 +281,65 @@ public partial class MainForm : Form
         memberPageBeforeEdit = null;
     }
 
+    private void HideMemberViews()
+    {
+        memberRegistrationView.Hide();
+        memberEditView.Hide();
+        memberDetailsView.Hide();
+        memberListView.Hide();
+    }
+
+    private void HideOrderViews()
+    {
+        refundRequestView.Hide();
+        orderDetailsView.Hide();
+        orderListView.Hide();
+    }
+
+    private void NavInvoices_Click(object? sender, EventArgs e) => ShowOrderList();
+
+    private void ShowOrderList()
+    {
+        pnlTicketSales.Hide();
+        HideCheckInViews();
+        shiftHandoverView.Hide();
+        shiftManagementView.Hide();
+        HideMemberViews();
+        refundRequestView.Hide();
+        orderDetailsView.Hide();
+        orderListView.Show();
+        lblOperator.Text = PreviewOperator;
+        SelectNavigationItem(navInvoices);
+    }
+
+    private void ShowOrderDetails(OrderListEntry order)
+    {
+        orderDetailsView.ShowFor(order);
+        orderListView.Hide();
+        orderDetailsView.Show();
+    }
+
+    private void ShowRefundRequest(OrderListEntry order)
+    {
+        refundRequestView.ShowFor(order.Code, order.Amount, order.Payment);
+        orderDetailsView.Hide();
+        refundRequestView.Show();
+    }
+
+    private void ReturnToOrderDetails()
+    {
+        refundRequestView.Hide();
+        orderDetailsView.Show();
+    }
+
     private void NavShifts_Click(object? sender, EventArgs e) => ShowShiftOverview();
 
     private void ShowShiftOverview()
     {
         pnlTicketSales.Hide();
-        memberRegistrationView.Hide();
-        memberEditView.Hide();
-        memberDetailsView.Hide();
-        memberListView.Hide();
+        HideCheckInViews();
+        HideOrderViews();
+        HideMemberViews();
         shiftHandoverView.Hide();
         shiftManagementView.Show();
         lblOperator.Text = PreviewOperator;
@@ -228,7 +356,9 @@ public partial class MainForm : Form
     {
         Color selectedColor = Color.FromArgb(51, 65, 85);
         navTicketSales.BackColor = selectedItem == navTicketSales ? selectedColor : Color.Empty;
+        navTicketCheck.BackColor = selectedItem == navTicketCheck ? selectedColor : Color.Empty;
         navMembers.BackColor = selectedItem == navMembers ? selectedColor : Color.Empty;
+        navInvoices.BackColor = selectedItem == navInvoices ? selectedColor : Color.Empty;
         navShifts.BackColor = selectedItem == navShifts ? selectedColor : Color.Empty;
         pnlNavStripe.SetBounds(0, selectedItem.Bounds.Top, pnlRail.Width, selectedItem.Bounds.Height);
     }

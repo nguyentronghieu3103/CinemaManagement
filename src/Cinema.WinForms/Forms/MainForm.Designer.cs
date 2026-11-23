@@ -1,4 +1,7 @@
 using Cinema.WinForms.Features.Members;
+using Cinema.WinForms.Features.Orders;
+using Cinema.WinForms.Features.Refunds;
+using Cinema.WinForms.Features.TicketCheckIn;
 using Cinema.WinForms.Features.ShiftManagement;
 using Cinema.WinForms.Features.TicketSales;
 
@@ -55,6 +58,13 @@ partial class MainForm
         memberDetailsView = new MemberDetailsView();
         memberEditView = new MemberEditView();
         memberRegistrationView = new MemberRegistrationView();
+        orderListView = new OrderListView();
+        orderDetailsView = new OrderDetailsView();
+        refundRequestView = new RefundRequestView();
+        checkInSessionView = new CheckInSessionView();
+        ticketScannerView = new TicketScannerView();
+        ticketScanResultView = new TicketScanResultView();
+        checkInHistoryView = new CheckInHistoryView();
         clockTimer = new System.Windows.Forms.Timer(components);
         layoutMain.SuspendLayout();
         pnlNavigation.SuspendLayout();
@@ -146,7 +156,6 @@ partial class MainForm
         // navTicketCheck
         // 
         navTicketCheck.AutoSize = false;
-        navTicketCheck.Enabled = false;
         navTicketCheck.ForeColor = Color.FromArgb(241, 245, 249);
         navTicketCheck.Image = (Image)resources.GetObject("navTicketCheck.Image");
         navTicketCheck.ImageAlign = ContentAlignment.MiddleLeft;
@@ -156,6 +165,7 @@ partial class MainForm
         navTicketCheck.Size = new Size(208, 48);
         navTicketCheck.Text = "Soát vé";
         navTicketCheck.TextAlign = ContentAlignment.MiddleLeft;
+        navTicketCheck.Click += NavTicketCheck_Click;
         // 
         // navMembers
         // 
@@ -174,7 +184,6 @@ partial class MainForm
         // navInvoices
         // 
         navInvoices.AutoSize = false;
-        navInvoices.Enabled = false;
         navInvoices.ForeColor = Color.FromArgb(241, 245, 249);
         navInvoices.Image = (Image)resources.GetObject("navInvoices.Image");
         navInvoices.ImageAlign = ContentAlignment.MiddleLeft;
@@ -184,6 +193,7 @@ partial class MainForm
         navInvoices.Size = new Size(208, 48);
         navInvoices.Text = "Hóa đơn && Hủy vé";
         navInvoices.TextAlign = ContentAlignment.MiddleLeft;
+        navInvoices.Click += NavInvoices_Click;
         // 
         // navShifts
         // 
@@ -329,6 +339,13 @@ partial class MainForm
         pnlWorkspace.Controls.Add(memberDetailsView);
         pnlWorkspace.Controls.Add(memberEditView);
         pnlWorkspace.Controls.Add(memberRegistrationView);
+        pnlWorkspace.Controls.Add(orderListView);
+        pnlWorkspace.Controls.Add(orderDetailsView);
+        pnlWorkspace.Controls.Add(refundRequestView);
+        pnlWorkspace.Controls.Add(checkInSessionView);
+        pnlWorkspace.Controls.Add(ticketScannerView);
+        pnlWorkspace.Controls.Add(ticketScanResultView);
+        pnlWorkspace.Controls.Add(checkInHistoryView);
         pnlWorkspace.Dock = DockStyle.Fill;
         pnlWorkspace.Location = new Point(212, 52);
         pnlWorkspace.Margin = Padding.Empty;
@@ -461,6 +478,76 @@ partial class MainForm
         memberRegistrationView.Size = new Size(1136, 730);
         memberRegistrationView.TabIndex = 6;
         memberRegistrationView.Visible = false;
+        //
+        // orderListView
+        //
+        orderListView.Dock = DockStyle.Fill;
+        orderListView.Location = Point.Empty;
+        orderListView.Margin = Padding.Empty;
+        orderListView.Name = "orderListView";
+        orderListView.Size = new Size(1136, 730);
+        orderListView.TabIndex = 7;
+        orderListView.Visible = false;
+        //
+        // orderDetailsView
+        //
+        orderDetailsView.Dock = DockStyle.Fill;
+        orderDetailsView.Location = Point.Empty;
+        orderDetailsView.Margin = Padding.Empty;
+        orderDetailsView.Name = "orderDetailsView";
+        orderDetailsView.Size = new Size(1136, 730);
+        orderDetailsView.TabIndex = 8;
+        orderDetailsView.Visible = false;
+        //
+        // refundRequestView
+        //
+        refundRequestView.Dock = DockStyle.Fill;
+        refundRequestView.Location = Point.Empty;
+        refundRequestView.Margin = Padding.Empty;
+        refundRequestView.Name = "refundRequestView";
+        refundRequestView.Size = new Size(1136, 730);
+        refundRequestView.TabIndex = 9;
+        refundRequestView.Visible = false;
+        //
+        // checkInSessionView
+        //
+        checkInSessionView.Dock = DockStyle.Fill;
+        checkInSessionView.Location = Point.Empty;
+        checkInSessionView.Margin = Padding.Empty;
+        checkInSessionView.Name = "checkInSessionView";
+        checkInSessionView.Size = new Size(1136, 730);
+        checkInSessionView.TabIndex = 10;
+        checkInSessionView.Visible = false;
+        //
+        // ticketScannerView
+        //
+        ticketScannerView.Dock = DockStyle.Fill;
+        ticketScannerView.Location = Point.Empty;
+        ticketScannerView.Margin = Padding.Empty;
+        ticketScannerView.Name = "ticketScannerView";
+        ticketScannerView.Size = new Size(1136, 730);
+        ticketScannerView.TabIndex = 11;
+        ticketScannerView.Visible = false;
+        //
+        // ticketScanResultView
+        //
+        ticketScanResultView.Dock = DockStyle.Fill;
+        ticketScanResultView.Location = Point.Empty;
+        ticketScanResultView.Margin = Padding.Empty;
+        ticketScanResultView.Name = "ticketScanResultView";
+        ticketScanResultView.Size = new Size(1136, 730);
+        ticketScanResultView.TabIndex = 12;
+        ticketScanResultView.Visible = false;
+        //
+        // checkInHistoryView
+        //
+        checkInHistoryView.Dock = DockStyle.Fill;
+        checkInHistoryView.Location = Point.Empty;
+        checkInHistoryView.Margin = Padding.Empty;
+        checkInHistoryView.Name = "checkInHistoryView";
+        checkInHistoryView.Size = new Size(1136, 730);
+        checkInHistoryView.TabIndex = 13;
+        checkInHistoryView.Visible = false;
         // 
         // clockTimer
         // 
@@ -526,5 +613,12 @@ partial class MainForm
     private MemberDetailsView memberDetailsView;
     private MemberEditView memberEditView;
     private MemberRegistrationView memberRegistrationView;
+    private OrderListView orderListView;
+    private OrderDetailsView orderDetailsView;
+    private RefundRequestView refundRequestView;
+    private CheckInSessionView checkInSessionView;
+    private TicketScannerView ticketScannerView;
+    private TicketScanResultView ticketScanResultView;
+    private CheckInHistoryView checkInHistoryView;
     private System.Windows.Forms.Timer clockTimer;
 }
