@@ -143,6 +143,7 @@ partial class PaymentView
         layoutPage.RowStyles.Add(new RowStyle(SizeType.Absolute, 57F));
         layoutPage.Size = new Size(1136, 722);
         layoutPage.TabIndex = 0;
+        layoutPage.Paint += layoutPage_Paint;
         // 
         // progressBar
         // 

@@ -239,4 +239,27 @@ public partial class PaymentView : UserControl
     private void BtnBack_Click(object? sender, EventArgs e) => BackRequested?.Invoke(this, EventArgs.Empty);
     private void BtnConfirm_Click(object? sender, EventArgs e) => ConfirmPayment();
     private void ChkQrVerified_CheckedChanged(object? sender, EventArgs e) => RefreshPayment();
+
+    private void layoutPage_Paint(object sender, PaintEventArgs e)
+    {
+
+    }
+}
+
+internal sealed record PaymentOrderLine(string Description, int Quantity, decimal UnitPrice)
+{
+    public decimal Amount => Quantity * UnitPrice;
+}
+
+internal sealed class PaymentOrder(SeatSelectionContext selection, IEnumerable<PaymentOrderLine> concessions)
+{
+    internal SeatSelectionContext Selection { get; } = selection;
+
+    internal IReadOnlyList<PaymentOrderLine> Lines { get; } = selection.Seats
+        .GroupBy(seat => (seat.TypeName, seat.Price))
+        .Select(group => new PaymentOrderLine($"Vé {group.Key.TypeName}", group.Count(), group.Key.Price))
+        .Concat(concessions)
+        .ToArray();
+
+    internal decimal Total => Lines.Sum(line => line.Amount);
 }

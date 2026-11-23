@@ -10,10 +10,12 @@ public partial class MainForm : Form
 
     private Control? memberPageBeforeEdit;
     private Control? checkInPageBeforeHistory;
+    private Control activeTicketSalesView;
 
     public MainForm()
     {
         InitializeComponent();
+        activeTicketSalesView = showtimeSelectionView;
         menuNavigation.Renderer = new PosNavigationRenderer();
         showtimeSelectionView.SetMovies([]);
         showtimeSelectionView.ShowtimeSelected += ShowtimeSelectionView_ShowtimeSelected;
@@ -21,7 +23,7 @@ public partial class MainForm : Form
         seatSelectionView.ContinueRequested += ShowConcessionSelection;
         concessionSelectionView.BackRequested += (_, _) => ShowSeatSelection();
         concessionSelectionView.ContinueRequested += ShowPayment;
-        paymentView.BackRequested += (_, _) => ReturnToConcessionSelection();
+        paymentView.BackRequested += (_, _) => ShowTicketSalesView(concessionSelectionView);
         paymentView.PaymentConfirmed += ShowSaleCompletion;
         saleCompletionView.NewSaleRequested += (_, _) => ShowShowtimeSelection();
         shiftManagementView.CloseShiftRequested += (_, _) => ShowShiftHandover();
@@ -104,64 +106,53 @@ public partial class MainForm : Form
         ShowSeatSelection();
     }
 
-    private void ShowSeatSelection()
-    {
-        paymentView.Hide();
-        concessionSelectionView.Hide();
-        showtimeSelectionView.Hide();
-        seatSelectionView.Show();
-        seatSelectionView.Select();
-    }
+    private void ShowSeatSelection() => ShowTicketSalesView(seatSelectionView);
 
     private void ShowConcessionSelection(SeatSelectionContext selection)
     {
         concessionSelectionView.ShowFor(selection, []);
-        seatSelectionView.Hide();
-        concessionSelectionView.Show();
-        concessionSelectionView.Select();
+        ShowTicketSalesView(concessionSelectionView);
     }
 
     private void ShowShowtimeSelection()
     {
-        saleCompletionView.Hide();
-        paymentView.Hide();
-        concessionSelectionView.Hide();
-        seatSelectionView.Hide();
+        activeTicketSalesView.Hide();
         saleCompletionView.ClearSale();
         paymentView.ClearDraft();
         concessionSelectionView.ClearDraft();
         seatSelectionView.ClearDraft();
         showtimeSelectionView.ClearSelection();
-        showtimeSelectionView.Show();
-        showtimeSelectionView.Select();
+        ShowTicketSalesView(showtimeSelectionView);
     }
 
     private void ShowPayment(PaymentOrder order)
     {
         paymentView.ShowFor(order);
-        concessionSelectionView.Hide();
-        paymentView.Show();
-        paymentView.Select();
-    }
-
-    private void ReturnToConcessionSelection()
-    {
-        paymentView.Hide();
-        concessionSelectionView.Show();
-        concessionSelectionView.Select();
+        ShowTicketSalesView(paymentView);
     }
 
     private void ShowSaleCompletion(CompletedSale sale)
     {
-        paymentView.Hide();
         saleCompletionView.ShowFor(sale);
-        saleCompletionView.Show();
+        ShowTicketSalesView(saleCompletionView);
         saleCompletionView.FocusNewSale();
+    }
+
+    private void ShowTicketSalesView(Control view)
+    {
+        if (activeTicketSalesView != view)
+        {
+            activeTicketSalesView.Hide();
+            activeTicketSalesView = view;
+        }
+
+        view.Show();
+        view.Select();
     }
 
     private void NavTicketSales_Click(object? sender, EventArgs e)
     {
-        if (pnlTicketSales.Visible)
+        if (activeTicketSalesView.Visible)
         {
             ShowShowtimeSelection();
             return;
@@ -172,7 +163,7 @@ public partial class MainForm : Form
         HideMemberViews();
         shiftHandoverView.Hide();
         shiftManagementView.Hide();
-        pnlTicketSales.Show();
+        activeTicketSalesView.Show();
         lblOperator.Text = string.Empty;
         SelectNavigationItem(navTicketSales);
     }
@@ -181,7 +172,7 @@ public partial class MainForm : Form
 
     private void ShowCheckInSessions()
     {
-        pnlTicketSales.Hide();
+        activeTicketSalesView.Hide();
         HideOrderViews();
         HideMemberViews();
         shiftHandoverView.Hide();
@@ -238,7 +229,7 @@ public partial class MainForm : Form
 
     private void ShowMemberList()
     {
-        pnlTicketSales.Hide();
+        activeTicketSalesView.Hide();
         HideCheckInViews();
         HideOrderViews();
         shiftHandoverView.Hide();
@@ -300,7 +291,7 @@ public partial class MainForm : Form
 
     private void ShowOrderList()
     {
-        pnlTicketSales.Hide();
+        activeTicketSalesView.Hide();
         HideCheckInViews();
         shiftHandoverView.Hide();
         shiftManagementView.Hide();
@@ -336,7 +327,7 @@ public partial class MainForm : Form
 
     private void ShowShiftOverview()
     {
-        pnlTicketSales.Hide();
+        activeTicketSalesView.Hide();
         HideCheckInViews();
         HideOrderViews();
         HideMemberViews();

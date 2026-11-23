@@ -46,7 +46,6 @@ partial class MainForm
         pnlHeaderDivider = new Panel();
         btnLogout = new Button();
         pnlWorkspace = new Panel();
-        pnlTicketSales = new Panel();
         showtimeSelectionView = new ShowtimeSelectionView();
         seatSelectionView = new SeatSelectionView();
         concessionSelectionView = new ConcessionSelectionView();
@@ -75,7 +74,6 @@ partial class MainForm
         ((System.ComponentModel.ISupportInitialize)picBrand).BeginInit();
         layoutHeader.SuspendLayout();
         pnlWorkspace.SuspendLayout();
-        pnlTicketSales.SuspendLayout();
         SuspendLayout();
         // 
         // layoutMain
@@ -332,7 +330,11 @@ partial class MainForm
         // 
         // pnlWorkspace
         //
-        pnlWorkspace.Controls.Add(pnlTicketSales);
+        pnlWorkspace.Controls.Add(showtimeSelectionView);
+        pnlWorkspace.Controls.Add(seatSelectionView);
+        pnlWorkspace.Controls.Add(concessionSelectionView);
+        pnlWorkspace.Controls.Add(paymentView);
+        pnlWorkspace.Controls.Add(saleCompletionView);
         pnlWorkspace.Controls.Add(shiftManagementView);
         pnlWorkspace.Controls.Add(shiftHandoverView);
         pnlWorkspace.Controls.Add(memberListView);
@@ -353,20 +355,6 @@ partial class MainForm
         pnlWorkspace.Size = new Size(1136, 730);
         pnlWorkspace.TabIndex = 1;
         //
-        // pnlTicketSales
-        // 
-        pnlTicketSales.Controls.Add(showtimeSelectionView);
-        pnlTicketSales.Controls.Add(seatSelectionView);
-        pnlTicketSales.Controls.Add(concessionSelectionView);
-        pnlTicketSales.Controls.Add(paymentView);
-        pnlTicketSales.Controls.Add(saleCompletionView);
-        pnlTicketSales.Dock = DockStyle.Fill;
-        pnlTicketSales.Location = Point.Empty;
-        pnlTicketSales.Margin = Padding.Empty;
-        pnlTicketSales.Name = "pnlTicketSales";
-        pnlTicketSales.Size = new Size(1136, 730);
-        pnlTicketSales.TabIndex = 1;
-        // 
         // showtimeSelectionView
         // 
         showtimeSelectionView.BackColor = Color.FromArgb(241, 245, 249);
@@ -576,7 +564,6 @@ partial class MainForm
         pnlBrand.ResumeLayout(false);
         ((System.ComponentModel.ISupportInitialize)picBrand).EndInit();
         layoutHeader.ResumeLayout(false);
-        pnlTicketSales.ResumeLayout(false);
         pnlWorkspace.ResumeLayout(false);
         ResumeLayout(false);
     }
@@ -601,7 +588,6 @@ partial class MainForm
     private Panel pnlHeaderDivider;
     private Button btnLogout;
     private Panel pnlWorkspace;
-    private Panel pnlTicketSales;
     private ShowtimeSelectionView showtimeSelectionView;
     private SeatSelectionView seatSelectionView;
     private ConcessionSelectionView concessionSelectionView;

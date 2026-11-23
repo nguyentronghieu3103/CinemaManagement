@@ -49,12 +49,15 @@ partial class ShowtimeSelectionView
         layoutContent.TabIndex = 0;
         // 
         // layoutSteps
-        //
-        layoutSteps.ActiveStep = 1;
+        // 
         layoutSteps.Dock = DockStyle.Fill;
-        layoutSteps.Margin = Padding.Empty;
+        layoutSteps.Location = new Point(20, 16);
+        layoutSteps.Margin = new Padding(0);
         layoutSteps.Name = "layoutSteps";
-        //
+        layoutSteps.Size = new Size(1110, 42);
+        layoutSteps.TabIndex = 0;
+        layoutSteps.TabStop = false;
+        // 
         // lblTitle
         // 
         lblTitle.Dock = DockStyle.Fill;
@@ -142,7 +145,7 @@ partial class ShowtimeSelectionView
         cboFormat.AccessibleName = "Định dạng";
         cboFormat.DropDownStyle = ComboBoxStyle.DropDownList;
         cboFormat.FormattingEnabled = true;
-        cboFormat.Items.Add("Tất cả định dạng");
+        cboFormat.Items.AddRange(new object[] { "Tất cả định dạng" });
         cboFormat.Location = new Point(562, 15);
         cboFormat.Margin = new Padding(0, 6, 8, 8);
         cboFormat.Name = "cboFormat";
@@ -155,7 +158,7 @@ partial class ShowtimeSelectionView
         cboRoom.AccessibleName = "Phòng chiếu";
         cboRoom.DropDownStyle = ComboBoxStyle.DropDownList;
         cboRoom.FormattingEnabled = true;
-        cboRoom.Items.Add("Tất cả phòng");
+        cboRoom.Items.AddRange(new object[] { "Tất cả phòng" });
         cboRoom.Location = new Point(718, 15);
         cboRoom.Margin = new Padding(0, 6, 8, 8);
         cboRoom.Name = "cboRoom";
@@ -222,7 +225,7 @@ partial class ShowtimeSelectionView
         gridMovies.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
         gridMovies.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
         gridMovies.Dock = DockStyle.Top;
-        gridMovies.Location = new Point(0, 120);
+        gridMovies.Location = new Point(0, 91);
         gridMovies.Margin = new Padding(0);
         gridMovies.Name = "gridMovies";
         gridMovies.RowCount = 1;
@@ -237,7 +240,7 @@ partial class ShowtimeSelectionView
         lblEmpty.ForeColor = Color.FromArgb(100, 116, 139);
         lblEmpty.Location = new Point(0, 0);
         lblEmpty.Name = "lblEmpty";
-        lblEmpty.Size = new Size(1110, 120);
+        lblEmpty.Size = new Size(1110, 91);
         lblEmpty.TabIndex = 1;
         lblEmpty.Text = "Không tìm thấy suất chiếu phù hợp";
         lblEmpty.TextAlign = ContentAlignment.MiddleCenter;

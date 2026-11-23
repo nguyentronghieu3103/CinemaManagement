@@ -73,7 +73,7 @@ partial class SeatSelectionView
         layoutPage.Controls.Add(layoutWorkArea, 0, 4);
         layoutPage.Dock = DockStyle.Fill;
         layoutPage.Location = new Point(0, 0);
-        layoutPage.Margin = new Padding(4, 4, 4, 4);
+        layoutPage.Margin = new Padding(4);
         layoutPage.Name = "layoutPage";
         layoutPage.Padding = new Padding(22, 15, 22, 20);
         layoutPage.RowCount = 5;
@@ -86,12 +86,16 @@ partial class SeatSelectionView
         layoutPage.TabIndex = 0;
         // 
         // layoutProgress
-        //
+        // 
         layoutProgress.ActiveStep = 2;
         layoutProgress.Dock = DockStyle.Fill;
-        layoutProgress.Margin = Padding.Empty;
+        layoutProgress.Location = new Point(22, 15);
+        layoutProgress.Margin = new Padding(0);
         layoutProgress.Name = "layoutProgress";
-        //
+        layoutProgress.Size = new Size(1356, 50);
+        layoutProgress.TabIndex = 0;
+        layoutProgress.TabStop = false;
+        // 
         // lblTitle
         // 
         lblTitle.Dock = DockStyle.Fill;
@@ -213,7 +217,7 @@ partial class SeatSelectionView
         seatMap.Font = new Font("Segoe UI", 9F);
         seatMap.ForeColor = Color.FromArgb(15, 23, 42);
         seatMap.Location = new Point(1, 1);
-        seatMap.Margin = new Padding(4, 4, 4, 4);
+        seatMap.Margin = new Padding(4);
         seatMap.Name = "seatMap";
         seatMap.Size = new Size(924, 578);
         seatMap.TabIndex = 0;
@@ -243,9 +247,9 @@ partial class SeatSelectionView
         layoutTickets.Controls.Add(btnContinue, 0, 5);
         layoutTickets.Dock = DockStyle.Fill;
         layoutTickets.Location = new Point(1, 1);
-        layoutTickets.Margin = new Padding(4, 4, 4, 4);
+        layoutTickets.Margin = new Padding(4);
         layoutTickets.Name = "layoutTickets";
-        layoutTickets.Padding = new Padding(12, 12, 12, 12);
+        layoutTickets.Padding = new Padding(12);
         layoutTickets.RowCount = 6;
         layoutTickets.RowStyles.Add(new RowStyle(SizeType.Absolute, 45F));
         layoutTickets.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
@@ -344,9 +348,9 @@ partial class SeatSelectionView
         gridSelectedSeats.Size = new Size(392, 290);
         gridSelectedSeats.TabIndex = 0;
         gridSelectedSeats.CellContentClick += GridSelectedSeats_CellContentClick;
-        // 
+        //
         // colSeat
-        // 
+        //
         colSeat.DataPropertyName = "Code";
         colSeat.FillWeight = 58F;
         colSeat.HeaderText = "Ghế";
@@ -354,9 +358,9 @@ partial class SeatSelectionView
         colSeat.Name = "colSeat";
         colSeat.ReadOnly = true;
         colSeat.SortMode = DataGridViewColumnSortMode.NotSortable;
-        // 
+        //
         // colType
-        // 
+        //
         colType.DataPropertyName = "TypeName";
         colType.FillWeight = 96F;
         colType.HeaderText = "Loại ghế";
@@ -364,9 +368,9 @@ partial class SeatSelectionView
         colType.Name = "colType";
         colType.ReadOnly = true;
         colType.SortMode = DataGridViewColumnSortMode.NotSortable;
-        // 
+        //
         // colPrice
-        // 
+        //
         colPrice.DataPropertyName = "Price";
         dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight;
         dataGridViewCellStyle2.Format = "#,0' đ'";
@@ -500,7 +504,7 @@ partial class SeatSelectionView
         Controls.Add(layoutPage);
         Font = new Font("Segoe UI", 9F);
         ForeColor = Color.FromArgb(15, 23, 42);
-        Margin = new Padding(4, 4, 4, 4);
+        Margin = new Padding(4);
         Name = "SeatSelectionView";
         Size = new Size(1400, 825);
         layoutPage.ResumeLayout(false);
