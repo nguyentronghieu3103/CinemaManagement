@@ -1,8 +1,1391 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@{
+    ViewData["Title"] = "Trang Chủ - Đặt Vé Xem Phim Trực Tuyến";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<!-- ======================================================================== -->
+<!-- BANNER CHÀO MỪNG HỘI VIÊN (CHỈ HIỂN THỊ KHI Ở CHẾ ĐỘ ĐÃ ĐĂNG NHẬP) -->
+<!-- ======================================================================== -->
+<div id="postLoginMemberBanner" class="container-xl pt-4 d-none">
+    <div class="welcome-member-banner">
+        <div class="row align-items-center g-3">
+            <div class="col-lg-8">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <span class="badge bg-warning text-dark fw-bold px-3 py-1 rounded-pill">⭐ GOLD MEMBER</span>
+                    <span class="text-secondary small">Mã thẻ: SL-882194</span>
+                </div>
+                <h4 class="text-white fw-bold mb-1">
+                    CHÀO MỪNG TRỞ LẠI, <span class="text-warning">NGUYỄN VĂN AN</span>!
+                </h4>
+                <p class="text-secondary small mb-2">
+                    Điểm thưởng hiện có: <strong class="text-warning fs-5">250 Điểm</strong> (Tương đương <strong>250.000 VNĐ</strong>) • Tỉ lệ tích điểm ưu đãi: <strong class="text-success">10% giá trị mỗi đơn vé</strong>.
+                </p>
+                <div class="d-flex flex-wrap gap-2">
+                    <button type="button" class="btn btn-warning btn-sm fw-bold px-3" onclick="openCustomerDashboard('rewards')">
+                        <i class="bi bi-gift-fill me-1"></i> Đổi 100 Điểm Lấy Vé 2D Miễn Phí
+                    </button>
+                    <button type="button" class="btn btn-outline-light btn-sm fw-bold px-3" onclick="openCustomerDashboard('overview')">
+                        <i class="bi bi-speedometer2 me-1"></i> Xem Dashboard Hội Viên
+                    </button>
+                </div>
+            </div>
+            <!-- Thẻ nhắc vé sắp chiếu hôm nay -->
+            <div class="col-lg-4">
+                <div class="p-3 rounded-3" style="background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(59, 130, 246, 0.3);">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <span class="text-primary small fw-bold"><i class="bi bi-bell-fill me-1"></i> VÉ SẮP CHIẾU (HÔM NAY)</span>
+                        <span class="badge bg-danger">19:30</span>
+                    </div>
+                    <div class="fw-bold text-white small">Kẻ Trộm Mặt Trăng 4 (2D)</div>
+                    <div class="small text-secondary mb-2">Phòng 01 • Ghế: <strong class="text-warning">F06, F07</strong> • Mã: VE882194</div>
+                    <button type="button" class="btn btn-cinema-primary btn-sm w-100 py-1 fw-bold" onclick="showTicketDetailModal('VE882194')">
+                        <i class="bi bi-qr-code-scan me-1"></i> Mở Mã QR Check-in Vào Rạp
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<!-- ======================================================================== -->
+<!-- HERO SECTION: PHIM BOM TẤN NỔI BẬT NHẤT HÔM NAY -->
+<!-- ======================================================================== -->
+<section class="cinema-hero-wrapper">
+    <div class="container-xl">
+        <div class="row align-items-center g-4">
+            <!-- Poster phim bom tấn -->
+            <div class="col-lg-4 col-md-5 text-center">
+                <div class="hero-poster-frame">
+                    <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=600&auto=format&fit=crop&q=80" 
+                         alt="Kẻ Trộm Mặt Trăng 4" class="hero-poster-img" id="heroPosterImg" />
+                    <button type="button" class="btn-trailer-float" onclick="openTrailerModal('Kẻ Trộm Mặt Trăng 4')">
+                        <i class="bi bi-play-circle-fill me-1 text-danger"></i> Xem Trailer HD
+                    </button>
+                </div>
+            </div>
+
+            <!-- Thông tin chi tiết phim & Nút đặt vé -->
+            <div class="col-lg-8 col-md-7">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <span class="badge bg-danger text-uppercase fw-bold px-2 py-1" style="font-size: 0.72rem;">● PHIM BOM TẤN ĐANG CHIẾU HÔM NAY</span>
+                    <span class="badge badge-age badge-age-c13" id="heroAgeBadge">C13</span>
+                    <span class="badge bg-dark border border-secondary text-light small"><i class="bi bi-badge-hd me-1"></i> 2D / 3D Atmos</span>
+                    <span class="badge bg-dark border border-secondary text-warning small"><i class="bi bi-star-fill text-warning me-1"></i> 9.2 / 10</span>
+                </div>
+
+                <h1 class="display-6 fw-extrabold text-white mb-2" id="heroMovieTitle">
+                    KẺ TRỘM MẶT TRĂNG 4 (DESPICABLE ME 4)
+                </h1>
+
+                <p class="text-secondary small mb-3">
+                    Đạo diễn: <strong>Chris Renaud</strong> • Diễn viên: <strong>Steve Carell, Kristen Wiig, Will Ferrell</strong><br>
+                    Thể loại: <strong>Hoạt hình, Hài hước, Phiêu lưu gia đình</strong> • Thời lượng: <strong>95 Phút</strong> • Ngôn ngữ: <strong>Lồng tiếng & Phụ đề</strong>
+                </p>
+
+                <p class="text-light mb-3" style="max-width: 650px; font-size: 0.95rem; line-height: 1.6;">
+                    Gru cùng đại gia đình đón chào quý tử Gru Jr. nhưng bị đảo lộn khi Maxime Le Mal trốn ngục quyết tâm trả thù. Cả gia đình phải chuyển tới thị trấn mới dưới thân phận bí mật cùng nhóm Minions siêu năng lực Mega Minions!
+                </p>
+
+                <!-- Box tình trạng phòng chiếu -->
+                <div class="d-inline-flex align-items-center gap-3 p-2 px-3 rounded-3 mb-4" style="background: rgba(30, 41, 59, 0.7); border: 1px solid var(--cinema-border);">
+                    <div class="small text-secondary">
+                        <i class="bi bi-door-open-fill text-primary me-1"></i> Suất kế tiếp: <strong class="text-white">19:30</strong> (Phòng 01 - Tiêu chuẩn 2D)
+                    </div>
+                    <div class="vr bg-secondary"></div>
+                    <div class="small text-success fw-bold">
+                        <i class="bi bi-check-circle-fill me-1"></i> Còn 82 / 140 ghế trống
+                    </div>
+                </div>
+
+                <!-- Call to action buttons -->
+                <div class="d-flex flex-wrap gap-3">
+                    <button type="button" class="btn btn-cinema-danger btn-lg px-4 fs-6" onclick="startBookingFlow('Kẻ Trộm Mặt Trăng 4', 'Phòng 01', '19:30')">
+                        <i class="bi bi-ticket-perforated-fill me-2"></i> MUA VÉ NGAY
+                    </button>
+                    <button type="button" class="btn btn-cinema-outline btn-lg px-4 fs-6" onclick="startBookingFlow('Kẻ Trộm Mặt Trăng 4', 'Phòng 01', '19:30')">
+                        <i class="bi bi-grid-3x3-gap-fill me-2"></i> XEM SƠ ĐỒ GHẾ
+                    </button>
+                </div>
+
+                <!-- Lời nhắc quyền lợi hội viên cho khách vãng lai -->
+                <div class="mt-4 small text-secondary" id="preLoginRewardTip">
+                    <i class="bi bi-stars text-warning me-1"></i> Khách hàng đăng ký hội viên miễn phí để nhận <strong>ưu đãi tích lũy 5% - 10% điểm</strong> cho mỗi đơn vé!
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================================== -->
+<!-- QUICK BOOKING BAR (THANH ĐẶT VÉ NHANH ĐA BƯỚC) -->
+<!-- ======================================================================== -->
+<div class="container-xl quick-booking-container">
+    <div class="quick-booking-card">
+        <div class="row g-3 align-items-end">
+            <!-- 1. Chọn Phim -->
+            <div class="col-lg-3 col-md-6">
+                <label class="quick-select-label"><i class="bi bi-film text-danger"></i> 1. Chọn Phim</label>
+                <select class="form-select quick-select-input" id="quickSelectMovie">
+                    <option value="Kẻ Trộm Mặt Trăng 4" selected>Kẻ Trộm Mặt Trăng 4 (C13)</option>
+                    <option value="Dune: Hành Tinh Cát 2">Dune: Hành Tinh Cát 2 (C16)</option>
+                    <option value="Kung Fu Panda 4">Kung Fu Panda 4 (P)</option>
+                    <option value="Mai">Mai - Trấn Thành (C18)</option>
+                    <option value="Godzilla x Kong">Godzilla x Kong: Đế Chế Mới (C13)</option>
+                    <option value="Exhuma">Exhuma: Quật Mộ Trùng Ma (C18)</option>
+                </select>
+            </div>
+
+            <!-- 2. Chọn Ngày Chiếu -->
+            <div class="col-lg-3 col-md-6">
+                <label class="quick-select-label"><i class="bi bi-calendar-event text-primary"></i> 2. Chọn Ngày Chiếu</label>
+                <select class="form-select quick-select-input" id="quickSelectDate">
+                    <option value="Hôm nay" selected>Hôm nay (24/11/2026)</option>
+                    <option value="Ngày mai">Ngày mai (25/11/2026)</option>
+                    <option value="Thứ Tư">Thứ Tư (26/11/2026)</option>
+                    <option value="Thứ Năm">Thứ Năm (27/11/2026)</option>
+                </select>
+            </div>
+
+            <!-- 3. Suất Chiếu & Phòng -->
+            <div class="col-lg-3 col-md-6">
+                <label class="quick-select-label"><i class="bi bi-clock-history text-warning"></i> 3. Suất Chiếu & Phòng</label>
+                <select class="form-select quick-select-input" id="quickSelectShowtime">
+                    <option value="19:30 - P01">19:30 (Phòng 01 - Còn 82 ghế)</option>
+                    <option value="20:00 - P03">20:00 (Phòng 03 - Còn 34 ghế)</option>
+                    <option value="20:15 - P04">20:15 (Phòng 04 - Còn 58 ghế)</option>
+                    <option value="21:45 - P01">21:45 (Phòng 01 - Còn 110 ghế)</option>
+                </select>
+            </div>
+
+            <!-- 4. Nút Hành Động -->
+            <div class="col-lg-3 col-md-6">
+                <button type="button" class="btn btn-cinema-danger w-100 py-2 fw-bold" onclick="onQuickBookingSubmit()">
+                    <i class="bi bi-arrow-right-circle-fill me-1"></i> ĐẶT VÉ / CHỌN GHẾ
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ======================================================================== -->
+<!-- DANH MỤC PHIM ĐANG CHIẾU & SẮP CHIẾU (TABS) -->
+<!-- ======================================================================== -->
+<section class="py-5" id="moviesSection">
+    <div class="container-xl">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+            <div>
+                <h3 class="text-white fw-bold mb-1">DANH MỤC PHIM TẠI RẠP</h3>
+                <p class="text-secondary small mb-0">Hệ thống phòng chiếu chuẩn Laser 4K & âm thanh vòm Dolby Atmos đỉnh cao</p>
+            </div>
+            
+            <!-- Tab switcher -->
+            <div class="cinema-tabs-nav">
+                <button class="cinema-tab-btn active" id="tabBtnNowShowing" onclick="switchMovieCategory('now')">
+                    <i class="bi bi-play-fill me-1"></i> PHIM ĐANG CHIẾU (06)
+                </button>
+                <button class="cinema-tab-btn" id="tabBtnUpcoming" onclick="switchMovieCategory('upcoming')">
+                    <i class="bi bi-hourglass-split me-1"></i> PHIM SẮP CHIẾU (04)
+                </button>
+            </div>
+        </div>
+
+        <!-- LƯỚI PHIM ĐANG CHIẾU -->
+        <div class="row g-4" id="gridNowShowing">
+            <!-- Phim 1: Kẻ Trộm Mặt Trăng 4 -->
+            <div class="col-xl-3 col-lg-4 col-sm-6">
+                <div class="movie-card">
+                    <div class="movie-poster-box">
+                        <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=500&auto=format&fit=crop&q=80" alt="Kẻ Trộm Mặt Trăng 4">
+                        <div class="movie-rating-badge"><i class="bi bi-star-fill"></i> 9.2</div>
+                        <span class="badge badge-age badge-age-c13 position-absolute bottom-0 start-0 m-2">C13</span>
+                    </div>
+                    <div class="movie-card-body">
+                        <div class="movie-card-title">Kẻ Trộm Mặt Trăng 4</div>
+                        <div class="movie-card-info">Hoạt hình, Hài • 95 phút • 2D/3D</div>
+                        <div class="small text-success mb-3"><i class="bi bi-door-open me-1"></i> Phòng 01: Còn 82 ghế trống</div>
+                        <div class="d-flex gap-2 mt-auto">
+                            <button class="btn btn-cinema-danger btn-sm w-100 fw-bold" onclick="startBookingFlow('Kẻ Trộm Mặt Trăng 4', 'Phòng 01', '19:30')">
+                                MUA VÉ
+                            </button>
+                            <button class="btn btn-cinema-outline btn-sm px-2" title="Xem sơ đồ ghế" onclick="startBookingFlow('Kẻ Trộm Mặt Trăng 4', 'Phòng 01', '19:30')">
+                                <i class="bi bi-grid-3x3"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phim 2: Dune: Phần Hai -->
+            <div class="col-xl-3 col-lg-4 col-sm-6">
+                <div class="movie-card">
+                    <div class="movie-poster-box">
+                        <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&auto=format&fit=crop&q=80" alt="Dune 2">
+                        <div class="movie-rating-badge"><i class="bi bi-star-fill"></i> 8.8</div>
+                        <span class="badge badge-age badge-age-c16 position-absolute bottom-0 start-0 m-2">C16</span>
+                    </div>
+                    <div class="movie-card-body">
+                        <div class="movie-card-title">Dune: Hành Tinh Cát 2</div>
+                        <div class="movie-card-info">Khoa học viễn tưởng • 166 phút • IMAX</div>
+                        <div class="small text-success mb-3"><i class="bi bi-door-open me-1"></i> Phòng 03: Còn 34 ghế trống</div>
+                        <div class="d-flex gap-2 mt-auto">
+                            <button class="btn btn-cinema-danger btn-sm w-100 fw-bold" onclick="startBookingFlow('Dune: Hành Tinh Cát 2', 'Phòng 03', '20:00')">
+                                MUA VÉ
+                            </button>
+                            <button class="btn btn-cinema-outline btn-sm px-2" title="Xem sơ đồ ghế" onclick="startBookingFlow('Dune: Hành Tinh Cát 2', 'Phòng 03', '20:00')">
+                                <i class="bi bi-grid-3x3"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phim 3: Kung Fu Panda 4 -->
+            <div class="col-xl-3 col-lg-4 col-sm-6">
+                <div class="movie-card">
+                    <div class="movie-poster-box">
+                        <img src="https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=500&auto=format&fit=crop&q=80" alt="Kung Fu Panda 4">
+                        <div class="movie-rating-badge"><i class="bi bi-star-fill"></i> 8.5</div>
+                        <span class="badge badge-age badge-age-p position-absolute bottom-0 start-0 m-2">P</span>
+                    </div>
+                    <div class="movie-card-body">
+                        <div class="movie-card-title">Kung Fu Panda 4</div>
+                        <div class="movie-card-info">Hoạt hình, Võ thuật • 94 phút • 2D</div>
+                        <div class="small text-success mb-3"><i class="bi bi-door-open me-1"></i> Phòng 02: Còn 65 ghế trống</div>
+                        <div class="d-flex gap-2 mt-auto">
+                            <button class="btn btn-cinema-danger btn-sm w-100 fw-bold" onclick="startBookingFlow('Kung Fu Panda 4', 'Phòng 02', '19:45')">
+                                MUA VÉ
+                            </button>
+                            <button class="btn btn-cinema-outline btn-sm px-2" title="Xem sơ đồ ghế" onclick="startBookingFlow('Kung Fu Panda 4', 'Phòng 02', '19:45')">
+                                <i class="bi bi-grid-3x3"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phim 4: Mai -->
+            <div class="col-xl-3 col-lg-4 col-sm-6">
+                <div class="movie-card">
+                    <div class="movie-poster-box">
+                        <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=500&auto=format&fit=crop&q=80" alt="Mai">
+                        <div class="movie-rating-badge"><i class="bi bi-star-fill"></i> 9.0</div>
+                        <span class="badge badge-age badge-age-c18 position-absolute bottom-0 start-0 m-2">C18</span>
+                    </div>
+                    <div class="movie-card-body">
+                        <div class="movie-card-title">Mai - Trấn Thành</div>
+                        <div class="movie-card-info">Tâm lý, Tình cảm • 131 phút • 2D</div>
+                        <div class="small text-warning mb-3"><i class="bi bi-door-open me-1"></i> Phòng 04: Còn 19 ghế trống</div>
+                        <div class="d-flex gap-2 mt-auto">
+                            <button class="btn btn-cinema-danger btn-sm w-100 fw-bold" onclick="startBookingFlow('Mai', 'Phòng 04', '20:15')">
+                                MUA VÉ
+                            </button>
+                            <button class="btn btn-cinema-outline btn-sm px-2" title="Xem sơ đồ ghế" onclick="startBookingFlow('Mai', 'Phòng 04', '20:15')">
+                                <i class="bi bi-grid-3x3"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LƯỚI PHIM SẮP CHIẾU (ẨN MẶC ĐỊNH) -->
+        <div class="row g-4 d-none" id="gridUpcoming">
+            <!-- Sắp chiếu 1: Deadpool & Wolverine -->
+            <div class="col-xl-3 col-lg-4 col-sm-6">
+                <div class="movie-card">
+                    <div class="movie-poster-box">
+                        <img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=500&auto=format&fit=crop&q=80" alt="Deadpool">
+                        <span class="badge badge-age badge-age-c18 position-absolute bottom-0 start-0 m-2">C18</span>
+                    </div>
+                    <div class="movie-card-body">
+                        <div class="movie-card-title">Deadpool & Wolverine</div>
+                        <div class="movie-card-info">Hành động, Hài • Khởi chiếu: 26/07</div>
+                        <div class="small text-primary mb-3"><i class="bi bi-bell me-1"></i> Mở bán vé sớm từ ngày mai</div>
+                        <button class="btn btn-cinema-outline btn-sm w-100 fw-bold mt-auto" onclick="openTrailerModal('Deadpool & Wolverine')">
+                            <i class="bi bi-play-circle me-1"></i> Xem Trailer HD
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sắp chiếu 2: Inside Out 2 -->
+            <div class="col-xl-3 col-lg-4 col-sm-6">
+                <div class="movie-card">
+                    <div class="movie-poster-box">
+                        <img src="https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=500&auto=format&fit=crop&q=80" alt="Inside Out 2">
+                        <span class="badge badge-age badge-age-p position-absolute bottom-0 start-0 m-2">P</span>
+                    </div>
+                    <div class="movie-card-body">
+                        <div class="movie-card-title">Những Mảnh Ghép Cảm Xúc 2</div>
+                        <div class="movie-card-info">Hoạt hình • Khởi chiếu: 14/06</div>
+                        <div class="small text-primary mb-3"><i class="bi bi-bell me-1"></i> Đăng ký nhận thông báo vé</div>
+                        <button class="btn btn-cinema-outline btn-sm w-100 fw-bold mt-auto" onclick="openTrailerModal('Inside Out 2')">
+                            <i class="bi bi-play-circle me-1"></i> Xem Trailer HD
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================================== -->
+<!-- BẢNG GIÁ VÉ & QUY ĐỊNH RẠP (PRICING & REGULATIONS) -->
+<!-- ======================================================================== -->
+<section class="py-5" id="pricingSection" style="background: #0f172a; border-top: 1px solid var(--cinema-border);">
+    <div class="container-xl">
+        <div class="text-center mb-5">
+            <span class="badge bg-primary text-uppercase px-3 py-1 mb-2">MINH BẠCH & HỢP LÝ</span>
+            <h3 class="text-white fw-bold">BẢNG GIÁ VÉ & QUY ĐỊNH PHÂN LOẠI ĐỘ TUỔI</h3>
+            <p class="text-secondary small">Áp dụng tại cụm rạp Storyline Cinema 123 Điện Biên Phủ, TP.HCM</p>
+        </div>
+
+        <div class="row g-4">
+            <!-- Bảng giá vé 2D Standard -->
+            <div class="col-lg-4 col-md-6">
+                <div class="p-4 rounded-3 h-100" style="background: var(--cinema-card); border: 1px solid var(--cinema-border);">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="text-white fw-bold mb-0">Vé 2D Chuẩn</h5>
+                        <span class="badge bg-secondary">Laser 4K</span>
+                    </div>
+                    <ul class="list-unstyled mb-4 small">
+                        <li class="d-flex justify-content-between py-2 border-bottom border-secondary">
+                            <span>Ghế Thường (Standard):</span>
+                            <strong class="text-white">85.000 VNĐ</strong>
+                        </li>
+                        <li class="d-flex justify-content-between py-2 border-bottom border-secondary">
+                            <span>Ghế VIP (Prime Center):</span>
+                            <strong class="text-primary">105.000 VNĐ</strong>
+                        </li>
+                        <li class="d-flex justify-content-between py-2 border-bottom border-secondary">
+                            <span>Ghế Đôi Sweetbox (2 Người):</span>
+                            <strong class="text-danger">220.000 VNĐ</strong>
+                        </li>
+                        <li class="d-flex justify-content-between py-2">
+                            <span>Học sinh / Sinh viên (U22):</span>
+                            <strong class="text-success">65.000 VNĐ</strong>
+                        </li>
+                    </ul>
+                    <div class="small text-secondary">• Phụ thu 10.000đ/vé vào Thứ 7, Chủ Nhật và ngày lễ.</div>
+                </div>
+            </div>
+
+            <!-- Bảng giá vé 3D & IMAX VIP -->
+            <div class="col-lg-4 col-md-6">
+                <div class="p-4 rounded-3 h-100 position-relative" style="background: var(--cinema-card); border: 2px solid var(--cinema-primary);">
+                    <span class="position-absolute top-0 end-0 translate-middle badge bg-primary">TRẢI NGHIỆM ĐỈNH CAO</span>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="text-white fw-bold mb-0">Vé 3D / IMAX Laser</h5>
+                        <span class="badge bg-warning text-dark fw-bold">Atmos 7.1</span>
+                    </div>
+                    <ul class="list-unstyled mb-4 small">
+                        <li class="d-flex justify-content-between py-2 border-bottom border-secondary">
+                            <span>Ghế Thường 3D:</span>
+                            <strong class="text-white">120.000 VNĐ</strong>
+                        </li>
+                        <li class="d-flex justify-content-between py-2 border-bottom border-secondary">
+                            <span>Ghế VIP 3D Laser:</span>
+                            <strong class="text-primary">145.000 VNĐ</strong>
+                        </li>
+                        <li class="d-flex justify-content-between py-2 border-bottom border-secondary">
+                            <span>Vé IMAX Laser Khổ Lớn:</span>
+                            <strong class="text-warning">180.000 VNĐ</strong>
+                        </li>
+                        <li class="d-flex justify-content-between py-2">
+                            <span>Sweetbox Đôi 3D Atmos:</span>
+                            <strong class="text-danger">280.000 VNĐ</strong>
+                        </li>
+                    </ul>
+                    <div class="small text-secondary">• Tặng kèm kính xem phim 3D khử trùng tiệt trùng tại cửa rạp.</div>
+                </div>
+            </div>
+
+            <!-- Quy định phân loại độ tuổi -->
+            <div class="col-lg-4 col-md-12">
+                <div class="p-4 rounded-3 h-100" style="background: var(--cinema-card); border: 1px solid var(--cinema-border);">
+                    <h5 class="text-white fw-bold mb-3"><i class="bi bi-shield-check text-warning me-2"></i>Quy Định Phân Loại Độ Tuổi</h5>
+                    <div class="small text-secondary mb-3">
+                        Theo thông tư của Bộ Văn hóa, Thể thao và Du lịch, khách hàng xem phim cần xuất trình CCCD/VNeID tại cửa soát vé:
+                    </div>
+                    <div class="d-flex flex-column gap-2 small">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge badge-age badge-age-p">P</span>
+                            <span class="text-light">Phim được phép phổ biến đến người xem ở mọi độ tuổi.</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge badge-age badge-age-c13">C13</span>
+                            <span class="text-light">Phim cấm phổ biến đến khán giả dưới 13 tuổi.</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge badge-age badge-age-c16">C16</span>
+                            <span class="text-light">Phim cấm khán giả dưới 16 tuổi (Kiểm tra CCCD tại cửa).</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge badge-age badge-age-c18">C18</span>
+                            <span class="text-light">Phim cấm khán giả dưới 18 tuổi (Bắt buộc CCCD hợp lệ).</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================================== -->
+<!-- TRA CỨU VÉ NHANH CHO KHÁCH (TICKET LOOKUP SECTION) -->
+<!-- ======================================================================== -->
+<section class="py-5" id="ticketLookupSection">
+    <div class="container-xl">
+        <div class="p-4 p-md-5 rounded-4 text-center" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid var(--cinema-border);">
+            <i class="bi bi-search fs-1 text-primary mb-2 d-inline-block"></i>
+            <h4 class="text-white fw-bold mb-2">TRA CỨU VÉ ĐÃ ĐẶT (KHÔNG CẦN ĐĂNG NHẬP)</h4>
+            <p class="text-secondary small mb-4" style="max-width: 550px; margin: 0 auto;">
+                Khách vãng lai có thể nhập Số điện thoại hoặc Mã vé điện tử để xem lại sơ đồ ghế, thông tin phòng chiếu và mã QR vào rạp bất cứ lúc nào.
+            </p>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-6 col-md-8">
+                    <div class="input-group">
+                        <input type="text" class="form-control quick-select-input text-start ps-3" 
+                               id="txtLookupBarcode" placeholder="Nhập mã vé (VD: VE882194) hoặc số điện thoại..." value="VE882194">
+                        <button class="btn btn-cinema-primary px-4 fw-bold" type="button" onclick="performTicketLookup()">
+                            <i class="bi bi-arrow-right-circle me-1"></i> Tra Cứu
+                        </button>
+                    </div>
+                    <div class="small text-secondary mt-2 text-start ps-1">
+                        * Mẹo: Thử tra cứu với mã vé mẫu <code>VE882194</code> để xem trước vé điện tử.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================================== -->
+<!-- MODAL 1: ĐẶT VÉ TRỰC TUYẾN 4 BƯỚC (CHỌN GHẾ, BẮP NƯỚC, VIETQR, E-TICKET) -->
+<!-- ======================================================================== -->
+<div class="modal fade cinema-modal" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="modal-title text-white fw-bold mb-0" id="bookingModalLabel">
+                        <i class="bi bi-ticket-detailed-fill text-danger me-2"></i>ĐẶT VÉ TRỰC TUYẾN: <span id="bookingMovieTitle" class="text-warning">Kẻ Trộm Mặt Trăng 4</span>
+                    </h5>
+                    <div class="small text-secondary" id="bookingShowtimeInfo">Phòng 01 - Laser 4K | Suất chiếu: 19:30 (Hôm nay 24/11/2026)</div>
+                </div>
+                <!-- Countdown Timer -->
+                <div class="d-flex align-items-center gap-3">
+                    <div class="badge bg-danger fs-6 px-3 py-2" id="holdSeatsCountdown">
+                        <i class="bi bi-clock-history me-1"></i> Giữ ghế: 05:00
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
+
+            <!-- Modal Body (Steps Container) -->
+            <div class="modal-body p-4">
+                <!-- Step Indicator Wizard -->
+                <div class="d-flex justify-content-center align-items-center mb-4 gap-2 text-secondary small fw-bold">
+                    <span class="badge bg-primary text-white px-3 py-2" id="stepBadge1">1. CHỌN GHẾ</span>
+                    <i class="bi bi-chevron-right"></i>
+                    <span class="badge bg-dark text-secondary border border-secondary px-3 py-2" id="stepBadge2">2. BẮP NƯỚC</span>
+                    <i class="bi bi-chevron-right"></i>
+                    <span class="badge bg-dark text-secondary border border-secondary px-3 py-2" id="stepBadge3">3. THANH TOÁN VIETQR</span>
+                    <i class="bi bi-chevron-right"></i>
+                    <span class="badge bg-dark text-secondary border border-secondary px-3 py-2" id="stepBadge4">4. VÉ ĐIỆN TỬ</span>
+                </div>
+
+                <!-- ==================== BƯỚC 1: SƠ ĐỒ CHỌN GHẾ ==================== -->
+                <div id="bookingStep1">
+                    <div class="screen-label">MÀN HÌNH CHIẾU CONG (CURVED SCREEN)</div>
+                    <div class="screen-curved-bar"></div>
+
+                    <!-- Chú thích loại ghế -->
+                    <div class="d-flex justify-content-center flex-wrap gap-4 mb-4 small">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="seat-item seat-standard" style="cursor: default;">A</div>
+                            <span>Ghế Thường (85k)</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="seat-item seat-vip" style="cursor: default;">VIP</div>
+                            <span>Ghế VIP Đắc Địa (105k)</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="seat-item seat-sweetbox" style="cursor: default;">ĐÔI</div>
+                            <span>Ghế Đôi Sweetbox (220k)</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="seat-item seat-selected" style="cursor: default;">✔</div>
+                            <span>Đang Chọn</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="seat-item seat-sold" style="cursor: default;">✕</div>
+                            <span>Đã Bán</span>
+                        </div>
+                    </div>
+
+                    <!-- Ma trận ghế (Seat Matrix) -->
+                    <div class="seat-matrix-grid" id="seatMatrixHolder">
+                        <!-- Sẽ sinh bằng JavaScript từ Hàng A đến H -->
+                    </div>
+
+                    <!-- Thanh tóm tắt ghế đã chọn -->
+                    <div class="p-3 rounded-3 mt-4 d-flex flex-column flex-md-row justify-content-between align-items-center gap-3" 
+                         style="background: #0f172a; border: 1px solid var(--cinema-border);">
+                        <div>
+                            <div class="small text-secondary">Ghế đang chọn:</div>
+                            <div class="fw-bold text-warning fs-5" id="lblSelectedSeatsDisplay">Chưa chọn ghế nào</div>
+                            <div class="small text-secondary" id="lblLoyaltyPointsNote">Hội viên đăng nhập sẽ được tích 19 Điểm thưởng cho đơn này</div>
+                        </div>
+                        <div class="text-md-end">
+                            <div class="small text-secondary">Tạm tính tiền vé:</div>
+                            <div class="fw-bold text-white fs-4" id="lblSeatTotalPriceDisplay">0 VNĐ</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== BƯỚC 2: CHỌN BẮP NƯỚC ==================== -->
+                <div id="bookingStep2" class="d-none">
+                    <h6 class="text-white fw-bold mb-3"><i class="bi bi-cup-straw text-warning me-2"></i>CHỌN BẮP NƯỚC KÈM THEO (FAST-TRACK TẠI QUẦY)</h6>
+                    <div class="row g-3">
+                        <!-- Combo 1: Solo -->
+                        <div class="col-md-4">
+                            <div class="p-3 rounded-3 h-100 d-flex flex-column" style="background: #0f172a; border: 1px solid var(--cinema-border);">
+                                <div class="fw-bold text-white mb-1">Combo Solo</div>
+                                <div class="small text-secondary mb-2">1 Bắp Ngọt (Vừa) + 1 Nước ngọt 32oz</div>
+                                <div class="text-warning fw-bold mb-3">85.000 VNĐ</div>
+                                <div class="d-flex align-items-center gap-2 mt-auto">
+                                    <button class="btn btn-outline-secondary btn-sm px-2 text-white" onclick="changeConcessionQty('solo', -1)">-</button>
+                                    <span class="fw-bold text-white px-2" id="qtyConcessionSolo">0</span>
+                                    <button class="btn btn-outline-secondary btn-sm px-2 text-white" onclick="changeConcessionQty('solo', 1)">+</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Combo 2: Couple -->
+                        <div class="col-md-4">
+                            <div class="p-3 rounded-3 h-100 d-flex flex-column position-relative" style="background: #0f172a; border: 2px solid var(--cinema-primary);">
+                                <span class="badge bg-primary position-absolute top-0 end-0 m-2">HOT</span>
+                                <div class="fw-bold text-white mb-1">Combo Couple</div>
+                                <div class="small text-secondary mb-2">1 Bắp Lớn (Phô mai/Caramel) + 2 Nước ngọt 32oz</div>
+                                <div class="text-warning fw-bold mb-3">110.000 VNĐ</div>
+                                <div class="d-flex align-items-center gap-2 mt-auto">
+                                    <button class="btn btn-outline-secondary btn-sm px-2 text-white" onclick="changeConcessionQty('couple', -1)">-</button>
+                                    <span class="fw-bold text-white px-2" id="qtyConcessionCouple">1</span>
+                                    <button class="btn btn-outline-secondary btn-sm px-2 text-white" onclick="changeConcessionQty('couple', 1)">+</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Combo 3: Family -->
+                        <div class="col-md-4">
+                            <div class="p-3 rounded-3 h-100 d-flex flex-column" style="background: #0f172a; border: 1px solid var(--cinema-border);">
+                                <div class="fw-bold text-white mb-1">Combo Gia Đình</div>
+                                <div class="small text-secondary mb-2">2 Bắp Lớn + 3 Nước ngọt 32oz + 1 Xúc xích nướng</div>
+                                <div class="text-warning fw-bold mb-3">165.000 VNĐ</div>
+                                <div class="d-flex align-items-center gap-2 mt-auto">
+                                    <button class="btn btn-outline-secondary btn-sm px-2 text-white" onclick="changeConcessionQty('family', -1)">-</button>
+                                    <span class="fw-bold text-white px-2" id="qtyConcessionFamily">0</span>
+                                    <button class="btn btn-outline-secondary btn-sm px-2 text-white" onclick="changeConcessionQty('family', 1)">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== BƯỚC 3: THANH TOÁN VIETQR ==================== -->
+                <div id="bookingStep3" class="d-none">
+                    <div class="row g-4 align-items-center">
+                        <div class="col-lg-6">
+                            <h6 class="text-white fw-bold mb-3"><i class="bi bi-wallet2 text-primary me-2"></i>TÓM TẮT ĐƠN HÀNG & TÍCH ĐIỂM</h6>
+                            <div class="p-3 rounded-3 mb-3" style="background: #0f172a; border: 1px solid var(--cinema-border);">
+                                <div class="d-flex justify-content-between py-1 border-bottom border-secondary small">
+                                    <span class="text-secondary">Phim:</span>
+                                    <strong class="text-white" id="summaryMovieName">Kẻ Trộm Mặt Trăng 4</strong>
+                                </div>
+                                <div class="d-flex justify-content-between py-1 border-bottom border-secondary small">
+                                    <span class="text-secondary">Ghế:</span>
+                                    <strong class="text-warning" id="summarySeats">F06, F07 (02 Ghế VIP)</strong>
+                                </div>
+                                <div class="d-flex justify-content-between py-1 border-bottom border-secondary small">
+                                    <span class="text-secondary">Tiền vé:</span>
+                                    <span class="text-white" id="summaryTicketPrice">210.000 VNĐ</span>
+                                </div>
+                                <div class="d-flex justify-content-between py-1 border-bottom border-secondary small">
+                                    <span class="text-secondary">Bắp nước:</span>
+                                    <span class="text-white" id="summaryConcessionPrice">110.000 VNĐ</span>
+                                </div>
+
+                                <!-- Checkbox đổi điểm (nếu đã đăng nhập) -->
+                                <div class="form-check my-2 p-2 rounded" style="background: rgba(245, 158, 11, 0.1); border: 1px dashed rgba(245, 158, 11, 0.4);">
+                                    <input class="form-check-input ms-0 me-2" type="checkbox" id="chkUseLoyaltyPoints" onchange="toggleLoyaltyDiscount()">
+                                    <label class="form-check-label text-warning small fw-bold" for="chkUseLoyaltyPoints">
+                                        Dùng 40 Điểm thưởng để giảm ngay -40.000 VNĐ
+                                    </label>
+                                </div>
+
+                                <div class="d-flex justify-content-between pt-2">
+                                    <span class="fw-bold text-white fs-6">TỔNG THANH TOÁN:</span>
+                                    <strong class="text-danger fs-4" id="summaryFinalAmount">320.000 VNĐ</strong>
+                                </div>
+                            </div>
+
+                            <div class="alert alert-warning py-2 small mb-0">
+                                <i class="bi bi-info-circle-fill me-1"></i> Hệ thống tự động kiểm tra sao kê chuyển khoản VietQR trong vòng 3 giây sau khi bạn chuyển tiền!
+                            </div>
+                        </div>
+
+                        <!-- Khung VietQR Code -->
+                        <div class="col-lg-6 text-center">
+                            <div class="p-4 rounded-3 d-inline-block shadow" style="background: #ffffff; color: #0f172a; max-width: 320px;">
+                                <div class="fw-bold mb-1" style="font-size: 0.85rem; color: #003366;">QUÉT MÃ VIETQR ĐỂ THANH TOÁN</div>
+                                <div class="small text-secondary mb-2">Ngân hàng Quân Đội (MB Bank)</div>
+
+                                <!-- QR SVG Simulation -->
+                                <div style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1; margin-bottom: 10px;">
+                                    <svg width="180" height="180" viewBox="0 0 180 180">
+                                        <rect width="180" height="180" fill="white"/>
+                                        <!-- Corner 1 -->
+                                        <rect x="15" y="15" width="45" height="45" fill="#003366"/>
+                                        <rect x="23" y="23" width="29" height="29" fill="white"/>
+                                        <rect x="29" y="29" width="17" height="17" fill="#003366"/>
+                                        <!-- Corner 2 -->
+                                        <rect x="120" y="15" width="45" height="45" fill="#003366"/>
+                                        <rect x="128" y="23" width="29" height="29" fill="white"/>
+                                        <rect x="134" y="29" width="17" height="17" fill="#003366"/>
+                                        <!-- Corner 3 -->
+                                        <rect x="15" y="120" width="45" height="45" fill="#003366"/>
+                                        <rect x="23" y="128" width="29" height="29" fill="white"/>
+                                        <rect x="29" y="134" width="17" height="17" fill="#003366"/>
+                                        <!-- Matrix Pattern dots -->
+                                        <rect x="75" y="20" width="15" height="15" fill="#003366"/>
+                                        <rect x="75" y="50" width="15" height="15" fill="#003366"/>
+                                        <rect x="75" y="80" width="30" height="30" fill="#003366"/>
+                                        <rect x="20" y="75" width="15" height="15" fill="#003366"/>
+                                        <rect x="50" y="75" width="15" height="15" fill="#003366"/>
+                                        <rect x="120" y="75" width="15" height="15" fill="#003366"/>
+                                        <rect x="150" y="75" width="15" height="15" fill="#003366"/>
+                                        <rect x="120" y="120" width="45" height="45" fill="#003366"/>
+                                        <circle cx="90" cy="90" r="18" fill="#e11d48"/>
+                                        <text x="90" y="95" text-anchor="middle" fill="white" font-size="10" font-weight="bold">QR</text>
+                                    </svg>
+                                </div>
+
+                                <div class="small fw-bold text-dark">STK: 0912345678 • RẠP STORYLINE</div>
+                                <div class="text-danger fw-bold" id="qrAmountDisplay">320.000 VNĐ</div>
+                                <div class="small text-muted">Nội dung: <strong class="text-primary">VE882194</strong></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== BƯỚC 4: VÉ ĐIỆN TỬ HOÀN TẤT (E-TICKET) ==================== -->
+                <div id="bookingStep4" class="d-none">
+                    <div class="text-center mb-3">
+                        <div class="badge bg-success px-3 py-2 fs-6 mb-2">✔ ĐẶT VÉ VÀ THANH TOÁN THÀNH CÔNG!</div>
+                        <div class="text-secondary small">Vé điện tử đã được kích hoạt. Hãy xuất trình mã QR này tại cổng soát vé rạp.</div>
+                    </div>
+
+                    <!-- Thẻ vé E-Ticket -->
+                    <div class="eticket-container">
+                        <div class="eticket-header">
+                            <div>
+                                <div class="fw-bold fs-6">STORYLINE CINEMA ELECTRONIC TICKET</div>
+                                <div class="small text-secondary">Rạp Storyline • Phòng chiếu: 01 (Tầng 2)</div>
+                            </div>
+                            <div class="text-end">
+                                <span class="badge bg-warning text-dark fw-bold">MÃ: VE882194</span>
+                            </div>
+                        </div>
+
+                        <div class="eticket-body">
+                            <h5 class="fw-bold text-dark mb-1" id="eticketMovie">KẺ TRỘM MẶT TRĂNG 4</h5>
+                            <div class="small text-muted mb-3">Định dạng: 2D Laser • Thời lượng: 95 phút • Phân loại: C13</div>
+
+                            <div class="row g-2 mb-3 small">
+                                <div class="col-6">
+                                    <span class="text-muted">Suất chiếu:</span><br>
+                                    <strong class="text-dark fs-6" id="eticketShowtime">19:30 - Hôm nay</strong>
+                                </div>
+                                <div class="col-6">
+                                    <span class="text-muted">Vị trí ghế:</span><br>
+                                    <strong class="text-primary fs-6" id="eticketSeats">F06, F07 (02 VIP)</strong>
+                                </div>
+                            </div>
+
+                            <!-- Khung mã QR vào phòng chiếu -->
+                            <div class="eticket-qr-box">
+                                <svg width="130" height="130" viewBox="0 0 130 130">
+                                    <rect width="130" height="130" fill="white"/>
+                                    <!-- QR Box Corners -->
+                                    <rect x="10" y="10" width="35" height="35" fill="black"/>
+                                    <rect x="16" y="16" width="23" height="23" fill="white"/>
+                                    <rect x="22" y="22" width="11" height="11" fill="black"/>
+                                    <rect x="85" y="10" width="35" height="35" fill="black"/>
+                                    <rect x="91" y="16" width="23" height="23" fill="white"/>
+                                    <rect x="97" y="22" width="11" height="11" fill="black"/>
+                                    <rect x="10" y="85" width="35" height="35" fill="black"/>
+                                    <rect x="16" y="91" width="23" height="23" fill="white"/>
+                                    <rect x="22" y="97" width="11" height="11" fill="black"/>
+                                    <!-- QR Centers -->
+                                    <rect x="55" y="15" width="18" height="18" fill="black"/>
+                                    <rect x="55" y="55" width="20" height="20" fill="black"/>
+                                    <rect x="15" y="55" width="18" height="18" fill="black"/>
+                                    <rect x="95" y="55" width="18" height="18" fill="black"/>
+                                    <rect x="85" y="85" width="35" height="35" fill="black"/>
+                                    <text x="65" y="70" text-anchor="middle" fill="white" font-size="8" font-weight="bold">SL</text>
+                                </svg>
+                            </div>
+                            <div class="text-center small text-muted mb-3">MÃ QR CHECK-IN CỔNG SOÁT VÉ</div>
+
+                            <div class="p-2 rounded bg-light small text-secondary">
+                                • Đưa mã QR này cho nhân viên soát vé quét trực tiếp tại cửa Phòng 01.<br>
+                                • Không cần in vé giấy. Vào rạp nhanh qua làn Fast-Track.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer (Navigation Buttons) -->
+            <div class="modal-footer d-flex justify-content-between">
+                <button type="button" class="btn btn-outline-secondary" id="btnBookingBack" onclick="onBookingPrevStep()" style="display: none;">
+                    <i class="bi bi-arrow-left me-1"></i> Quay Lại
+                </button>
+                <div class="ms-auto d-flex gap-2">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-cinema-danger" id="btnBookingNext" onclick="onBookingNextStep()">
+                        Tiếp Tục (Bắp Nước) <i class="bi bi-arrow-right ms-1"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ======================================================================== -->
+<!-- MODAL 2: ĐĂNG NHẬP HỘI VIÊN (LOGIN MODAL) -->
+<!-- ======================================================================== -->
+<div class="modal fade cinema-modal" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-white fw-bold" id="loginModalLabel">
+                    <i class="bi bi-person-circle text-primary me-2"></i>ĐĂNG NHẬP HỘI VIÊN STORYLINE
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Banner tích điểm -->
+                <div class="alert alert-warning py-2 small mb-3">
+                    <i class="bi bi-stars me-1"></i> Đăng nhập để tích lũy <strong>5% - 10% điểm thưởng</strong> cho mỗi đơn vé xem phim!
+                </div>
+
+                <!-- Tabs: Mật khẩu / OTP SĐT -->
+                <ul class="nav nav-pills nav-fill mb-3" style="background: #0f172a; border-radius: 8px; padding: 4px;">
+                    <li class="nav-item">
+                        <button class="nav-link active small py-1" data-bs-toggle="pill" data-bs-target="#tabLoginPass">MẬT KHẨU</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link small py-1" data-bs-toggle="pill" data-bs-target="#tabLoginOtp">OTP QUA SĐT</button>
+                    </li>
+                </ul>
+
+                <div class="tab-content mb-3">
+                    <div class="tab-pane fade show active" id="tabLoginPass">
+                        <div class="mb-3">
+                            <label class="form-label small text-secondary">Số điện thoại hoặc Email (*)</label>
+                            <input type="text" class="form-control" id="txtLoginUser" placeholder="0912 345 678 hoặc email@domain.com" value="0912345678">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small text-secondary">Mật khẩu (*)</label>
+                            <input type="password" class="form-control" id="txtLoginPassword" placeholder="Nhập mật khẩu..." value="Password123">
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="tabLoginOtp">
+                        <div class="mb-3">
+                            <label class="form-label small text-secondary">Số điện thoại đăng ký hội viên</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="0912 345 678" value="0912345678">
+                                <button class="btn btn-outline-secondary" type="button">Gửi Mã OTP</button>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small text-secondary">Nhập mã OTP (6 số)</label>
+                            <input type="text" class="form-control" placeholder="123456">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-3 small">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="chkRememberMe" checked>
+                        <label class="form-check-label text-secondary" for="chkRememberMe">Ghi nhớ đăng nhập</label>
+                    </div>
+                    <a href="javascript:void(0)" class="text-primary text-decoration-none">Quên mật khẩu?</a>
+                </div>
+
+                <!-- Nút Đăng nhập mẫu nhanh 1 click -->
+                <button type="button" class="btn btn-cinema-danger w-100 py-2 fw-bold mb-3" onclick="doDemoLogin('Nguyễn Văn An', 'Gold Member', 250)">
+                    <i class="bi bi-box-arrow-in-right me-1"></i> ĐĂNG NHẬP NGAY
+                </button>
+
+                <div class="text-center small text-secondary">
+                    Chưa có tài khoản hội viên? 
+                    <a href="javascript:void(0)" class="text-warning fw-bold text-decoration-none ms-1" 
+                       data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#registerModal">
+                       Đăng Ký Ngay
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ======================================================================== -->
+<!-- MODAL 3: ĐĂNG KÝ HỘI VIÊN MỚI (REGISTER MODAL) -->
+<!-- ======================================================================== -->
+<div class="modal fade cinema-modal" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-white fw-bold" id="registerModalLabel">
+                    <i class="bi bi-person-plus-fill text-warning me-2"></i>ĐĂNG KÝ TÀI KHOẢN HỘI VIÊN
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="mb-3">
+                    <label class="form-label small text-secondary">Họ và tên (*)</label>
+                    <input type="text" class="form-control" placeholder="Ví dụ: Nguyễn Văn An" value="Nguyễn Văn An">
+                </div>
+                <div class="row g-2 mb-3">
+                    <div class="col-6">
+                        <label class="form-label small text-secondary">Số điện thoại (*)</label>
+                        <input type="text" class="form-control" placeholder="0912 345 678" value="0912345678">
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label small text-secondary">Số CCCD/VNeID (*)</label>
+                        <input type="text" class="form-control" placeholder="12 số CCCD" value="079203001234" title="Dùng đối soát độ tuổi khi vào rạp">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label small text-secondary">Email nhận vé điện tử (*)</label>
+                    <input type="email" class="form-control" placeholder="an.nguyen@gmail.com" value="an.nguyen@gmail.com">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label small text-secondary">Mật khẩu (*)</label>
+                    <input type="password" class="form-control" placeholder="Tối thiểu 6 ký tự" value="Password123">
+                </div>
+
+                <button type="button" class="btn btn-warning text-dark w-100 py-2 fw-bold mb-3" onclick="doDemoLogin('Nguyễn Văn An', 'Thành Viên Mới', 50)">
+                    <i class="bi bi-check2-circle me-1"></i> TẠO TÀI KHOẢN & NHẬN NGAY 50 ĐIỂM
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ======================================================================== -->
+<!-- MODAL 4: DASHBOARD HỘI VIÊN KHÁCH HÀNG (CUSTOMER DASHBOARD) -->
+<!-- ======================================================================== -->
+<div class="modal fade cinema-modal" id="customerDashboardModal" tabindex="-1" aria-labelledby="customerDashboardLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-white fw-bold" id="customerDashboardLabel">
+                    <i class="bi bi-person-badge-fill text-warning me-2"></i>TRUNG TÂM HỘI VIÊN: NGUYỄN VĂN AN
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- 4 KPI Thẻ thống kê -->
+                <div class="row g-3 mb-4">
+                    <div class="col-md-3 col-6">
+                        <div class="kpi-stat-card">
+                            <div class="small text-secondary mb-1">Điểm Hiện Có</div>
+                            <div class="kpi-num text-warning">250 Điểm</div>
+                            <div class="small text-success">+24 điểm tuần này</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="kpi-stat-card">
+                            <div class="small text-secondary mb-1">Vé Đã Xem</div>
+                            <div class="kpi-num text-primary">18 Vé</div>
+                            <div class="small text-secondary">3 vé trong tháng này</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="kpi-stat-card">
+                            <div class="small text-secondary mb-1">Vé Đổi Từ Điểm</div>
+                            <div class="kpi-num text-success">03 Vé</div>
+                            <div class="small text-secondary">Đã dùng 300 điểm</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="kpi-stat-card">
+                            <div class="small text-secondary mb-1">Hạng Hội Viên</div>
+                            <div class="kpi-num text-warning">GOLD</div>
+                            <div class="small text-secondary">Còn 50 điểm lên DIAMOND</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bảng Lịch sử giao dịch & Tích điểm -->
+                <h6 class="text-white fw-bold mb-3"><i class="bi bi-clock-history text-primary me-2"></i>LỊCH SỬ GIAO DỊCH & TÍCH ĐIỂM TẠI RẠP</h6>
+                <div class="table-responsive rounded-3" style="background: #0f172a; border: 1px solid var(--cinema-border);">
+                    <table class="table table-dark table-hover mb-0 small align-middle">
+                        <thead>
+                            <tr class="text-secondary" style="border-bottom: 1px solid var(--cinema-border);">
+                                <th class="py-3 ps-3">MÃ ĐƠN</th>
+                                <th class="py-3">PHIM / DỊCH VỤ</th>
+                                <th class="py-3">NGÀY ĐẶT</th>
+                                <th class="py-3">TỔNG TIỀN</th>
+                                <th class="py-3">TÍCH ĐIỂM</th>
+                                <th class="py-3">TRẠNG THÁI</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="ps-3"><strong class="text-primary">VE882194</strong></td>
+                                <td>Kẻ Trộm Mặt Trăng 4 (2 VIP + Combo Couple)</td>
+                                <td>24/11/2026</td>
+                                <td>320.000đ</td>
+                                <td class="text-warning fw-bold">+24 Điểm</td>
+                                <td><span class="badge bg-success">Đã thanh toán</span></td>
+                            </tr>
+                            <tr>
+                                <td class="ps-3"><strong class="text-primary">VE771203</strong></td>
+                                <td>Dune: Phần Hai (2 Vé IMAX - Phòng 03)</td>
+                                <td>15/11/2026</td>
+                                <td>290.000đ</td>
+                                <td class="text-warning fw-bold">+29 Điểm</td>
+                                <td><span class="badge bg-secondary">Đã check-in</span></td>
+                            </tr>
+                            <tr>
+                                <td class="ps-3"><strong class="text-primary">VE652011</strong></td>
+                                <td>Đổi 100 Điểm Thưởng lấy Vé 2D Miễn Phí</td>
+                                <td>01/11/2026</td>
+                                <td>0đ</td>
+                                <td class="text-danger fw-bold">-100 Điểm</td>
+                                <td><span class="badge bg-secondary">Đã sử dụng</span></td>
+                            </tr>
+                            <tr>
+                                <td class="ps-3"><strong class="text-primary">VE541990</strong></td>
+                                <td>Kung Fu Panda 4 (1 Vé Thường - Phòng 02)</td>
+                                <td>25/10/2026</td>
+                                <td>85.000đ</td>
+                                <td class="text-warning fw-bold">+9 Điểm</td>
+                                <td><span class="badge bg-secondary">Đã check-in</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ======================================================================== -->
+<!-- MODAL 5: XEM TRAILER PHIM -->
+<!-- ======================================================================== -->
+<div class="modal fade cinema-modal" id="trailerModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header py-2">
+                <h6 class="modal-title text-white fw-bold" id="trailerModalTitle">Xem Trailer</h6>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-0" style="aspect-ratio: 16/9; background: #000;">
+                <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-secondary">
+                    <i class="bi bi-play-circle display-1 text-danger mb-2"></i>
+                    <div class="text-white fw-bold">Trailer HD Chính Thức</div>
+                    <div class="small">Âm thanh chuẩn Dolby Atmos 7.1</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    // ==========================================================================
+    // FRONTEND APPLICATION STATE (DEMO STATE MANAGEMENT)
+    // ==========================================================================
+    let isUserLoggedIn = false;
+    let currentUser = {
+        name: "Nguyễn Văn An",
+        role: "Gold Member",
+        points: 250
+    };
+
+    // Booking Flow State
+    let currentBooking = {
+        movie: "Kẻ Trộm Mặt Trăng 4",
+        room: "Phòng 01",
+        showtime: "19:30",
+        step: 1,
+        selectedSeats: ["F06", "F07"], // Ghế mặc định mẫu
+        concessions: {
+            solo: 0,
+            couple: 1,
+            family: 0
+        },
+        usePoints: false
+    };
+
+    // Khởi tạo trang
+    document.addEventListener("DOMContentLoaded", function () {
+        renderSeatMatrix();
+        updateSelectedSeatsSummary();
+
+        // Nút toggle demo role
+        document.getElementById("btnToggleDemoRole").addEventListener("click", function () {
+            toggleDemoAuthState();
+        });
+
+        // Nút đăng xuất
+        document.getElementById("btnLogoutUser").addEventListener("click", function () {
+            setAuthState(false);
+        });
+    });
+
+    // ==========================================================================
+    // CHUYỂN ĐỔI GIỮA GIAO DIỆN TRƯỚC ĐĂNG NHẬP & SAU ĐĂNG NHẬP
+    // ==========================================================================
+    function toggleDemoAuthState() {
+        setAuthState(!isUserLoggedIn);
+    }
+
+    function setAuthState(loggedIn, name, role, points) {
+        isUserLoggedIn = loggedIn;
+        if (name) currentUser.name = name;
+        if (role) currentUser.role = role;
+        if (points) currentUser.points = points;
+
+        const preArea = document.getElementById("preLoginAuthArea");
+        const postArea = document.getElementById("postLoginAuthArea");
+        const memberBanner = document.getElementById("postLoginMemberBanner");
+        const demoText = document.getElementById("demoRoleText");
+
+        if (isUserLoggedIn) {
+            preArea.classList.add("d-none");
+            postArea.classList.remove("d-none");
+            memberBanner.classList.remove("d-none");
+            demoText.innerHTML = '<span class="text-warning">● Hội Viên Đã Đăng Nhập</span>';
+        } else {
+            preArea.classList.remove("d-none");
+            postArea.classList.add("d-none");
+            memberBanner.classList.add("d-none");
+            demoText.innerHTML = 'Demo: Khách Vãng Lai';
+        }
+    }
+
+    function doDemoLogin(name, role, points) {
+        setAuthState(true, name, role, points);
+        const loginModalEl = document.getElementById("loginModal");
+        const regModalEl = document.getElementById("registerModal");
+        
+        bootstrap.Modal.getInstance(loginModalEl)?.hide();
+        bootstrap.Modal.getInstance(regModalEl)?.hide();
+    }
+
+    // ==========================================================================
+    // ĐIỀU HƯỚNG DANH MỤC PHIM (TABS)
+    // ==========================================================================
+    function switchMovieCategory(type) {
+        const btnNow = document.getElementById("tabBtnNowShowing");
+        const btnUp = document.getElementById("tabBtnUpcoming");
+        const gridNow = document.getElementById("gridNowShowing");
+        const gridUp = document.getElementById("gridUpcoming");
+
+        if (type === 'now') {
+            btnNow.classList.add("active");
+            btnUp.classList.remove("active");
+            gridNow.classList.remove("d-none");
+            gridUp.classList.add("d-none");
+        } else {
+            btnNow.classList.remove("active");
+            btnUp.classList.add("active");
+            gridNow.classList.add("d-none");
+            gridUp.classList.remove("d-none");
+        }
+    }
+
+    // ==========================================================================
+    // QUY TRÌNH ĐẶT VÉ TRỰC TUYẾN 4 BƯỚC
+    // ==========================================================================
+    function startBookingFlow(movie, room, showtime) {
+        currentBooking.movie = movie;
+        currentBooking.room = room;
+        currentBooking.showtime = showtime;
+        currentBooking.step = 1;
+
+        document.getElementById("bookingMovieTitle").innerText = movie;
+        document.getElementById("bookingShowtimeInfo").innerText = `${room} - Laser 4K | Suất chiếu: ${showtime} (Hôm nay)`;
+        
+        showBookingStep(1);
+        const modal = new bootstrap.Modal(document.getElementById("bookingModal"));
+        modal.show();
+    }
+
+    function onQuickBookingSubmit() {
+        const movie = document.getElementById("quickSelectMovie").value;
+        const showtime = document.getElementById("quickSelectShowtime").value;
+        startBookingFlow(movie, "Phòng 01", showtime.split(' ')[0]);
+    }
+
+    function showBookingStep(step) {
+        currentBooking.step = step;
+
+        document.getElementById("bookingStep1").classList.toggle("d-none", step !== 1);
+        document.getElementById("bookingStep2").classList.toggle("d-none", step !== 2);
+        document.getElementById("bookingStep3").classList.toggle("d-none", step !== 3);
+        document.getElementById("bookingStep4").classList.toggle("d-none", step !== 4);
+
+        // Update Wizard Badges
+        for (let i = 1; i <= 4; i++) {
+            const badge = document.getElementById(`stepBadge${i}`);
+            if (i === step) {
+                badge.className = "badge bg-primary text-white px-3 py-2";
+            } else if (i < step) {
+                badge.className = "badge bg-success text-white px-3 py-2";
+            } else {
+                badge.className = "badge bg-dark text-secondary border border-secondary px-3 py-2";
+            }
+        }
+
+        // Footer Buttons
+        const btnBack = document.getElementById("btnBookingBack");
+        const btnNext = document.getElementById("btnBookingNext");
+
+        btnBack.style.display = (step > 1 && step < 4) ? "block" : "none";
+
+        if (step === 1) {
+            btnNext.style.display = "block";
+            btnNext.innerHTML = 'Tiếp Tục (Bắp Nước) <i class="bi bi-arrow-right ms-1"></i>';
+            btnNext.className = "btn btn-cinema-danger";
+        } else if (step === 2) {
+            btnNext.style.display = "block";
+            btnNext.innerHTML = 'Thanh Toán VietQR <i class="bi bi-arrow-right ms-1"></i>';
+            btnNext.className = "btn btn-cinema-danger";
+        } else if (step === 3) {
+            btnNext.style.display = "block";
+            btnNext.innerHTML = '✔ Xác Nhận Đã Chuyển Khoản';
+            btnNext.className = "btn btn-success fw-bold";
+            updatePaymentSummary();
+        } else if (step === 4) {
+            btnNext.style.display = "none";
+            updateFinalTicketData();
+        }
+    }
+
+    function onBookingNextStep() {
+        if (currentBooking.step === 1) {
+            if (currentBooking.selectedSeats.length === 0) {
+                alert("Vui lòng chọn ít nhất 1 ghế trên sơ đồ trước khi tiếp tục!");
+                return;
+            }
+            showBookingStep(2);
+        } else if (currentBooking.step === 2) {
+            showBookingStep(3);
+        } else if (currentBooking.step === 3) {
+            // Xác nhận chuyển khoản -> Sang E-Ticket
+            showBookingStep(4);
+        }
+    }
+
+    function onBookingPrevStep() {
+        if (currentBooking.step > 1) {
+            showBookingStep(currentBooking.step - 1);
+        }
+    }
+
+    // ==========================================================================
+    // VẼ SƠ ĐỒ GHẾ VÀ XỬ LÝ CHỌN GHẾ
+    // ==========================================================================
+    function renderSeatMatrix() {
+        const holder = document.getElementById("seatMatrixHolder");
+        if (!holder) return;
+        holder.innerHTML = "";
+
+        const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+        const soldSeats = ["A01", "A02", "B03", "C10", "D05", "D06", "E08", "E09"];
+
+        rows.forEach(r => {
+            const rowDiv = document.createElement("div");
+            rowDiv.className = "seat-row";
+
+            const lbl = document.createElement("div");
+            lbl.className = "seat-row-label";
+            lbl.innerText = r;
+            rowDiv.appendChild(lbl);
+
+            if (r === 'H') {
+                // Hàng H là 7 ghế đôi Sweetbox (H01-02, H03-04...)
+                for (let c = 1; c <= 7; c++) {
+                    const code = `H0${c}`;
+                    const seat = document.createElement("div");
+                    seat.className = "seat-item seat-sweetbox";
+                    seat.innerText = code;
+                    seat.dataset.code = code;
+                    seat.dataset.price = "220000";
+
+                    if (currentBooking.selectedSeats.includes(code)) {
+                        seat.classList.add("seat-selected");
+                    }
+
+                    seat.onclick = () => toggleSeatSelect(seat, code);
+                    rowDiv.appendChild(seat);
+                }
+            } else {
+                // Hàng A -> G: 14 ghế mỗi hàng
+                for (let c = 1; c <= 14; c++) {
+                    const colNum = c < 10 ? `0${c}` : `${c}`;
+                    const code = `${r}${colNum}`;
+                    const seat = document.createElement("div");
+
+                    // Ghế VIP là hàng E, F, G cột 4 đến 11
+                    const isVip = (r === 'E' || r === 'F' || r === 'G') && (c >= 4 && c <= 11);
+                    seat.className = isVip ? "seat-item seat-vip" : "seat-item seat-standard";
+                    seat.dataset.price = isVip ? "105000" : "85000";
+                    seat.innerText = colNum;
+                    seat.dataset.code = code;
+
+                    if (soldSeats.includes(code)) {
+                        seat.className = "seat-item seat-sold";
+                        seat.innerText = "✕";
+                        seat.title = "Ghế đã có người mua";
+                    } else {
+                        if (currentBooking.selectedSeats.includes(code)) {
+                            seat.classList.add("seat-selected");
+                        }
+                        seat.onclick = () => toggleSeatSelect(seat, code);
+                    }
+
+                    rowDiv.appendChild(seat);
+
+                    // Khoảng hở lối đi giữa cột 7 và 8
+                    if (c === 7) {
+                        const aisle = document.createElement("div");
+                        aisle.style.width = "18px";
+                        rowDiv.appendChild(aisle);
+                    }
+                }
+            }
+
+            holder.appendChild(rowDiv);
+        });
+    }
+
+    function toggleSeatSelect(el, code) {
+        if (currentBooking.selectedSeats.includes(code)) {
+            currentBooking.selectedSeats = currentBooking.selectedSeats.filter(s => s !== code);
+            el.classList.remove("seat-selected");
+        } else {
+            currentBooking.selectedSeats.push(code);
+            el.classList.add("seat-selected");
+        }
+        updateSelectedSeatsSummary();
+    }
+
+    function updateSelectedSeatsSummary() {
+        const display = document.getElementById("lblSelectedSeatsDisplay");
+        const priceDisplay = document.getElementById("lblSeatTotalPriceDisplay");
+        if (!display || !priceDisplay) return;
+
+        if (currentBooking.selectedSeats.length === 0) {
+            display.innerText = "Chưa chọn ghế nào";
+            priceDisplay.innerText = "0 VNĐ";
+            return;
+        }
+
+        display.innerText = currentBooking.selectedSeats.join(", ");
+        
+        let total = 0;
+        currentBooking.selectedSeats.forEach(code => {
+            if (code.startsWith('H')) total += 220000;
+            else if (['E', 'F', 'G'].includes(code[0]) && parseInt(code.substring(1)) >= 4 && parseInt(code.substring(1)) <= 11) total += 105000;
+            else total += 85000;
+        });
+
+        priceDisplay.innerText = total.toLocaleString("vi-VN") + " VNĐ";
+    }
+
+    // ==========================================================================
+    // BẮP NƯỚC & THANH TOÁN
+    // ==========================================================================
+    function changeConcessionQty(type, delta) {
+        currentBooking.concessions[type] = Math.max(0, currentBooking.concessions[type] + delta);
+        if (type === 'solo') document.getElementById("qtyConcessionSolo").innerText = currentBooking.concessions.solo;
+        if (type === 'couple') document.getElementById("qtyConcessionCouple").innerText = currentBooking.concessions.couple;
+        if (type === 'family') document.getElementById("qtyConcessionFamily").innerText = currentBooking.concessions.family;
+    }
+
+    function toggleLoyaltyDiscount() {
+        currentBooking.usePoints = document.getElementById("chkUseLoyaltyPoints").checked;
+        updatePaymentSummary();
+    }
+
+    function updatePaymentSummary() {
+        document.getElementById("summaryMovieName").innerText = currentBooking.movie;
+        document.getElementById("summarySeats").innerText = currentBooking.selectedSeats.join(", ");
+
+        let ticketTotal = 0;
+        currentBooking.selectedSeats.forEach(code => {
+            if (code.startsWith('H')) ticketTotal += 220000;
+            else if (['E', 'F', 'G'].includes(code[0]) && parseInt(code.substring(1)) >= 4 && parseInt(code.substring(1)) <= 11) ticketTotal += 105000;
+            else total = 85000;
+        });
+
+        let concessionTotal = (currentBooking.concessions.solo * 85000) + 
+                              (currentBooking.concessions.couple * 110000) + 
+                              (currentBooking.concessions.family * 165000);
+
+        let discount = currentBooking.usePoints ? 40000 : 0;
+        let finalAmount = ticketTotal + concessionTotal - discount;
+
+        document.getElementById("summaryTicketPrice").innerText = ticketTotal.toLocaleString("vi-VN") + " VNĐ";
+        document.getElementById("summaryConcessionPrice").innerText = concessionTotal.toLocaleString("vi-VN") + " VNĐ";
+        document.getElementById("summaryFinalAmount").innerText = finalAmount.toLocaleString("vi-VN") + " VNĐ";
+        document.getElementById("qrAmountDisplay").innerText = finalAmount.toLocaleString("vi-VN") + " VNĐ";
+    }
+
+    function updateFinalTicketData() {
+        document.getElementById("eticketMovie").innerText = currentBooking.movie;
+        document.getElementById("eticketShowtime").innerText = `${currentBooking.showtime} - Hôm nay`;
+        document.getElementById("eticketSeats").innerText = currentBooking.selectedSeats.join(", ");
+    }
+
+    // ==========================================================================
+    // DASHBOARD & MODAL TIỆN ÍCH
+    // ==========================================================================
+    function openCustomerDashboard(tab) {
+        setAuthState(true); // Đảm bảo trạng thái đã login
+        const modal = new bootstrap.Modal(document.getElementById("customerDashboardModal"));
+        modal.show();
+    }
+
+    function showTicketDetailModal(barcode) {
+        startBookingFlow("Kẻ Trộm Mặt Trăng 4", "Phòng 01", "19:30");
+        showBookingStep(4);
+    }
+
+    function openTrailerModal(movieTitle) {
+        document.getElementById("trailerModalTitle").innerText = `Trailer HD: ${movieTitle}`;
+        const modal = new bootstrap.Modal(document.getElementById("trailerModal"));
+        modal.show();
+    }
+
+    function performTicketLookup() {
+        const val = document.getElementById("txtLookupBarcode").value.trim();
+        if (!val) {
+            alert("Vui lòng nhập mã vé hoặc số điện thoại!");
+            return;
+        }
+        showTicketDetailModal(val);
+    }
+</script>
+}
