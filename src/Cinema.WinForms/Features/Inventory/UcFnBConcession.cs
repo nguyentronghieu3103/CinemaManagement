@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Cinema.WinForms.Controls;
 
 namespace Cinema.WinForms.Features.Inventory
 {
@@ -31,8 +32,8 @@ namespace Cinema.WinForms.Features.Inventory
 
         private void SetupRuntime()
         {
-            StyleGrid(gridMenu);
-            StyleGrid(gridHist);
+            UiTheme.StyleGrid(gridMenu);
+            UiTheme.StyleGrid(gridHist);
 
             cboSupplier.Items.AddRange(new object[] { "Suntory PepsiCo", "C\u00F4ng ty N\u00F4ng S\u1EA3n B\u1EAFp V\u00E0ng", "C\u00F4ng ty Bao B\u00EC Cinema" });
             cboSupplier.SelectedIndex = 0;
@@ -60,16 +61,6 @@ namespace Cinema.WinForms.Features.Inventory
             var supplier = cboSupplier.SelectedItem?.ToString() ?? "";
             foreach (var it in menuItems.Where(x => x.Supplier == supplier))
                 gridMenu.Rows.Add(it.Code, it.Name, it.Supplier, it.Cat, it.List, it.Promo, it.Pos, it.Stock);
-        }
-
-        private static void StyleGrid(DataGridView g)
-        {
-            g.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(248, 250, 252);
-            g.ColumnHeadersDefaultCellStyle.ForeColor = Color.FromArgb(15, 23, 42);
-            g.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            g.DefaultCellStyle.SelectionBackColor = Color.FromArgb(219, 234, 254);
-            g.DefaultCellStyle.SelectionForeColor = Color.FromArgb(15, 23, 42);
-            g.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
         }
     }
 }

@@ -1,3 +1,5 @@
+using Cinema.WinForms.Controls;
+
 namespace Cinema.WinForms.Features.MovieManagement
 {
     partial class UcMoviesAndHalls
@@ -106,7 +108,7 @@ namespace Cinema.WinForms.Features.MovieManagement
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.BackColor = System.Drawing.Color.FromArgb(241, 245, 249);
+            this.BackColor = UiTheme.MainBg;
             this.Controls.Add(this.tlpHalls);
             this.Controls.Add(this.lblHalls);
             this.Controls.Add(this.movieCard);
@@ -121,7 +123,7 @@ namespace Cinema.WinForms.Features.MovieManagement
             // 
             this.lblTitle.AutoSize = true;
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
-            this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblTitle.ForeColor = UiTheme.TextMain;
             this.lblTitle.Location = new System.Drawing.Point(0, 0);
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Size = new System.Drawing.Size(320, 32);
@@ -132,7 +134,7 @@ namespace Cinema.WinForms.Features.MovieManagement
             // 
             this.lblSubtitle.AutoSize = true;
             this.lblSubtitle.Font = new System.Drawing.Font("Segoe UI", 8.5F);
-            this.lblSubtitle.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139);
+            this.lblSubtitle.ForeColor = UiTheme.TextMuted;
             this.lblSubtitle.Location = new System.Drawing.Point(2, 34);
             this.lblSubtitle.Name = "lblSubtitle";
             this.lblSubtitle.Size = new System.Drawing.Size(480, 15);
@@ -144,7 +146,7 @@ namespace Cinema.WinForms.Features.MovieManagement
             this.lblDate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDate.AutoSize = true;
             this.lblDate.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblDate.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblDate.ForeColor = UiTheme.TextMain;
             this.lblDate.Location = new System.Drawing.Point(760, 10);
             this.lblDate.Name = "lblDate";
             this.lblDate.Size = new System.Drawing.Size(96, 15);
@@ -164,8 +166,8 @@ namespace Cinema.WinForms.Features.MovieManagement
             // 
             this.movieCard.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.movieCard.BackColor = System.Drawing.Color.White;
-            this.movieCard.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.movieCard.BackColor = UiTheme.CardBg;
+            this.movieCard.Paint += UiTheme.DrawCardBorder;
             this.movieCard.Controls.Add(this.gridMovies);
             this.movieCard.Controls.Add(this.lblMovieCardTitle);
             this.movieCard.Location = new System.Drawing.Point(0, 68);
@@ -177,7 +179,7 @@ namespace Cinema.WinForms.Features.MovieManagement
             // 
             this.lblMovieCardTitle.AutoSize = true;
             this.lblMovieCardTitle.Font = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Bold);
-            this.lblMovieCardTitle.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblMovieCardTitle.ForeColor = UiTheme.TextMain;
             this.lblMovieCardTitle.Location = new System.Drawing.Point(12, 10);
             this.lblMovieCardTitle.Name = "lblMovieCardTitle";
             this.lblMovieCardTitle.Size = new System.Drawing.Size(230, 25);
@@ -189,7 +191,7 @@ namespace Cinema.WinForms.Features.MovieManagement
             this.gridMovies.AllowUserToAddRows = false;
             this.gridMovies.AllowUserToResizeRows = false;
             this.gridMovies.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.gridMovies.BackgroundColor = System.Drawing.Color.White;
+            this.gridMovies.BackgroundColor = UiTheme.CardBg;
             this.gridMovies.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.gridMovies.ColumnHeadersHeight = 38;
             this.gridMovies.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -204,7 +206,7 @@ namespace Cinema.WinForms.Features.MovieManagement
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gridMovies.EnableHeadersVisualStyles = false;
-            this.gridMovies.GridColor = System.Drawing.Color.FromArgb(226, 232, 240);
+            this.gridMovies.GridColor = UiTheme.Border;
             this.gridMovies.Location = new System.Drawing.Point(12, 42);
             this.gridMovies.MultiSelect = false;
             this.gridMovies.Name = "gridMovies";
@@ -268,7 +270,7 @@ namespace Cinema.WinForms.Features.MovieManagement
             // 
             this.lblHalls.AutoSize = true;
             this.lblHalls.Font = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Bold);
-            this.lblHalls.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblHalls.ForeColor = UiTheme.TextMain;
             this.lblHalls.Location = new System.Drawing.Point(0, 335);
             this.lblHalls.Name = "lblHalls";
             this.lblHalls.Size = new System.Drawing.Size(290, 25);
@@ -297,8 +299,8 @@ namespace Cinema.WinForms.Features.MovieManagement
             // 
             // hallCard1
             // 
-            this.hallCard1.BackColor = System.Drawing.Color.White;
-            this.hallCard1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.hallCard1.BackColor = UiTheme.CardBg;
+            this.hallCard1.Paint += UiTheme.DrawCardBorder;
             this.hallCard1.Controls.Add(this.btnHall1);
             this.hallCard1.Controls.Add(this.lblHall1Status);
             this.hallCard1.Controls.Add(this.lblHall1Seats);
@@ -315,7 +317,7 @@ namespace Cinema.WinForms.Features.MovieManagement
             // 
             this.lblHall1Name.AutoSize = true;
             this.lblHall1Name.Font = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Bold);
-            this.lblHall1Name.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblHall1Name.ForeColor = UiTheme.TextMain;
             this.lblHall1Name.Location = new System.Drawing.Point(12, 12);
             this.lblHall1Name.Name = "lblHall1Name";
             this.lblHall1Name.Size = new System.Drawing.Size(84, 25);
@@ -326,7 +328,7 @@ namespace Cinema.WinForms.Features.MovieManagement
             // 
             this.lblHall1Type.AutoSize = true;
             this.lblHall1Type.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.lblHall1Type.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139);
+            this.lblHall1Type.ForeColor = UiTheme.TextMuted;
             this.lblHall1Type.Location = new System.Drawing.Point(12, 44);
             this.lblHall1Type.Name = "lblHall1Type";
             this.lblHall1Type.Size = new System.Drawing.Size(123, 17);
@@ -337,7 +339,7 @@ namespace Cinema.WinForms.Features.MovieManagement
             // 
             this.lblHall1Seats.AutoSize = true;
             this.lblHall1Seats.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.lblHall1Seats.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139);
+            this.lblHall1Seats.ForeColor = UiTheme.TextMuted;
             this.lblHall1Seats.Location = new System.Drawing.Point(12, 64);
             this.lblHall1Seats.Name = "lblHall1Seats";
             this.lblHall1Seats.Size = new System.Drawing.Size(104, 17);
@@ -348,7 +350,7 @@ namespace Cinema.WinForms.Features.MovieManagement
             // 
             this.lblHall1Status.AutoSize = true;
             this.lblHall1Status.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblHall1Status.ForeColor = System.Drawing.Color.FromArgb(22, 163, 74);
+            this.lblHall1Status.ForeColor = UiTheme.Success;
             this.lblHall1Status.Location = new System.Drawing.Point(12, 88);
             this.lblHall1Status.Name = "lblHall1Status";
             this.lblHall1Status.Size = new System.Drawing.Size(93, 15);
@@ -359,11 +361,11 @@ namespace Cinema.WinForms.Features.MovieManagement
             // 
             this.btnHall1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnHall1.BackColor = System.Drawing.Color.White;
-            this.btnHall1.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(226, 232, 240);
+            this.btnHall1.BackColor = UiTheme.CardBg;
+            this.btnHall1.FlatAppearance.BorderColor = UiTheme.Border;
             this.btnHall1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnHall1.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnHall1.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.btnHall1.ForeColor = UiTheme.TextMain;
             this.btnHall1.Location = new System.Drawing.Point(12, 118);
             this.btnHall1.Name = "btnHall1";
             this.btnHall1.Size = new System.Drawing.Size(228, 36);
@@ -373,8 +375,8 @@ namespace Cinema.WinForms.Features.MovieManagement
             // 
             // hallCard2
             // 
-            this.hallCard2.BackColor = System.Drawing.Color.White;
-            this.hallCard2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.hallCard2.BackColor = UiTheme.CardBg;
+            this.hallCard2.Paint += UiTheme.DrawCardBorder;
             this.hallCard2.Controls.Add(this.btnHall2);
             this.hallCard2.Controls.Add(this.lblHall2Status);
             this.hallCard2.Controls.Add(this.lblHall2Seats);
@@ -391,7 +393,7 @@ namespace Cinema.WinForms.Features.MovieManagement
             // 
             this.lblHall2Name.AutoSize = true;
             this.lblHall2Name.Font = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Bold);
-            this.lblHall2Name.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblHall2Name.ForeColor = UiTheme.TextMain;
             this.lblHall2Name.Location = new System.Drawing.Point(12, 12);
             this.lblHall2Name.Name = "lblHall2Name";
             this.lblHall2Name.Size = new System.Drawing.Size(84, 25);
@@ -402,7 +404,7 @@ namespace Cinema.WinForms.Features.MovieManagement
             // 
             this.lblHall2Type.AutoSize = true;
             this.lblHall2Type.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.lblHall2Type.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139);
+            this.lblHall2Type.ForeColor = UiTheme.TextMuted;
             this.lblHall2Type.Location = new System.Drawing.Point(12, 44);
             this.lblHall2Type.Name = "lblHall2Type";
             this.lblHall2Type.Size = new System.Drawing.Size(123, 17);
@@ -413,7 +415,7 @@ namespace Cinema.WinForms.Features.MovieManagement
             // 
             this.lblHall2Seats.AutoSize = true;
             this.lblHall2Seats.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.lblHall2Seats.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139);
+            this.lblHall2Seats.ForeColor = UiTheme.TextMuted;
             this.lblHall2Seats.Location = new System.Drawing.Point(12, 64);
             this.lblHall2Seats.Name = "lblHall2Seats";
             this.lblHall2Seats.Size = new System.Drawing.Size(97, 17);
@@ -424,7 +426,7 @@ namespace Cinema.WinForms.Features.MovieManagement
             // 
             this.lblHall2Status.AutoSize = true;
             this.lblHall2Status.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblHall2Status.ForeColor = System.Drawing.Color.FromArgb(22, 163, 74);
+            this.lblHall2Status.ForeColor = UiTheme.Success;
             this.lblHall2Status.Location = new System.Drawing.Point(12, 88);
             this.lblHall2Status.Name = "lblHall2Status";
             this.lblHall2Status.Size = new System.Drawing.Size(93, 15);
@@ -435,11 +437,11 @@ namespace Cinema.WinForms.Features.MovieManagement
             // 
             this.btnHall2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnHall2.BackColor = System.Drawing.Color.White;
-            this.btnHall2.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(226, 232, 240);
+            this.btnHall2.BackColor = UiTheme.CardBg;
+            this.btnHall2.FlatAppearance.BorderColor = UiTheme.Border;
             this.btnHall2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnHall2.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnHall2.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.btnHall2.ForeColor = UiTheme.TextMain;
             this.btnHall2.Location = new System.Drawing.Point(12, 118);
             this.btnHall2.Name = "btnHall2";
             this.btnHall2.Size = new System.Drawing.Size(228, 36);
@@ -449,8 +451,8 @@ namespace Cinema.WinForms.Features.MovieManagement
             // 
             // hallCard3
             // 
-            this.hallCard3.BackColor = System.Drawing.Color.White;
-            this.hallCard3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.hallCard3.BackColor = UiTheme.CardBg;
+            this.hallCard3.Paint += UiTheme.DrawCardBorder;
             this.hallCard3.Controls.Add(this.btnHall3);
             this.hallCard3.Controls.Add(this.lblHall3Status);
             this.hallCard3.Controls.Add(this.lblHall3Seats);
@@ -467,7 +469,7 @@ namespace Cinema.WinForms.Features.MovieManagement
             // 
             this.lblHall3Name.AutoSize = true;
             this.lblHall3Name.Font = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Bold);
-            this.lblHall3Name.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblHall3Name.ForeColor = UiTheme.TextMain;
             this.lblHall3Name.Location = new System.Drawing.Point(12, 12);
             this.lblHall3Name.Name = "lblHall3Name";
             this.lblHall3Name.Size = new System.Drawing.Size(84, 25);
@@ -478,7 +480,7 @@ namespace Cinema.WinForms.Features.MovieManagement
             // 
             this.lblHall3Type.AutoSize = true;
             this.lblHall3Type.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.lblHall3Type.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139);
+            this.lblHall3Type.ForeColor = UiTheme.TextMuted;
             this.lblHall3Type.Location = new System.Drawing.Point(12, 44);
             this.lblHall3Type.Name = "lblHall3Type";
             this.lblHall3Type.Size = new System.Drawing.Size(123, 17);
@@ -489,7 +491,7 @@ namespace Cinema.WinForms.Features.MovieManagement
             // 
             this.lblHall3Seats.AutoSize = true;
             this.lblHall3Seats.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.lblHall3Seats.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139);
+            this.lblHall3Seats.ForeColor = UiTheme.TextMuted;
             this.lblHall3Seats.Location = new System.Drawing.Point(12, 64);
             this.lblHall3Seats.Name = "lblHall3Seats";
             this.lblHall3Seats.Size = new System.Drawing.Size(104, 17);
@@ -500,7 +502,7 @@ namespace Cinema.WinForms.Features.MovieManagement
             // 
             this.lblHall3Status.AutoSize = true;
             this.lblHall3Status.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblHall3Status.ForeColor = System.Drawing.Color.FromArgb(217, 119, 6);
+            this.lblHall3Status.ForeColor = UiTheme.Amber;
             this.lblHall3Status.Location = new System.Drawing.Point(12, 88);
             this.lblHall3Status.Name = "lblHall3Status";
             this.lblHall3Status.Size = new System.Drawing.Size(102, 15);
@@ -511,11 +513,11 @@ namespace Cinema.WinForms.Features.MovieManagement
             // 
             this.btnHall3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnHall3.BackColor = System.Drawing.Color.White;
-            this.btnHall3.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(226, 232, 240);
+            this.btnHall3.BackColor = UiTheme.CardBg;
+            this.btnHall3.FlatAppearance.BorderColor = UiTheme.Border;
             this.btnHall3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnHall3.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnHall3.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.btnHall3.ForeColor = UiTheme.TextMain;
             this.btnHall3.Location = new System.Drawing.Point(12, 118);
             this.btnHall3.Name = "btnHall3";
             this.btnHall3.Size = new System.Drawing.Size(228, 36);
@@ -525,8 +527,8 @@ namespace Cinema.WinForms.Features.MovieManagement
             // 
             // hallCard4
             // 
-            this.hallCard4.BackColor = System.Drawing.Color.White;
-            this.hallCard4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.hallCard4.BackColor = UiTheme.CardBg;
+            this.hallCard4.Paint += UiTheme.DrawCardBorder;
             this.hallCard4.Controls.Add(this.btnHall4);
             this.hallCard4.Controls.Add(this.lblHall4Status);
             this.hallCard4.Controls.Add(this.lblHall4Seats);
@@ -543,7 +545,7 @@ namespace Cinema.WinForms.Features.MovieManagement
             // 
             this.lblHall4Name.AutoSize = true;
             this.lblHall4Name.Font = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Bold);
-            this.lblHall4Name.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblHall4Name.ForeColor = UiTheme.TextMain;
             this.lblHall4Name.Location = new System.Drawing.Point(12, 12);
             this.lblHall4Name.Name = "lblHall4Name";
             this.lblHall4Name.Size = new System.Drawing.Size(84, 25);
@@ -554,7 +556,7 @@ namespace Cinema.WinForms.Features.MovieManagement
             // 
             this.lblHall4Type.AutoSize = true;
             this.lblHall4Type.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.lblHall4Type.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139);
+            this.lblHall4Type.ForeColor = UiTheme.TextMuted;
             this.lblHall4Type.Location = new System.Drawing.Point(12, 44);
             this.lblHall4Type.Name = "lblHall4Type";
             this.lblHall4Type.Size = new System.Drawing.Size(123, 17);
@@ -565,7 +567,7 @@ namespace Cinema.WinForms.Features.MovieManagement
             // 
             this.lblHall4Seats.AutoSize = true;
             this.lblHall4Seats.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.lblHall4Seats.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139);
+            this.lblHall4Seats.ForeColor = UiTheme.TextMuted;
             this.lblHall4Seats.Location = new System.Drawing.Point(12, 64);
             this.lblHall4Seats.Name = "lblHall4Seats";
             this.lblHall4Seats.Size = new System.Drawing.Size(104, 17);
@@ -576,7 +578,7 @@ namespace Cinema.WinForms.Features.MovieManagement
             // 
             this.lblHall4Status.AutoSize = true;
             this.lblHall4Status.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblHall4Status.ForeColor = System.Drawing.Color.FromArgb(22, 163, 74);
+            this.lblHall4Status.ForeColor = UiTheme.Success;
             this.lblHall4Status.Location = new System.Drawing.Point(12, 88);
             this.lblHall4Status.Name = "lblHall4Status";
             this.lblHall4Status.Size = new System.Drawing.Size(93, 15);
@@ -587,11 +589,11 @@ namespace Cinema.WinForms.Features.MovieManagement
             // 
             this.btnHall4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnHall4.BackColor = System.Drawing.Color.White;
-            this.btnHall4.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(226, 232, 240);
+            this.btnHall4.BackColor = UiTheme.CardBg;
+            this.btnHall4.FlatAppearance.BorderColor = UiTheme.Border;
             this.btnHall4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnHall4.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnHall4.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.btnHall4.ForeColor = UiTheme.TextMain;
             this.btnHall4.Location = new System.Drawing.Point(12, 118);
             this.btnHall4.Name = "btnHall4";
             this.btnHall4.Size = new System.Drawing.Size(228, 36);

@@ -1,3 +1,5 @@
+using Cinema.WinForms.Controls;
+
 namespace Cinema.WinForms.Features.Pricing
 {
     partial class EditShowtimePriceModal
@@ -40,7 +42,7 @@ namespace Cinema.WinForms.Features.Pricing
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.White;
+            this.BackColor = UiTheme.CardBg;
             this.ClientSize = new System.Drawing.Size(434, 361);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.numExtra);
@@ -63,7 +65,7 @@ namespace Cinema.WinForms.Features.Pricing
             // 
             this.lblStd.AutoSize = true;
             this.lblStd.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.lblStd.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblStd.ForeColor = UiTheme.TextMain;
             this.lblStd.Location = new System.Drawing.Point(24, 20);
             this.lblStd.Name = "lblStd";
             this.lblStd.Text = "1. Gi\u00E1 Gh\u1EBF Th\u01B0\u1EDDng (Standard)";
@@ -82,7 +84,7 @@ namespace Cinema.WinForms.Features.Pricing
             // 
             this.lblVip.AutoSize = true;
             this.lblVip.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.lblVip.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblVip.ForeColor = UiTheme.TextMain;
             this.lblVip.Location = new System.Drawing.Point(24, 80);
             this.lblVip.Name = "lblVip";
             this.lblVip.Text = "2. Gi\u00E1 Gh\u1EBF VIP";
@@ -101,7 +103,7 @@ namespace Cinema.WinForms.Features.Pricing
             // 
             this.lblCouple.AutoSize = true;
             this.lblCouple.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.lblCouple.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblCouple.ForeColor = UiTheme.TextMain;
             this.lblCouple.Location = new System.Drawing.Point(24, 140);
             this.lblCouple.Name = "lblCouple";
             this.lblCouple.Text = "3. Gi\u00E1 Gh\u1EBF \u0110\u00F4i Sweetbox";
@@ -120,7 +122,7 @@ namespace Cinema.WinForms.Features.Pricing
             // 
             this.lblExtra.AutoSize = true;
             this.lblExtra.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.lblExtra.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblExtra.ForeColor = UiTheme.TextMain;
             this.lblExtra.Location = new System.Drawing.Point(24, 200);
             this.lblExtra.Name = "lblExtra";
             this.lblExtra.Text = "4. Ti\u1EC1n Ph\u1EE5 Thu Su\u1EA5t Chi\u1EBFu";
@@ -137,11 +139,11 @@ namespace Cinema.WinForms.Features.Pricing
             // 
             // btnSave
             // 
-            this.btnSave.BackColor = System.Drawing.Color.FromArgb(37, 99, 235);
+            this.btnSave.BackColor = UiTheme.Primary;
             this.btnSave.FlatAppearance.BorderSize = 0;
             this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSave.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnSave.ForeColor = System.Drawing.Color.White;
+            this.btnSave.ForeColor = UiTheme.CardBg;
             this.btnSave.Location = new System.Drawing.Point(274, 300);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(130, 36);

@@ -1,3 +1,5 @@
+using Cinema.WinForms.Controls;
+
 namespace Cinema.WinForms.Features.AuditoriumManagement
 {
     partial class SeatMapModal
@@ -53,7 +55,7 @@ namespace Cinema.WinForms.Features.AuditoriumManagement
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(241, 245, 249);
+            this.BackColor = UiTheme.MainBg;
             this.ClientSize = new System.Drawing.Size(984, 600);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.legendPanel);
@@ -71,7 +73,7 @@ namespace Cinema.WinForms.Features.AuditoriumManagement
             // 
             // screenAccent
             // 
-            this.screenAccent.BackColor = System.Drawing.Color.FromArgb(37, 99, 235);
+            this.screenAccent.BackColor = UiTheme.Primary;
             this.screenAccent.Location = new System.Drawing.Point(180, 16);
             this.screenAccent.Name = "screenAccent";
             this.screenAccent.Size = new System.Drawing.Size(620, 4);
@@ -90,7 +92,7 @@ namespace Cinema.WinForms.Features.AuditoriumManagement
             // 
             this.lblScreen.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblScreen.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.lblScreen.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblScreen.ForeColor = UiTheme.TextMain;
             this.lblScreen.Location = new System.Drawing.Point(0, 0);
             this.lblScreen.Name = "lblScreen";
             this.lblScreen.Size = new System.Drawing.Size(620, 34);
@@ -100,8 +102,8 @@ namespace Cinema.WinForms.Features.AuditoriumManagement
             // 
             // toolbar
             // 
-            this.toolbar.BackColor = System.Drawing.Color.White;
-            this.toolbar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.toolbar.BackColor = UiTheme.CardBg;
+            this.toolbar.Paint += UiTheme.DrawCardBorder;
             this.toolbar.Controls.Add(this.btnToolLock);
             this.toolbar.Controls.Add(this.btnToolCouple);
             this.toolbar.Controls.Add(this.btnToolVip);
@@ -116,7 +118,7 @@ namespace Cinema.WinForms.Features.AuditoriumManagement
             // 
             this.lblTool.AutoSize = true;
             this.lblTool.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
-            this.lblTool.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblTool.ForeColor = UiTheme.TextMain;
             this.lblTool.Location = new System.Drawing.Point(12, 16);
             this.lblTool.Name = "lblTool";
             this.lblTool.Text = "C\u1ECD lo\u1EA1i gh\u1EBF:";
@@ -127,7 +129,7 @@ namespace Cinema.WinForms.Features.AuditoriumManagement
             this.btnToolNormal.FlatAppearance.BorderSize = 0;
             this.btnToolNormal.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnToolNormal.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnToolNormal.ForeColor = System.Drawing.Color.White;
+            this.btnToolNormal.ForeColor = UiTheme.CardBg;
             this.btnToolNormal.Location = new System.Drawing.Point(110, 10);
             this.btnToolNormal.Name = "btnToolNormal";
             this.btnToolNormal.Size = new System.Drawing.Size(150, 32);
@@ -137,11 +139,11 @@ namespace Cinema.WinForms.Features.AuditoriumManagement
             // 
             // btnToolVip
             // 
-            this.btnToolVip.BackColor = System.Drawing.Color.FromArgb(217, 119, 6);
+            this.btnToolVip.BackColor = UiTheme.Amber;
             this.btnToolVip.FlatAppearance.BorderSize = 0;
             this.btnToolVip.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnToolVip.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnToolVip.ForeColor = System.Drawing.Color.White;
+            this.btnToolVip.ForeColor = UiTheme.CardBg;
             this.btnToolVip.Location = new System.Drawing.Point(270, 10);
             this.btnToolVip.Name = "btnToolVip";
             this.btnToolVip.Size = new System.Drawing.Size(150, 32);
@@ -155,7 +157,7 @@ namespace Cinema.WinForms.Features.AuditoriumManagement
             this.btnToolCouple.FlatAppearance.BorderSize = 0;
             this.btnToolCouple.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnToolCouple.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnToolCouple.ForeColor = System.Drawing.Color.White;
+            this.btnToolCouple.ForeColor = UiTheme.CardBg;
             this.btnToolCouple.Location = new System.Drawing.Point(430, 10);
             this.btnToolCouple.Name = "btnToolCouple";
             this.btnToolCouple.Size = new System.Drawing.Size(150, 32);
@@ -169,7 +171,7 @@ namespace Cinema.WinForms.Features.AuditoriumManagement
             this.btnToolLock.FlatAppearance.BorderSize = 0;
             this.btnToolLock.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnToolLock.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnToolLock.ForeColor = System.Drawing.Color.White;
+            this.btnToolLock.ForeColor = UiTheme.CardBg;
             this.btnToolLock.Location = new System.Drawing.Point(590, 10);
             this.btnToolLock.Name = "btnToolLock";
             this.btnToolLock.Size = new System.Drawing.Size(180, 32);
@@ -179,8 +181,8 @@ namespace Cinema.WinForms.Features.AuditoriumManagement
             // 
             // seatPanel
             // 
-            this.seatPanel.BackColor = System.Drawing.Color.White;
-            this.seatPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.seatPanel.BackColor = UiTheme.CardBg;
+            this.seatPanel.Paint += UiTheme.DrawCardBorder;
             this.seatPanel.Location = new System.Drawing.Point(20, 124);
             this.seatPanel.Name = "seatPanel";
             this.seatPanel.Size = new System.Drawing.Size(944, 400);
@@ -197,21 +199,21 @@ namespace Cinema.WinForms.Features.AuditoriumManagement
             this.legendPanel.Size = new System.Drawing.Size(700, 30);
             this.legendPanel.TabIndex = 3;
             this.l1c.BackColor = System.Drawing.Color.FromArgb(156, 163, 175); this.l1c.Location = new System.Drawing.Point(0, 6); this.l1c.Size = new System.Drawing.Size(16, 16);
-            this.l1t.AutoSize = true; this.l1t.Location = new System.Drawing.Point(22, 5); this.l1t.Text = "Gh\u1EBF Th\u01B0\u1EDDng"; this.l1t.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
-            this.l2c.BackColor = System.Drawing.Color.FromArgb(217, 119, 6); this.l2c.Location = new System.Drawing.Point(140, 6); this.l2c.Size = new System.Drawing.Size(16, 16);
-            this.l2t.AutoSize = true; this.l2t.Location = new System.Drawing.Point(162, 5); this.l2t.Text = "VIP"; this.l2t.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.l1t.AutoSize = true; this.l1t.Location = new System.Drawing.Point(22, 5); this.l1t.Text = "Gh\u1EBF Th\u01B0\u1EDDng"; this.l1t.ForeColor = UiTheme.TextMain;
+            this.l2c.BackColor = UiTheme.Amber; this.l2c.Location = new System.Drawing.Point(140, 6); this.l2c.Size = new System.Drawing.Size(16, 16);
+            this.l2t.AutoSize = true; this.l2t.Location = new System.Drawing.Point(162, 5); this.l2t.Text = "VIP"; this.l2t.ForeColor = UiTheme.TextMain;
             this.l3c.BackColor = System.Drawing.Color.FromArgb(236, 72, 153); this.l3c.Location = new System.Drawing.Point(220, 6); this.l3c.Size = new System.Drawing.Size(16, 16);
-            this.l3t.AutoSize = true; this.l3t.Location = new System.Drawing.Point(242, 5); this.l3t.Text = "Gh\u1EBF \u0110\u00F4i"; this.l3t.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.l3t.AutoSize = true; this.l3t.Location = new System.Drawing.Point(242, 5); this.l3t.Text = "Gh\u1EBF \u0110\u00F4i"; this.l3t.ForeColor = UiTheme.TextMain;
             this.l4c.BackColor = System.Drawing.Color.FromArgb(17, 24, 39); this.l4c.Location = new System.Drawing.Point(330, 6); this.l4c.Size = new System.Drawing.Size(16, 16);
-            this.l4t.AutoSize = true; this.l4t.Location = new System.Drawing.Point(352, 5); this.l4t.Text = "Kh\u00F3a/B\u1EA3o tr\u00EC"; this.l4t.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.l4t.AutoSize = true; this.l4t.Location = new System.Drawing.Point(352, 5); this.l4t.Text = "Kh\u00F3a/B\u1EA3o tr\u00EC"; this.l4t.ForeColor = UiTheme.TextMain;
             // 
             // btnSave
             // 
-            this.btnSave.BackColor = System.Drawing.Color.FromArgb(37, 99, 235);
+            this.btnSave.BackColor = UiTheme.Primary;
             this.btnSave.FlatAppearance.BorderSize = 0;
             this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSave.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnSave.ForeColor = System.Drawing.Color.White;
+            this.btnSave.ForeColor = UiTheme.CardBg;
             this.btnSave.Location = new System.Drawing.Point(834, 548);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(130, 36);

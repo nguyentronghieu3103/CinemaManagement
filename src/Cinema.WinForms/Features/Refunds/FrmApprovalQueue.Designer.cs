@@ -1,3 +1,5 @@
+using Cinema.WinForms.Controls;
+
 namespace Cinema.WinForms.Features.Refunds
 {
     partial class FrmApprovalQueue
@@ -44,7 +46,7 @@ namespace Cinema.WinForms.Features.Refunds
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(241, 245, 249);
+            this.BackColor = UiTheme.MainBg;
             this.ClientSize = new System.Drawing.Size(980, 520);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.btnReject);
@@ -64,7 +66,7 @@ namespace Cinema.WinForms.Features.Refunds
             // 
             this.lblTitle.AutoSize = true;
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold);
-            this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblTitle.ForeColor = UiTheme.TextMain;
             this.lblTitle.Location = new System.Drawing.Point(24, 18);
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Text = "H\u00E0ng \u0111\u1EE3i duy\u1EC7t h\u1EE7y v\u00E9 kh\u1EA9n c\u1EA5p";
@@ -73,15 +75,15 @@ namespace Cinema.WinForms.Features.Refunds
             // 
             this.lblSubtitle.AutoSize = true;
             this.lblSubtitle.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblSubtitle.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139);
+            this.lblSubtitle.ForeColor = UiTheme.TextMuted;
             this.lblSubtitle.Location = new System.Drawing.Point(26, 50);
             this.lblSubtitle.Name = "lblSubtitle";
             this.lblSubtitle.Text = "Ki\u1EC3m tra l\u00FD do h\u1EE7y v\u00E0 x\u1eed l\u00FD ho\u00E0n ti\u1EC1n cho kh\u00E1ch h\u00E0ng.";
             // 
             // card
             // 
-            this.card.BackColor = System.Drawing.Color.White;
-            this.card.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.card.BackColor = UiTheme.CardBg;
+            this.card.Paint += UiTheme.DrawCardBorder;
             this.card.Controls.Add(this.gridQueue);
             this.card.Location = new System.Drawing.Point(24, 84);
             this.card.Name = "card";
@@ -93,7 +95,7 @@ namespace Cinema.WinForms.Features.Refunds
             this.gridQueue.AllowUserToAddRows = false;
             this.gridQueue.AllowUserToResizeRows = false;
             this.gridQueue.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.gridQueue.BackgroundColor = System.Drawing.Color.White;
+            this.gridQueue.BackgroundColor = UiTheme.CardBg;
             this.gridQueue.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.gridQueue.ColumnHeadersHeight = 40;
             this.gridQueue.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -101,7 +103,7 @@ namespace Cinema.WinForms.Features.Refunds
             });
             this.gridQueue.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridQueue.EnableHeadersVisualStyles = false;
-            this.gridQueue.GridColor = System.Drawing.Color.FromArgb(226, 232, 240);
+            this.gridQueue.GridColor = UiTheme.Border;
             this.gridQueue.Location = new System.Drawing.Point(0, 0);
             this.gridQueue.MultiSelect = false;
             this.gridQueue.Name = "gridQueue";
@@ -136,11 +138,11 @@ namespace Cinema.WinForms.Features.Refunds
             // 
             // btnApprove
             // 
-            this.btnApprove.BackColor = System.Drawing.Color.FromArgb(22, 163, 74);
+            this.btnApprove.BackColor = UiTheme.Primary;
             this.btnApprove.FlatAppearance.BorderSize = 0;
             this.btnApprove.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnApprove.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnApprove.ForeColor = System.Drawing.Color.White;
+            this.btnApprove.ForeColor = UiTheme.CardBg;
             this.btnApprove.Location = new System.Drawing.Point(534, 462);
             this.btnApprove.Name = "btnApprove";
             this.btnApprove.Size = new System.Drawing.Size(190, 36);
@@ -150,11 +152,11 @@ namespace Cinema.WinForms.Features.Refunds
             // 
             // btnReject
             // 
-            this.btnReject.BackColor = System.Drawing.Color.White;
-            this.btnReject.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(220, 38, 38);
+            this.btnReject.BackColor = UiTheme.CardBg;
+            this.btnReject.FlatAppearance.BorderColor = UiTheme.Danger;
             this.btnReject.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnReject.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnReject.ForeColor = System.Drawing.Color.FromArgb(220, 38, 38);
+            this.btnReject.ForeColor = UiTheme.Danger;
             this.btnReject.Location = new System.Drawing.Point(732, 462);
             this.btnReject.Name = "btnReject";
             this.btnReject.Size = new System.Drawing.Size(120, 36);
@@ -164,11 +166,11 @@ namespace Cinema.WinForms.Features.Refunds
             // 
             // btnClose
             // 
-            this.btnClose.BackColor = System.Drawing.Color.White;
-            this.btnClose.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(226, 232, 240);
+            this.btnClose.BackColor = UiTheme.CardBg;
+            this.btnClose.FlatAppearance.BorderColor = UiTheme.Border;
             this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnClose.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnClose.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139);
+            this.btnClose.ForeColor = UiTheme.TextMuted;
             this.btnClose.Location = new System.Drawing.Point(860, 462);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(96, 36);

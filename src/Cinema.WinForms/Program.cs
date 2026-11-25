@@ -5,10 +5,13 @@ namespace Cinema.WinForms
     internal static class Program
     {
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
             ApplicationConfiguration.Initialize();
-            Application.Run(new MainForm());
+            Form mainForm = args.Contains("--management", StringComparer.OrdinalIgnoreCase)
+                ? new ManagementForm()
+                : new MainForm();
+            Application.Run(mainForm);
         }
     }
 }

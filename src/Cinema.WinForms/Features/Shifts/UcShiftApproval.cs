@@ -1,6 +1,6 @@
 using System;
-using System.Drawing;
 using System.Windows.Forms;
+using Cinema.WinForms.Controls;
 
 namespace Cinema.WinForms.Features.Shifts
 {
@@ -14,12 +14,7 @@ namespace Cinema.WinForms.Features.Shifts
 
         private void SetupRuntime()
         {
-            gridShifts.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(248, 250, 252);
-            gridShifts.ColumnHeadersDefaultCellStyle.ForeColor = Color.FromArgb(15, 23, 42);
-            gridShifts.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            gridShifts.DefaultCellStyle.SelectionBackColor = Color.FromArgb(219, 234, 254);
-            gridShifts.DefaultCellStyle.SelectionForeColor = Color.FromArgb(15, 23, 42);
-            gridShifts.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            UiTheme.StyleGrid(gridShifts);
 
             gridShifts.Rows.Add("NV-012", "Ca s\u00E1ng", "21/11/2026 14:05", "Ch\u1EDD duy\u1EC7t");
             gridShifts.Rows.Add("NV-015", "Ca t\u1ED1i", "21/11/2026 22:10", "\u0110\u00E3 duy\u1EC7t");

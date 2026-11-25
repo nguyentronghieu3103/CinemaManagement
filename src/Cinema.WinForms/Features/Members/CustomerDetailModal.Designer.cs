@@ -1,3 +1,5 @@
+using Cinema.WinForms.Controls;
+
 namespace Cinema.WinForms.Features.Members
 {
     partial class CustomerDetailModal
@@ -67,7 +69,7 @@ namespace Cinema.WinForms.Features.Members
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(241, 245, 249);
+            this.BackColor = UiTheme.MainBg;
             this.ClientSize = new System.Drawing.Size(860, 500);
             this.Controls.Add(this.pnlHistory);
             this.Controls.Add(this.btnRedeem);
@@ -87,15 +89,15 @@ namespace Cinema.WinForms.Features.Members
             // 
             this.lblInfo.AutoSize = true;
             this.lblInfo.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblInfo.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139);
+            this.lblInfo.ForeColor = UiTheme.TextMuted;
             this.lblInfo.Location = new System.Drawing.Point(24, 12);
             this.lblInfo.Name = "lblInfo";
             this.lblInfo.Text = "S\u0110T: - | H\u1EA1ng th\u1EBB: - | T\u1ED5ng chi ti\u00EAu: -";
             // 
             // cardPoint1
             // 
-            this.cardPoint1.BackColor = System.Drawing.Color.White;
-            this.cardPoint1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.cardPoint1.BackColor = UiTheme.CardBg;
+            this.cardPoint1.Paint += UiTheme.DrawCardBorder;
             this.cardPoint1.Controls.Add(this.lblPoint1Sub);
             this.cardPoint1.Controls.Add(this.lblPoint1Value);
             this.cardPoint1.Controls.Add(this.lblPoint1Title);
@@ -103,14 +105,14 @@ namespace Cinema.WinForms.Features.Members
             this.cardPoint1.Name = "cardPoint1";
             this.cardPoint1.Size = new System.Drawing.Size(250, 105);
             this.cardPoint1.TabIndex = 0;
-            this.lblPoint1Title.AutoSize = true; this.lblPoint1Title.Font = new System.Drawing.Font("Segoe UI", 9F); this.lblPoint1Title.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139); this.lblPoint1Title.Location = new System.Drawing.Point(14, 10); this.lblPoint1Title.Text = "\u0110i\u1EC3m hi\u1EC7n c\u00F3";
-            this.lblPoint1Value.AutoSize = true; this.lblPoint1Value.Font = new System.Drawing.Font("Segoe UI", 20F, System.Drawing.FontStyle.Bold); this.lblPoint1Value.ForeColor = System.Drawing.Color.FromArgb(37, 99, 235); this.lblPoint1Value.Location = new System.Drawing.Point(12, 34); this.lblPoint1Value.Text = "0";
-            this.lblPoint1Sub.AutoSize = true; this.lblPoint1Sub.Font = new System.Drawing.Font("Segoe UI", 8.5F); this.lblPoint1Sub.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139); this.lblPoint1Sub.Location = new System.Drawing.Point(14, 76); this.lblPoint1Sub.Text = "D\u00F9ng x\u00E9t n\u00E2ng h\u1EA1ng";
+            this.lblPoint1Title.AutoSize = true; this.lblPoint1Title.Font = new System.Drawing.Font("Segoe UI", 9F); this.lblPoint1Title.ForeColor = UiTheme.TextMuted; this.lblPoint1Title.Location = new System.Drawing.Point(14, 10); this.lblPoint1Title.Text = "\u0110i\u1EC3m hi\u1EC7n c\u00F3";
+            this.lblPoint1Value.AutoSize = true; this.lblPoint1Value.Font = new System.Drawing.Font("Segoe UI", 20F, System.Drawing.FontStyle.Bold); this.lblPoint1Value.ForeColor = UiTheme.Primary; this.lblPoint1Value.Location = new System.Drawing.Point(12, 34); this.lblPoint1Value.Text = "0";
+            this.lblPoint1Sub.AutoSize = true; this.lblPoint1Sub.Font = new System.Drawing.Font("Segoe UI", 8.5F); this.lblPoint1Sub.ForeColor = UiTheme.TextMuted; this.lblPoint1Sub.Location = new System.Drawing.Point(14, 76); this.lblPoint1Sub.Text = "D\u00F9ng x\u00E9t n\u00E2ng h\u1EA1ng";
             // 
             // cardPoint2
             // 
-            this.cardPoint2.BackColor = System.Drawing.Color.White;
-            this.cardPoint2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.cardPoint2.BackColor = UiTheme.CardBg;
+            this.cardPoint2.Paint += UiTheme.DrawCardBorder;
             this.cardPoint2.Controls.Add(this.lblPoint2Sub);
             this.cardPoint2.Controls.Add(this.lblPoint2Value);
             this.cardPoint2.Controls.Add(this.lblPoint2Title);
@@ -118,14 +120,14 @@ namespace Cinema.WinForms.Features.Members
             this.cardPoint2.Name = "cardPoint2";
             this.cardPoint2.Size = new System.Drawing.Size(250, 105);
             this.cardPoint2.TabIndex = 1;
-            this.lblPoint2Title.AutoSize = true; this.lblPoint2Title.Font = new System.Drawing.Font("Segoe UI", 9F); this.lblPoint2Title.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139); this.lblPoint2Title.Location = new System.Drawing.Point(14, 10); this.lblPoint2Title.Text = "\u0110i\u1EC3m \u0111\u00E3 d\u00F9ng";
-            this.lblPoint2Value.AutoSize = true; this.lblPoint2Value.Font = new System.Drawing.Font("Segoe UI", 20F, System.Drawing.FontStyle.Bold); this.lblPoint2Value.ForeColor = System.Drawing.Color.FromArgb(217, 119, 6); this.lblPoint2Value.Location = new System.Drawing.Point(12, 34); this.lblPoint2Value.Text = "0";
-            this.lblPoint2Sub.AutoSize = true; this.lblPoint2Sub.Font = new System.Drawing.Font("Segoe UI", 8.5F); this.lblPoint2Sub.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139); this.lblPoint2Sub.Location = new System.Drawing.Point(14, 76); this.lblPoint2Sub.Text = "\u0110\u00E3 \u0111\u1ED5i v\u00E9/qu\u00E0";
+            this.lblPoint2Title.AutoSize = true; this.lblPoint2Title.Font = new System.Drawing.Font("Segoe UI", 9F); this.lblPoint2Title.ForeColor = UiTheme.TextMuted; this.lblPoint2Title.Location = new System.Drawing.Point(14, 10); this.lblPoint2Title.Text = "\u0110i\u1EC3m \u0111\u00E3 d\u00F9ng";
+            this.lblPoint2Value.AutoSize = true; this.lblPoint2Value.Font = new System.Drawing.Font("Segoe UI", 20F, System.Drawing.FontStyle.Bold); this.lblPoint2Value.ForeColor = UiTheme.Amber; this.lblPoint2Value.Location = new System.Drawing.Point(12, 34); this.lblPoint2Value.Text = "0";
+            this.lblPoint2Sub.AutoSize = true; this.lblPoint2Sub.Font = new System.Drawing.Font("Segoe UI", 8.5F); this.lblPoint2Sub.ForeColor = UiTheme.TextMuted; this.lblPoint2Sub.Location = new System.Drawing.Point(14, 76); this.lblPoint2Sub.Text = "\u0110\u00E3 \u0111\u1ED5i v\u00E9/qu\u00E0";
             // 
             // cardPoint3
             // 
-            this.cardPoint3.BackColor = System.Drawing.Color.White;
-            this.cardPoint3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.cardPoint3.BackColor = UiTheme.CardBg;
+            this.cardPoint3.Paint += UiTheme.DrawCardBorder;
             this.cardPoint3.Controls.Add(this.lblPoint3Sub);
             this.cardPoint3.Controls.Add(this.lblPoint3Value);
             this.cardPoint3.Controls.Add(this.lblPoint3Title);
@@ -133,17 +135,17 @@ namespace Cinema.WinForms.Features.Members
             this.cardPoint3.Name = "cardPoint3";
             this.cardPoint3.Size = new System.Drawing.Size(250, 105);
             this.cardPoint3.TabIndex = 2;
-            this.lblPoint3Title.AutoSize = true; this.lblPoint3Title.Font = new System.Drawing.Font("Segoe UI", 9F); this.lblPoint3Title.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139); this.lblPoint3Title.Location = new System.Drawing.Point(14, 10); this.lblPoint3Title.Text = "\u0110i\u1EC3m c\u00F2n l\u1EA1i";
-            this.lblPoint3Value.AutoSize = true; this.lblPoint3Value.Font = new System.Drawing.Font("Segoe UI", 20F, System.Drawing.FontStyle.Bold); this.lblPoint3Value.ForeColor = System.Drawing.Color.FromArgb(22, 163, 74); this.lblPoint3Value.Location = new System.Drawing.Point(12, 34); this.lblPoint3Value.Text = "0";
-            this.lblPoint3Sub.AutoSize = true; this.lblPoint3Sub.Font = new System.Drawing.Font("Segoe UI", 8.5F); this.lblPoint3Sub.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139); this.lblPoint3Sub.Location = new System.Drawing.Point(14, 76); this.lblPoint3Sub.Text = "C\u00F3 th\u1EC3 \u0111\u1ED5i v\u00E9 ngay";
+            this.lblPoint3Title.AutoSize = true; this.lblPoint3Title.Font = new System.Drawing.Font("Segoe UI", 9F); this.lblPoint3Title.ForeColor = UiTheme.TextMuted; this.lblPoint3Title.Location = new System.Drawing.Point(14, 10); this.lblPoint3Title.Text = "\u0110i\u1EC3m c\u00F2n l\u1EA1i";
+            this.lblPoint3Value.AutoSize = true; this.lblPoint3Value.Font = new System.Drawing.Font("Segoe UI", 20F, System.Drawing.FontStyle.Bold); this.lblPoint3Value.ForeColor = UiTheme.Success; this.lblPoint3Value.Location = new System.Drawing.Point(12, 34); this.lblPoint3Value.Text = "0";
+            this.lblPoint3Sub.AutoSize = true; this.lblPoint3Sub.Font = new System.Drawing.Font("Segoe UI", 8.5F); this.lblPoint3Sub.ForeColor = UiTheme.TextMuted; this.lblPoint3Sub.Location = new System.Drawing.Point(14, 76); this.lblPoint3Sub.Text = "C\u00F3 th\u1EC3 \u0111\u1ED5i v\u00E9 ngay";
             // 
             // btnRedeem
             // 
-            this.btnRedeem.BackColor = System.Drawing.Color.FromArgb(22, 163, 74);
+            this.btnRedeem.BackColor = UiTheme.Primary;
             this.btnRedeem.FlatAppearance.BorderSize = 0;
             this.btnRedeem.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRedeem.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnRedeem.ForeColor = System.Drawing.Color.White;
+            this.btnRedeem.ForeColor = UiTheme.CardBg;
             this.btnRedeem.Location = new System.Drawing.Point(606, 156);
             this.btnRedeem.Name = "btnRedeem";
             this.btnRedeem.Size = new System.Drawing.Size(230, 36);
@@ -156,8 +158,8 @@ namespace Cinema.WinForms.Features.Members
             this.pnlHistory.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnlHistory.BackColor = System.Drawing.Color.White;
-            this.pnlHistory.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlHistory.BackColor = UiTheme.CardBg;
+            this.pnlHistory.Paint += UiTheme.DrawCardBorder;
             this.pnlHistory.Controls.Add(this.gridHistory);
             this.pnlHistory.Location = new System.Drawing.Point(24, 204);
             this.pnlHistory.Name = "pnlHistory";
@@ -169,7 +171,7 @@ namespace Cinema.WinForms.Features.Members
             this.gridHistory.AllowUserToAddRows = false;
             this.gridHistory.AllowUserToResizeRows = false;
             this.gridHistory.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.gridHistory.BackgroundColor = System.Drawing.Color.White;
+            this.gridHistory.BackgroundColor = UiTheme.CardBg;
             this.gridHistory.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.gridHistory.ColumnHeadersHeight = 38;
             this.gridHistory.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -177,7 +179,7 @@ namespace Cinema.WinForms.Features.Members
             });
             this.gridHistory.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridHistory.EnableHeadersVisualStyles = false;
-            this.gridHistory.GridColor = System.Drawing.Color.FromArgb(226, 232, 240);
+            this.gridHistory.GridColor = UiTheme.Border;
             this.gridHistory.Location = new System.Drawing.Point(0, 0);
             this.gridHistory.MultiSelect = false;
             this.gridHistory.Name = "gridHistory";

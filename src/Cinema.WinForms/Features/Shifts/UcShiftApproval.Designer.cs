@@ -1,3 +1,5 @@
+using Cinema.WinForms.Controls;
+
 namespace Cinema.WinForms.Features.Shifts
 {
     partial class UcShiftApproval
@@ -75,7 +77,7 @@ namespace Cinema.WinForms.Features.Shifts
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.BackColor = System.Drawing.Color.FromArgb(241, 245, 249);
+            this.BackColor = UiTheme.MainBg;
             this.Controls.Add(this.split);
             this.Controls.Add(this.pnlHeader);
             // Higher index docks first; Fill (split) must be index 0 (dock last)
@@ -86,7 +88,7 @@ namespace Cinema.WinForms.Features.Shifts
             // 
             // pnlHeader
             // 
-            this.pnlHeader.BackColor = System.Drawing.Color.FromArgb(241, 245, 249);
+            this.pnlHeader.BackColor = UiTheme.MainBg;
             this.pnlHeader.Controls.Add(this.lblSubtitle);
             this.pnlHeader.Controls.Add(this.lblTitle);
             this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top;
@@ -99,7 +101,7 @@ namespace Cinema.WinForms.Features.Shifts
             // 
             this.lblTitle.AutoSize = true;
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
-            this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblTitle.ForeColor = UiTheme.TextMain;
             this.lblTitle.Location = new System.Drawing.Point(0, 0);
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Text = "\u0110\u1ED1i so\u00E1t ca l\u00E0m";
@@ -108,21 +110,21 @@ namespace Cinema.WinForms.Features.Shifts
             // 
             this.lblSubtitle.AutoSize = true;
             this.lblSubtitle.Font = new System.Drawing.Font("Segoe UI", 8.5F);
-            this.lblSubtitle.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139);
+            this.lblSubtitle.ForeColor = UiTheme.TextMuted;
             this.lblSubtitle.Location = new System.Drawing.Point(2, 34);
             this.lblSubtitle.Name = "lblSubtitle";
             this.lblSubtitle.Text = "Ki\u1EC3m tra ch\u00EAnh l\u1EC7ch ti\u1EC1n m\u1EB7t v\u00E0 duy\u1EC7t ch\u1ED1t ca thu ng\u00E2n.";
             // 
             // split
             // 
-            this.split.BackColor = System.Drawing.Color.FromArgb(226, 232, 240);
+            this.split.BackColor = UiTheme.Border;
             this.split.Dock = System.Windows.Forms.DockStyle.Fill;
             this.split.Location = new System.Drawing.Point(0, 64);
             this.split.Name = "split";
-            this.split.Panel1.BackColor = System.Drawing.Color.FromArgb(241, 245, 249);
+            this.split.Panel1.BackColor = UiTheme.MainBg;
             this.split.Panel1.Controls.Add(this.leftCard);
             this.split.Panel1.Padding = new System.Windows.Forms.Padding(12);
-            this.split.Panel2.BackColor = System.Drawing.Color.FromArgb(241, 245, 249);
+            this.split.Panel2.BackColor = UiTheme.MainBg;
             this.split.Panel2.Controls.Add(this.rightCard);
             this.split.Panel2.Padding = new System.Windows.Forms.Padding(12);
             this.split.Size = new System.Drawing.Size(1100, 696);
@@ -131,8 +133,8 @@ namespace Cinema.WinForms.Features.Shifts
             // 
             // leftCard
             // 
-            this.leftCard.BackColor = System.Drawing.Color.White;
-            this.leftCard.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.leftCard.BackColor = UiTheme.CardBg;
+            this.leftCard.Paint += UiTheme.DrawCardBorder;
             this.leftCard.Controls.Add(this.gridShifts);
             this.leftCard.Controls.Add(this.lblLeftTitle);
             // Higher index docks first; Fill (gridShifts) must be index 0 (dock last)
@@ -148,7 +150,7 @@ namespace Cinema.WinForms.Features.Shifts
             // 
             this.lblLeftTitle.Dock = System.Windows.Forms.DockStyle.Top;
             this.lblLeftTitle.Font = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Bold);
-            this.lblLeftTitle.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblLeftTitle.ForeColor = UiTheme.TextMain;
             this.lblLeftTitle.Location = new System.Drawing.Point(0, 0);
             this.lblLeftTitle.Name = "lblLeftTitle";
             this.lblLeftTitle.Padding = new System.Windows.Forms.Padding(12, 10, 12, 0);
@@ -161,13 +163,13 @@ namespace Cinema.WinForms.Features.Shifts
             this.gridShifts.AllowUserToAddRows = false;
             this.gridShifts.AllowUserToResizeRows = false;
             this.gridShifts.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.gridShifts.BackgroundColor = System.Drawing.Color.White;
+            this.gridShifts.BackgroundColor = UiTheme.CardBg;
             this.gridShifts.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.gridShifts.ColumnHeadersHeight = 38;
             this.gridShifts.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] { this.colCashier, this.colShift, this.colTime, this.colStatus });
             this.gridShifts.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridShifts.EnableHeadersVisualStyles = false;
-            this.gridShifts.GridColor = System.Drawing.Color.FromArgb(226, 232, 240);
+            this.gridShifts.GridColor = UiTheme.Border;
             this.gridShifts.Location = new System.Drawing.Point(0, 42);
             this.gridShifts.MultiSelect = false;
             this.gridShifts.Name = "gridShifts";
@@ -184,8 +186,8 @@ namespace Cinema.WinForms.Features.Shifts
             // 
             // rightCard
             // 
-            this.rightCard.BackColor = System.Drawing.Color.White;
-            this.rightCard.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.rightCard.BackColor = UiTheme.CardBg;
+            this.rightCard.Paint += UiTheme.DrawCardBorder;
             this.rightCard.Controls.Add(this.btnReject);
             this.rightCard.Controls.Add(this.btnApprove);
             this.rightCard.Controls.Add(this.lblNote);
@@ -207,23 +209,23 @@ namespace Cinema.WinForms.Features.Shifts
             // 
             this.lblRightTitle.AutoSize = true;
             this.lblRightTitle.Font = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Bold);
-            this.lblRightTitle.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblRightTitle.ForeColor = UiTheme.TextMain;
             this.lblRightTitle.Location = new System.Drawing.Point(12, 10);
             this.lblRightTitle.Name = "lblRightTitle";
             this.lblRightTitle.Text = "H\u1ED3 s\u01A1 \u0111\u1ED1i so\u00E1t - NV-012 / Ca s\u00E1ng";
-            this.SetupInfo(this.info1, this.info1Lbl, this.info1Val, 12, 55, "1. Ti\u1EC1n \u0111\u1EA7u ca", "500.000 \u0111", System.Drawing.Color.FromArgb(15, 23, 42));
-            this.SetupInfo(this.info2, this.info2Lbl, this.info2Val, 162, 55, "2. Ti\u1EC1n m\u1EB7t v\u00E9 (+)", "4.250.000 \u0111", System.Drawing.Color.FromArgb(22, 163, 74));
-            this.SetupInfo(this.info3, this.info3Lbl, this.info3Val, 312, 55, "3. Ti\u1EC1n m\u1EB7t F&&B (+)", "1.840.000 \u0111", System.Drawing.Color.FromArgb(22, 163, 74));
-            this.SetupInfo(this.info4, this.info4Lbl, this.info4Val, 462, 55, "4. Ho\u00E0n tr\u1EA3 (-)", "120.000 \u0111", System.Drawing.Color.FromArgb(220, 38, 38));
-            this.SetupLine(this.line1, this.line1Lbl, this.line1Val, 12, 160, "T\u1ED5ng ti\u1EC1n m\u1EB7t l\u00FD thuy\u1EBFt h\u1EC7 th\u1ED1ng:", "6.470.000 \u0111", System.Drawing.Color.FromArgb(15, 23, 42));
-            this.SetupLine(this.line2, this.line2Lbl, this.line2Val, 12, 200, "Ti\u1EC1n m\u1EB7t th\u1EF1c t\u1EBF thu ng\u00E2n \u0111\u1EBFm:", "6.470.000 \u0111", System.Drawing.Color.FromArgb(15, 23, 42));
-            this.SetupLine(this.line3, this.line3Lbl, this.line3Val, 12, 240, "Ch\u00EAnh l\u1EC7ch (Th\u1EF1c \u0111\u1EBFm - L\u00FD thuy\u1EBFt):", "0 \u0111 (Kh\u1EDBp k\u00E9t ho\u00E0n to\u00E0n)", System.Drawing.Color.FromArgb(22, 163, 74));
+            this.SetupInfo(this.info1, this.info1Lbl, this.info1Val, 12, 55, "1. Ti\u1EC1n \u0111\u1EA7u ca", "500.000 \u0111", UiTheme.TextMain);
+            this.SetupInfo(this.info2, this.info2Lbl, this.info2Val, 162, 55, "2. Ti\u1EC1n m\u1EB7t v\u00E9 (+)", "4.250.000 \u0111", UiTheme.Success);
+            this.SetupInfo(this.info3, this.info3Lbl, this.info3Val, 312, 55, "3. Ti\u1EC1n m\u1EB7t F&&B (+)", "1.840.000 \u0111", UiTheme.Success);
+            this.SetupInfo(this.info4, this.info4Lbl, this.info4Val, 462, 55, "4. Ho\u00E0n tr\u1EA3 (-)", "120.000 \u0111", UiTheme.Danger);
+            this.SetupLine(this.line1, this.line1Lbl, this.line1Val, 12, 160, "T\u1ED5ng ti\u1EC1n m\u1EB7t l\u00FD thuy\u1EBFt h\u1EC7 th\u1ED1ng:", "6.470.000 \u0111", UiTheme.TextMain);
+            this.SetupLine(this.line2, this.line2Lbl, this.line2Val, 12, 200, "Ti\u1EC1n m\u1EB7t th\u1EF1c t\u1EBF thu ng\u00E2n \u0111\u1EBFm:", "6.470.000 \u0111", UiTheme.TextMain);
+            this.SetupLine(this.line3, this.line3Lbl, this.line3Val, 12, 240, "Ch\u00EAnh l\u1EC7ch (Th\u1EF1c \u0111\u1EBFm - L\u00FD thuy\u1EBFt):", "0 \u0111 (Kh\u1EDBp k\u00E9t ho\u00E0n to\u00E0n)", UiTheme.Success);
             // 
             // lblNote
             // 
             this.lblNote.AutoSize = true;
             this.lblNote.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic);
-            this.lblNote.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139);
+            this.lblNote.ForeColor = UiTheme.TextMuted;
             this.lblNote.Location = new System.Drawing.Point(12, 292);
             this.lblNote.Name = "lblNote";
             this.lblNote.TabIndex = 11;
@@ -232,11 +234,11 @@ namespace Cinema.WinForms.Features.Shifts
             // btnApprove
             // 
             this.btnApprove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnApprove.BackColor = System.Drawing.Color.FromArgb(22, 163, 74);
+            this.btnApprove.BackColor = UiTheme.Primary;
             this.btnApprove.FlatAppearance.BorderSize = 0;
             this.btnApprove.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnApprove.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnApprove.ForeColor = System.Drawing.Color.White;
+            this.btnApprove.ForeColor = UiTheme.CardBg;
             this.btnApprove.Location = new System.Drawing.Point(300, 324);
             this.btnApprove.Name = "btnApprove";
             this.btnApprove.Size = new System.Drawing.Size(150, 36);
@@ -247,12 +249,12 @@ namespace Cinema.WinForms.Features.Shifts
             // btnReject
             // 
             this.btnReject.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnReject.BackColor = System.Drawing.Color.White;
-            this.btnReject.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(220, 38, 38);
+            this.btnReject.BackColor = UiTheme.CardBg;
+            this.btnReject.FlatAppearance.BorderColor = UiTheme.Danger;
             this.btnReject.FlatAppearance.BorderSize = 1;
             this.btnReject.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnReject.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnReject.ForeColor = System.Drawing.Color.FromArgb(220, 38, 38);
+            this.btnReject.ForeColor = UiTheme.Danger;
             this.btnReject.Location = new System.Drawing.Point(460, 324);
             this.btnReject.Name = "btnReject";
             this.btnReject.Size = new System.Drawing.Size(150, 36);
@@ -276,13 +278,13 @@ namespace Cinema.WinForms.Features.Shifts
 
         private void SetupInfo(System.Windows.Forms.Panel p, System.Windows.Forms.Label lbl, System.Windows.Forms.Label val, int x, int y, string label, string value, System.Drawing.Color color)
         {
-            p.BackColor = System.Drawing.Color.White;
-            p.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            p.BackColor = UiTheme.CardBg;
+            p.Paint += UiTheme.DrawCardBorder;
             p.Location = new System.Drawing.Point(x, y);
             p.Name = "info" + x;
             p.Size = new System.Drawing.Size(140, 80);
             lbl.Font = new System.Drawing.Font("Segoe UI", 8.5F);
-            lbl.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139);
+            lbl.ForeColor = UiTheme.TextMuted;
             lbl.Location = new System.Drawing.Point(8, 8);
             lbl.Size = new System.Drawing.Size(124, 30);
             lbl.Text = label;
@@ -300,13 +302,13 @@ namespace Cinema.WinForms.Features.Shifts
             p.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             p.BackColor = System.Drawing.Color.FromArgb(248, 250, 252);
-            p.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            p.Paint += UiTheme.DrawCardBorder;
             p.Location = new System.Drawing.Point(x, y);
             p.Name = "line" + y;
             p.Size = new System.Drawing.Size(600, 34);
             lbl.AutoSize = true;
             lbl.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            lbl.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            lbl.ForeColor = UiTheme.TextMain;
             lbl.Location = new System.Drawing.Point(10, 7);
             lbl.Text = label;
             val.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));

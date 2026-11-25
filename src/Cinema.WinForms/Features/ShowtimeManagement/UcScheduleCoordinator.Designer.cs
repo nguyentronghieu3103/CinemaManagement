@@ -1,3 +1,5 @@
+using Cinema.WinForms.Controls;
+
 namespace Cinema.WinForms.Features.ShowtimeManagement
 {
     partial class UcScheduleCoordinator
@@ -79,7 +81,7 @@ namespace Cinema.WinForms.Features.ShowtimeManagement
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.BackColor = System.Drawing.Color.FromArgb(241, 245, 249);
+            this.BackColor = UiTheme.MainBg;
             this.Controls.Add(this.tabs);
             this.Controls.Add(this.toolbar);
             this.Controls.Add(this.lblSubtitle);
@@ -91,7 +93,7 @@ namespace Cinema.WinForms.Features.ShowtimeManagement
             // 
             this.lblTitle.AutoSize = true;
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
-            this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblTitle.ForeColor = UiTheme.TextMain;
             this.lblTitle.Location = new System.Drawing.Point(0, 0);
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Text = "\u0110i\u1EC1u ph\u1ED1i L\u1ECBch chi\u1EBFu && C\u1EA5u h\u00ECnh gi\u00E1";
@@ -100,7 +102,7 @@ namespace Cinema.WinForms.Features.ShowtimeManagement
             // 
             this.lblSubtitle.AutoSize = true;
             this.lblSubtitle.Font = new System.Drawing.Font("Segoe UI", 8.5F);
-            this.lblSubtitle.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139);
+            this.lblSubtitle.ForeColor = UiTheme.TextMuted;
             this.lblSubtitle.Location = new System.Drawing.Point(2, 34);
             this.lblSubtitle.Name = "lblSubtitle";
             this.lblSubtitle.Text = "T\u1EF1 \u0111\u1ED9ng t\u00EDnh 20 ph\u00FAt d\u1ECDn r\u1EA1p ch\u1ED1ng tr\u00F9ng gi\u1EDD. Thi\u1EBFt l\u1EADp gi\u00E1 ri\u00EAng cho t\u1EEBng su\u1EA5t.";
@@ -118,7 +120,7 @@ namespace Cinema.WinForms.Features.ShowtimeManagement
             // lblDate
             // 
             this.lblDate.AutoSize = true;
-            this.lblDate.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblDate.ForeColor = UiTheme.TextMain;
             this.lblDate.Location = new System.Drawing.Point(0, 11);
             this.lblDate.Name = "lblDate";
             this.lblDate.Text = "Ng\u00E0y h\u1EA1ch to\u00E1n:";
@@ -133,11 +135,11 @@ namespace Cinema.WinForms.Features.ShowtimeManagement
             // 
             // btnAdd
             // 
-            this.btnAdd.BackColor = System.Drawing.Color.FromArgb(37, 99, 235);
+            this.btnAdd.BackColor = UiTheme.Primary;
             this.btnAdd.FlatAppearance.BorderSize = 0;
             this.btnAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAdd.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnAdd.ForeColor = System.Drawing.Color.White;
+            this.btnAdd.ForeColor = UiTheme.CardBg;
             this.btnAdd.Location = new System.Drawing.Point(270, 4);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(140, 36);
@@ -162,7 +164,7 @@ namespace Cinema.WinForms.Features.ShowtimeManagement
             // 
             // tabTl
             // 
-            this.tabTl.BackColor = System.Drawing.Color.FromArgb(241, 245, 249);
+            this.tabTl.BackColor = UiTheme.MainBg;
             this.tabTl.Controls.Add(this.tl);
             this.tabTl.Location = new System.Drawing.Point(4, 34);
             this.tabTl.Name = "tabTl";
@@ -172,7 +174,7 @@ namespace Cinema.WinForms.Features.ShowtimeManagement
             // 
             // tabPrice
             // 
-            this.tabPrice.BackColor = System.Drawing.Color.FromArgb(241, 245, 249);
+            this.tabPrice.BackColor = UiTheme.MainBg;
             this.tabPrice.Controls.Add(this.gridPrice);
             this.tabPrice.Location = new System.Drawing.Point(4, 34);
             this.tabPrice.Name = "tabPrice";
@@ -183,8 +185,8 @@ namespace Cinema.WinForms.Features.ShowtimeManagement
             // tl
             // 
             this.tl.AutoScroll = true;
-            this.tl.BackColor = System.Drawing.Color.White;
-            this.tl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tl.BackColor = UiTheme.CardBg;
+            this.tl.Paint += UiTheme.DrawCardBorder;
             this.tl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tl.Location = new System.Drawing.Point(0, 0);
             this.tl.Name = "tl";
@@ -216,7 +218,7 @@ namespace Cinema.WinForms.Features.ShowtimeManagement
             this.SetupRoom(this.lblR1, this.lineR1, "Ph\u00F2ng 01 (2D)", 52);
             this.SetupRoom(this.lblR2, this.lineR2, "Ph\u00F2ng 02 (3D)", 130);
             this.SetupRoom(this.lblR3, this.lineR3, "Ph\u00F2ng 03 (2D)", 208);
-            this.block1.BackColor = System.Drawing.Color.FromArgb(225, 37, 99, 235);
+            this.block1.BackColor = UiTheme.Primary;
             this.block1.Controls.Add(this.block1Lbl);
             this.block1.Location = new System.Drawing.Point(140, 60);
             this.block1.Name = "block1";
@@ -224,10 +226,10 @@ namespace Cinema.WinForms.Features.ShowtimeManagement
             this.block1.TabIndex = 50;
             this.block1Lbl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.block1Lbl.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
-            this.block1Lbl.ForeColor = System.Drawing.Color.White;
+            this.block1Lbl.ForeColor = UiTheme.CardBg;
             this.block1Lbl.Padding = new System.Windows.Forms.Padding(6, 4, 0, 0);
             this.block1Lbl.Text = "Dune: Part Two\r\n09:00-12:06 (+20p)";
-            this.block2.BackColor = System.Drawing.Color.FromArgb(225, 217, 119, 6);
+            this.block2.BackColor = UiTheme.Amber;
             this.block2.Controls.Add(this.block2Lbl);
             this.block2.Location = new System.Drawing.Point(440, 138);
             this.block2.Name = "block2";
@@ -235,7 +237,7 @@ namespace Cinema.WinForms.Features.ShowtimeManagement
             this.block2.TabIndex = 51;
             this.block2Lbl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.block2Lbl.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
-            this.block2Lbl.ForeColor = System.Drawing.Color.White;
+            this.block2Lbl.ForeColor = UiTheme.TextMain;
             this.block2Lbl.Padding = new System.Windows.Forms.Padding(6, 4, 0, 0);
             this.block2Lbl.Text = "Mai\r\n14:00-16:31 (+20p)";
             // 
@@ -244,14 +246,14 @@ namespace Cinema.WinForms.Features.ShowtimeManagement
             this.gridPrice.AllowUserToAddRows = false;
             this.gridPrice.AllowUserToResizeRows = false;
             this.gridPrice.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.gridPrice.BackgroundColor = System.Drawing.Color.White;
+            this.gridPrice.BackgroundColor = UiTheme.CardBg;
             this.gridPrice.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.gridPrice.ColumnHeadersHeight = 38;
             this.gridPrice.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colCode, this.colRoom, this.colMovie, this.colTime, this.colStd, this.colVip, this.colCouple, this.colExtra, this.colEdit});
             this.gridPrice.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridPrice.EnableHeadersVisualStyles = false;
-            this.gridPrice.GridColor = System.Drawing.Color.FromArgb(226, 232, 240);
+            this.gridPrice.GridColor = UiTheme.Border;
             this.gridPrice.MultiSelect = false;
             this.gridPrice.Name = "gridPrice";
             this.gridPrice.ReadOnly = true;
@@ -267,7 +269,7 @@ namespace Cinema.WinForms.Features.ShowtimeManagement
             this.colVip.HeaderText = "Gi\u00E1 Gh\u1EBF VIP"; this.colVip.Name = "colVip"; this.colVip.ReadOnly = true;
             this.colCouple.HeaderText = "Gi\u00E1 Gh\u1EBF \u0110\u00F4i"; this.colCouple.Name = "colCouple"; this.colCouple.ReadOnly = true;
             this.colExtra.HeaderText = "Ph\u1EE5 Thu"; this.colExtra.Name = "colExtra"; this.colExtra.ReadOnly = true;
-            this.colEdit.HeaderText = ""; this.colEdit.Name = "colEdit"; this.colEdit.ReadOnly = true; this.colEdit.Text = "\u0110\u1ECBnh Gi\u00E1 Ngay"; this.colEdit.UseColumnTextForButtonValue = true; this.colEdit.FlatStyle = System.Windows.Forms.FlatStyle.Flat; this.colEdit.DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(217, 119, 6); this.colEdit.DefaultCellStyle.ForeColor = System.Drawing.Color.White; this.colEdit.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.colEdit.HeaderText = ""; this.colEdit.Name = "colEdit"; this.colEdit.ReadOnly = true; this.colEdit.Text = "\u0110\u1ECBnh Gi\u00E1 Ngay"; this.colEdit.UseColumnTextForButtonValue = true; this.colEdit.FlatStyle = System.Windows.Forms.FlatStyle.Flat; this.colEdit.DefaultCellStyle.BackColor = UiTheme.MainBg; this.colEdit.DefaultCellStyle.ForeColor = UiTheme.Primary; this.colEdit.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.toolbar.ResumeLayout(false);
             this.toolbar.PerformLayout();
             this.tabs.ResumeLayout(false);
@@ -286,11 +288,11 @@ namespace Cinema.WinForms.Features.ShowtimeManagement
         {
             lbl.AutoSize = true;
             lbl.Font = new System.Drawing.Font("Segoe UI", 8.5F);
-            lbl.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139);
+            lbl.ForeColor = UiTheme.TextMuted;
             lbl.Location = new System.Drawing.Point(x - 15, 10);
             lbl.Name = "t" + text.Replace(":", "");
             lbl.Text = text;
-            line.BackColor = System.Drawing.Color.FromArgb(226, 232, 240);
+            line.BackColor = UiTheme.Border;
             line.Location = new System.Drawing.Point(x, 30);
             line.Name = "v" + text.Replace(":", "");
             line.Size = new System.Drawing.Size(1, 280);
@@ -300,11 +302,11 @@ namespace Cinema.WinForms.Features.ShowtimeManagement
         {
             lbl.AutoSize = true;
             lbl.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            lbl.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            lbl.ForeColor = UiTheme.TextMain;
             lbl.Location = new System.Drawing.Point(10, y + 14);
             lbl.Name = "lbl" + text.Replace(" ", "").Replace("(", "").Replace(")", "");
             lbl.Text = text;
-            line.BackColor = System.Drawing.Color.FromArgb(226, 232, 240);
+            line.BackColor = UiTheme.Border;
             line.Location = new System.Drawing.Point(80, y + 58);
             line.Name = "line" + text.Replace(" ", "").Replace("(", "").Replace(")", "");
             line.Size = new System.Drawing.Size(980, 1);

@@ -1,3 +1,5 @@
+using Cinema.WinForms.Controls;
+
 namespace Cinema.WinForms.Features.Inventory
 {
     partial class ImportFnBModal
@@ -52,7 +54,7 @@ namespace Cinema.WinForms.Features.Inventory
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.White;
+            this.BackColor = UiTheme.CardBg;
             this.ClientSize = new System.Drawing.Size(484, 411);
             this.Controls.Add(this.btnConfirm);
             this.Controls.Add(this.btnCancel);
@@ -82,7 +84,7 @@ namespace Cinema.WinForms.Features.Inventory
             // 
             this.lblSupplier.AutoSize = true;
             this.lblSupplier.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.lblSupplier.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblSupplier.ForeColor = UiTheme.TextMain;
             this.lblSupplier.Location = new System.Drawing.Point(20, 18);
             this.lblSupplier.Name = "lblSupplier";
             this.lblSupplier.Text = "Nh\u00E0 cung c\u1EA5p";
@@ -99,7 +101,7 @@ namespace Cinema.WinForms.Features.Inventory
             // 
             this.lblMode.AutoSize = true;
             this.lblMode.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.lblMode.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblMode.ForeColor = UiTheme.TextMain;
             this.lblMode.Location = new System.Drawing.Point(20, 76);
             this.lblMode.Name = "lblMode";
             this.lblMode.Text = "Ch\u1EBF \u0111\u1ED9 nh\u1EADp";
@@ -128,7 +130,7 @@ namespace Cinema.WinForms.Features.Inventory
             // 
             this.lblItem.AutoSize = true;
             this.lblItem.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
-            this.lblItem.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblItem.ForeColor = UiTheme.TextMain;
             this.lblItem.Location = new System.Drawing.Point(20, 154);
             this.lblItem.Name = "lblItem";
             this.lblItem.Text = "Ch\u1ECDn s\u1EA3n ph\u1EA9m:";
@@ -163,7 +165,7 @@ namespace Cinema.WinForms.Features.Inventory
             // 
             this.lblQty.AutoSize = true;
             this.lblQty.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.lblQty.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblQty.ForeColor = UiTheme.TextMain;
             this.lblQty.Location = new System.Drawing.Point(20, 214);
             this.lblQty.Name = "lblQty";
             this.lblQty.Text = "S\u1ED1 l\u01B0\u1EE3ng nh\u1EADp";
@@ -182,7 +184,7 @@ namespace Cinema.WinForms.Features.Inventory
             // 
             this.lblPrice.AutoSize = true;
             this.lblPrice.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.lblPrice.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblPrice.ForeColor = UiTheme.TextMain;
             this.lblPrice.Location = new System.Drawing.Point(260, 214);
             this.lblPrice.Name = "lblPrice";
             this.lblPrice.Text = "\u0110\u01A1n gi\u00E1 nh\u1EADp s\u1EC9 (VN\u0110)";
@@ -201,18 +203,18 @@ namespace Cinema.WinForms.Features.Inventory
             // 
             this.lblTotal.AutoSize = true;
             this.lblTotal.Font = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Bold);
-            this.lblTotal.ForeColor = System.Drawing.Color.FromArgb(217, 119, 6);
+            this.lblTotal.ForeColor = UiTheme.TextMain;
             this.lblTotal.Location = new System.Drawing.Point(20, 280);
             this.lblTotal.Name = "lblTotal";
             this.lblTotal.Text = "T\u1ED5ng ti\u1EC1n phi\u1EBFu = S\u1ED1 l\u01B0\u1EE3ng x \u0110\u01A1n gi\u00E1 nh\u1EADp: 150.000 \u0111";
             // 
             // btnCancel
             // 
-            this.btnCancel.BackColor = System.Drawing.Color.White;
-            this.btnCancel.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(226, 232, 240);
+            this.btnCancel.BackColor = UiTheme.CardBg;
+            this.btnCancel.FlatAppearance.BorderColor = UiTheme.Border;
             this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCancel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnCancel.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139);
+            this.btnCancel.ForeColor = UiTheme.TextMuted;
             this.btnCancel.Location = new System.Drawing.Point(250, 350);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(100, 36);
@@ -222,11 +224,11 @@ namespace Cinema.WinForms.Features.Inventory
             // 
             // btnConfirm
             // 
-            this.btnConfirm.BackColor = System.Drawing.Color.FromArgb(22, 163, 74);
+            this.btnConfirm.BackColor = UiTheme.Primary;
             this.btnConfirm.FlatAppearance.BorderSize = 0;
             this.btnConfirm.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnConfirm.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnConfirm.ForeColor = System.Drawing.Color.White;
+            this.btnConfirm.ForeColor = UiTheme.CardBg;
             this.btnConfirm.Location = new System.Drawing.Point(360, 350);
             this.btnConfirm.Name = "btnConfirm";
             this.btnConfirm.Size = new System.Drawing.Size(100, 36);

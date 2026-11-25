@@ -6,8 +6,10 @@ namespace Cinema.WinForms.Controls
     internal static class UiTheme
     {
         public static readonly Color SidebarBg = ColorTranslator.FromHtml("#1E293B");
+        public static readonly Color SidebarHover = ColorTranslator.FromHtml("#273549");
         public static readonly Color SidebarActive = ColorTranslator.FromHtml("#334155");
         public static readonly Color SidebarAccent = ColorTranslator.FromHtml("#3B82F6");
+        public static readonly Color SidebarText = ColorTranslator.FromHtml("#CBD5E1");
         public static readonly Color MainBg = ColorTranslator.FromHtml("#F1F5F9");
         public static readonly Color CardBg = Color.White;
         public static readonly Color Border = ColorTranslator.FromHtml("#E2E8F0");
@@ -40,20 +42,44 @@ namespace Cinema.WinForms.Controls
             var b = new Button { Text = text, BackColor = Color.White, ForeColor = Danger, FlatStyle = FlatStyle.Flat, Font = new Font("Segoe UI", 9F, FontStyle.Bold), Height = 36, Cursor = Cursors.Hand };
             b.FlatAppearance.BorderColor = Danger; b.FlatAppearance.BorderSize = 1; return b;
         }
-        public static Panel Card(int w, int h) => new Panel { Width = w, Height = h, BackColor = CardBg, BorderStyle = BorderStyle.FixedSingle };
+        public static Panel Card(int w, int h)
+        {
+            var card = new Panel { Width = w, Height = h, BackColor = CardBg };
+            card.Paint += DrawCardBorder;
+            return card;
+        }
+
+        public static void DrawCardBorder(object? sender, PaintEventArgs e)
+        {
+            var card = (Control)sender!;
+            ControlPaint.DrawBorder(e.Graphics, card.ClientRectangle, Border, ButtonBorderStyle.Solid);
+        }
         public static Label Title(string text, float size = 18F) => new Label { Text = text, Font = new Font("Segoe UI", size, FontStyle.Bold), ForeColor = TextMain, AutoSize = true };
         public static Label Muted(string text) => new Label { Text = text, Font = Small, ForeColor = TextMuted, AutoSize = true };
         public static DataGridView Grid()
         {
             var g = new DataGridView { BackgroundColor = Color.White, BorderStyle = BorderStyle.None, AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill, RowHeadersVisible = false, AllowUserToAddRows = false, AllowUserToResizeRows = false, ReadOnly = true, SelectionMode = DataGridViewSelectionMode.FullRowSelect, MultiSelect = false, EnableHeadersVisualStyles = false, Font = Body, ColumnHeadersHeight = 38, RowTemplate = { Height = 34 } };
-            g.ColumnHeadersDefaultCellStyle.BackColor = ColorTranslator.FromHtml("#F8FAFC");
-            g.ColumnHeadersDefaultCellStyle.ForeColor = TextMain;
-            g.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            g.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            g.DefaultCellStyle.SelectionBackColor = ColorTranslator.FromHtml("#DBEAFE");
-            g.DefaultCellStyle.SelectionForeColor = TextMain;
-            g.GridColor = Border; g.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            StyleGrid(g);
             return g;
+        }
+
+        public static void StyleGrid(DataGridView grid)
+        {
+            grid.EnableHeadersVisualStyles = false;
+            grid.BackgroundColor = CardBg;
+            grid.GridColor = Border;
+            grid.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            grid.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+
+            grid.ColumnHeadersDefaultCellStyle.BackColor = MainBg;
+            grid.ColumnHeadersDefaultCellStyle.ForeColor = TextMain;
+            grid.ColumnHeadersDefaultCellStyle.SelectionBackColor = MainBg;
+            grid.ColumnHeadersDefaultCellStyle.SelectionForeColor = TextMain;
+            grid.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            grid.DefaultCellStyle.BackColor = CardBg;
+            grid.DefaultCellStyle.ForeColor = TextMain;
+            grid.DefaultCellStyle.SelectionBackColor = ColorTranslator.FromHtml("#DBEAFE");
+            grid.DefaultCellStyle.SelectionForeColor = TextMain;
         }
         public static void StyleTab(TabControl tab) { tab.Font = Body; tab.Padding = new Point(14, 7); }
         public static Label FieldLabel(string t, int x, int y) => new Label { Text = t, Location = new Point(x, y), AutoSize = true, ForeColor = TextMain, Font = H3 };

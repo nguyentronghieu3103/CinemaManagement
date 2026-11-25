@@ -1,6 +1,6 @@
 using System;
-using System.Drawing;
 using System.Windows.Forms;
+using Cinema.WinForms.Controls;
 
 namespace Cinema.WinForms.Features.Members
 {
@@ -30,12 +30,7 @@ namespace Cinema.WinForms.Features.Members
             lblPoint2Value.Text = isMember ? "100" : "0";
             lblPoint3Value.Text = isMember ? "420" : "0";
 
-            gridHistory.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(248, 250, 252);
-            gridHistory.ColumnHeadersDefaultCellStyle.ForeColor = Color.FromArgb(15, 23, 42);
-            gridHistory.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            gridHistory.DefaultCellStyle.SelectionBackColor = Color.FromArgb(219, 234, 254);
-            gridHistory.DefaultCellStyle.SelectionForeColor = Color.FromArgb(15, 23, 42);
-            gridHistory.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            UiTheme.StyleGrid(gridHistory);
 
             gridHistory.Rows.Add("VE-10021", "Mai 2", "D5", "95.000 \u0111", "20/11/2026", "+10");
             gridHistory.Rows.Add("VE-10045", "Anh Trai V\u01B0\u1EE3t Ng\u00E0n S\u00F3ng Gi\u00F3", "A5, A6", "180.000 \u0111", "21/11/2026", "+18");

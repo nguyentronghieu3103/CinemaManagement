@@ -1,3 +1,5 @@
+using Cinema.WinForms.Controls;
+
 namespace Cinema.WinForms.Features.Inventory
 {
     partial class UcFnBConcession
@@ -76,7 +78,7 @@ namespace Cinema.WinForms.Features.Inventory
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.BackColor = System.Drawing.Color.FromArgb(241, 245, 249);
+            this.BackColor = UiTheme.MainBg;
             this.Controls.Add(this.tabs);
             this.Controls.Add(this.btnAddImport);
             this.Controls.Add(this.cboSupplier);
@@ -90,7 +92,7 @@ namespace Cinema.WinForms.Features.Inventory
             // 
             this.lblTitle.AutoSize = true;
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
-            this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblTitle.ForeColor = UiTheme.TextMain;
             this.lblTitle.Location = new System.Drawing.Point(0, 0);
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Text = "Qu\u1EA3n l\u00FD B\u1EAFp n\u01B0\u1EDBc && T\u1ED3n kho (F&&B)";
@@ -99,7 +101,7 @@ namespace Cinema.WinForms.Features.Inventory
             // 
             this.lblSubtitle.AutoSize = true;
             this.lblSubtitle.Font = new System.Drawing.Font("Segoe UI", 8.5F);
-            this.lblSubtitle.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139);
+            this.lblSubtitle.ForeColor = UiTheme.TextMuted;
             this.lblSubtitle.Location = new System.Drawing.Point(2, 34);
             this.lblSubtitle.Name = "lblSubtitle";
             this.lblSubtitle.Text = "Danh m\u1EE5c t\u00E1ch bi\u1EC7t theo 3 nh\u00E0 cung c\u1EA5p c\u1ED1 \u0111\u1ECBnh. \u0110i\u1EC1u ch\u1EC9nh gi\u00E1 b\u00E1n POS v\u00E0 t\u1EA1o phi\u1EBFu nh\u1EADp h\u00E0ng.";
@@ -108,7 +110,7 @@ namespace Cinema.WinForms.Features.Inventory
             // 
             this.lblSupplier.AutoSize = true;
             this.lblSupplier.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblSupplier.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblSupplier.ForeColor = UiTheme.TextMain;
             this.lblSupplier.Location = new System.Drawing.Point(0, 62);
             this.lblSupplier.Name = "lblSupplier";
             this.lblSupplier.Text = "Nh\u00E0 cung c\u1EA5p:";
@@ -125,11 +127,11 @@ namespace Cinema.WinForms.Features.Inventory
             // btnAddImport
             // 
             this.btnAddImport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAddImport.BackColor = System.Drawing.Color.FromArgb(22, 163, 74);
+            this.btnAddImport.BackColor = UiTheme.Primary;
             this.btnAddImport.FlatAppearance.BorderSize = 0;
             this.btnAddImport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAddImport.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnAddImport.ForeColor = System.Drawing.Color.White;
+            this.btnAddImport.ForeColor = UiTheme.CardBg;
             this.btnAddImport.Location = new System.Drawing.Point(900, 52);
             this.btnAddImport.Name = "btnAddImport";
             this.btnAddImport.Size = new System.Drawing.Size(180, 36);
@@ -154,7 +156,7 @@ namespace Cinema.WinForms.Features.Inventory
             // 
             // tabMenu
             // 
-            this.tabMenu.BackColor = System.Drawing.Color.FromArgb(241, 245, 249);
+            this.tabMenu.BackColor = UiTheme.MainBg;
             this.tabMenu.Controls.Add(this.gridMenu);
             this.tabMenu.Location = new System.Drawing.Point(4, 34);
             this.tabMenu.Name = "tabMenu";
@@ -165,7 +167,7 @@ namespace Cinema.WinForms.Features.Inventory
             // 
             // tabHist
             // 
-            this.tabHist.BackColor = System.Drawing.Color.FromArgb(241, 245, 249);
+            this.tabHist.BackColor = UiTheme.MainBg;
             this.tabHist.Controls.Add(this.gridHist);
             this.tabHist.Location = new System.Drawing.Point(4, 34);
             this.tabHist.Name = "tabHist";
@@ -179,13 +181,13 @@ namespace Cinema.WinForms.Features.Inventory
             this.gridMenu.AllowUserToAddRows = false;
             this.gridMenu.AllowUserToResizeRows = false;
             this.gridMenu.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.gridMenu.BackgroundColor = System.Drawing.Color.White;
+            this.gridMenu.BackgroundColor = UiTheme.CardBg;
             this.gridMenu.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.gridMenu.ColumnHeadersHeight = 38;
             this.gridMenu.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] { this.colMCode, this.colMName, this.colMSupplier, this.colMCat, this.colMList, this.colMPromo, this.colMPos, this.colMStock, this.colMEdit });
             this.gridMenu.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridMenu.EnableHeadersVisualStyles = false;
-            this.gridMenu.GridColor = System.Drawing.Color.FromArgb(226, 232, 240);
+            this.gridMenu.GridColor = UiTheme.Border;
             this.gridMenu.MultiSelect = false;
             this.gridMenu.Name = "gridMenu";
             this.gridMenu.ReadOnly = true;
@@ -208,13 +210,13 @@ namespace Cinema.WinForms.Features.Inventory
             this.gridHist.AllowUserToAddRows = false;
             this.gridHist.AllowUserToResizeRows = false;
             this.gridHist.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.gridHist.BackgroundColor = System.Drawing.Color.White;
+            this.gridHist.BackgroundColor = UiTheme.CardBg;
             this.gridHist.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.gridHist.ColumnHeadersHeight = 38;
             this.gridHist.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] { this.colHCode, this.colHTime, this.colHSupplier, this.colHItem, this.colHQty, this.colHTotal, this.colHBy });
             this.gridHist.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridHist.EnableHeadersVisualStyles = false;
-            this.gridHist.GridColor = System.Drawing.Color.FromArgb(226, 232, 240);
+            this.gridHist.GridColor = UiTheme.Border;
             this.gridHist.MultiSelect = false;
             this.gridHist.Name = "gridHist";
             this.gridHist.ReadOnly = true;

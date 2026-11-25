@@ -1,3 +1,5 @@
+using Cinema.WinForms.Controls;
+
 namespace Cinema.WinForms.Features.Shifts
 {
     partial class RejectShiftModal
@@ -24,7 +26,7 @@ namespace Cinema.WinForms.Features.Shifts
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.White;
+            this.BackColor = UiTheme.CardBg;
             this.ClientSize = new System.Drawing.Size(444, 221);
             this.Controls.Add(this.btnSend);
             this.Controls.Add(this.txtReason);
@@ -41,7 +43,7 @@ namespace Cinema.WinForms.Features.Shifts
             // 
             this.lblReason.AutoSize = true;
             this.lblReason.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.lblReason.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblReason.ForeColor = UiTheme.TextMain;
             this.lblReason.Location = new System.Drawing.Point(20, 20);
             this.lblReason.Name = "lblReason";
             this.lblReason.Text = "Lý do gửi về máy thu ngân";
@@ -57,12 +59,12 @@ namespace Cinema.WinForms.Features.Shifts
             // 
             // btnSend
             // 
-            this.btnSend.BackColor = System.Drawing.Color.White;
-            this.btnSend.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(220, 38, 38);
+            this.btnSend.BackColor = UiTheme.CardBg;
+            this.btnSend.FlatAppearance.BorderColor = UiTheme.Danger;
             this.btnSend.FlatAppearance.BorderSize = 1;
             this.btnSend.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSend.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnSend.ForeColor = System.Drawing.Color.FromArgb(220, 38, 38);
+            this.btnSend.ForeColor = UiTheme.Danger;
             this.btnSend.Location = new System.Drawing.Point(300, 160);
             this.btnSend.Name = "btnSend";
             this.btnSend.Size = new System.Drawing.Size(120, 36);

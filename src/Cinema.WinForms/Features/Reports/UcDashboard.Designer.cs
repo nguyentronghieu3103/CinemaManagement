@@ -1,3 +1,5 @@
+using Cinema.WinForms.Controls;
+
 namespace Cinema.WinForms.Features.Reports
 {
     partial class UcDashboard
@@ -65,7 +67,7 @@ namespace Cinema.WinForms.Features.Reports
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.BackColor = System.Drawing.Color.FromArgb(241, 245, 249);
+            this.BackColor = UiTheme.MainBg;
             this.Controls.Add(this.tlpBottom);
             this.Controls.Add(this.tlpKpi);
             this.Controls.Add(this.pnlHeader);
@@ -92,7 +94,7 @@ namespace Cinema.WinForms.Features.Reports
             // 
             this.lblTitle.AutoSize = true;
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
-            this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblTitle.ForeColor = UiTheme.TextMain;
             this.lblTitle.Location = new System.Drawing.Point(0, 0);
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Text = "B\u00E1o c\u00E1o && Dashboard";
@@ -101,7 +103,7 @@ namespace Cinema.WinForms.Features.Reports
             // 
             this.lblSubtitle.AutoSize = true;
             this.lblSubtitle.Font = new System.Drawing.Font("Segoe UI", 8.5F);
-            this.lblSubtitle.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139);
+            this.lblSubtitle.ForeColor = UiTheme.TextMuted;
             this.lblSubtitle.Location = new System.Drawing.Point(2, 34);
             this.lblSubtitle.Name = "lblSubtitle";
             this.lblSubtitle.Text = "T\u1ED5ng quan ho\u1EA1t \u0111\u1ED9ng r\u1EA1p h\u00F4m nay";
@@ -109,11 +111,11 @@ namespace Cinema.WinForms.Features.Reports
             // btnExportExcel
             // 
             this.btnExportExcel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnExportExcel.BackColor = System.Drawing.Color.White;
-            this.btnExportExcel.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(226, 232, 240);
+            this.btnExportExcel.BackColor = UiTheme.CardBg;
+            this.btnExportExcel.FlatAppearance.BorderColor = UiTheme.Border;
             this.btnExportExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExportExcel.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnExportExcel.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.btnExportExcel.ForeColor = UiTheme.TextMain;
             this.btnExportExcel.Location = new System.Drawing.Point(796, 4);
             this.btnExportExcel.Name = "btnExportExcel";
             this.btnExportExcel.Size = new System.Drawing.Size(140, 36);
@@ -124,11 +126,11 @@ namespace Cinema.WinForms.Features.Reports
             // btnExportPdf
             // 
             this.btnExportPdf.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnExportPdf.BackColor = System.Drawing.Color.White;
-            this.btnExportPdf.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(226, 232, 240);
+            this.btnExportPdf.BackColor = UiTheme.CardBg;
+            this.btnExportPdf.FlatAppearance.BorderColor = UiTheme.Border;
             this.btnExportPdf.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExportPdf.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnExportPdf.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.btnExportPdf.ForeColor = UiTheme.TextMain;
             this.btnExportPdf.Location = new System.Drawing.Point(944, 4);
             this.btnExportPdf.Name = "btnExportPdf";
             this.btnExportPdf.Size = new System.Drawing.Size(140, 36);
@@ -157,9 +159,9 @@ namespace Cinema.WinForms.Features.Reports
             // 
             // KPI cards
             // 
-            this.SetupKpi(this.cardKpi1, this.accentKpi1, this.lblKpi1Title, this.lblKpi1Value, this.lblKpi1Desc, "Doanh thu h\u00F4m nay", "14.850.000 \u0111", "+12% so v\u1EDBi h\u00F4m qua", System.Drawing.Color.FromArgb(37, 99, 235), System.Drawing.Color.FromArgb(22, 163, 74));
-            this.SetupKpi(this.cardKpi2, this.accentKpi2, this.lblKpi2Title, this.lblKpi2Value, this.lblKpi2Desc, "S\u1ED1 v\u00E9 \u0111\u00E3 b\u00E1n", "312 v\u00E9", "Bao g\u1ED3m 18 v\u00E9 online", System.Drawing.Color.FromArgb(22, 163, 74), System.Drawing.Color.FromArgb(100, 116, 139));
-            this.SetupKpi(this.cardKpi3, this.accentKpi3, this.lblKpi3Title, this.lblKpi3Value, this.lblKpi3Desc, "T\u1EF7 l\u1EC7 l\u1EA5p \u0111\u1EA7y gh\u1EBF", "64.5%", "312 kh\u00E1ch / 480 gh\u1EBF kh\u1EA3 d\u1EE5ng", System.Drawing.Color.FromArgb(217, 119, 6), System.Drawing.Color.FromArgb(100, 116, 139));
+            this.SetupKpi(this.cardKpi1, this.accentKpi1, this.lblKpi1Title, this.lblKpi1Value, this.lblKpi1Desc, "Doanh thu h\u00F4m nay", "14.850.000 \u0111", "+12% so v\u1EDBi h\u00F4m qua", UiTheme.Primary, UiTheme.Success);
+            this.SetupKpi(this.cardKpi2, this.accentKpi2, this.lblKpi2Title, this.lblKpi2Value, this.lblKpi2Desc, "S\u1ED1 v\u00E9 \u0111\u00E3 b\u00E1n", "312 v\u00E9", "Bao g\u1ED3m 18 v\u00E9 online", UiTheme.Success, UiTheme.TextMuted);
+            this.SetupKpi(this.cardKpi3, this.accentKpi3, this.lblKpi3Title, this.lblKpi3Value, this.lblKpi3Desc, "T\u1EF7 l\u1EC7 l\u1EA5p \u0111\u1EA7y gh\u1EBF", "64.5%", "312 kh\u00E1ch / 480 gh\u1EBF kh\u1EA3 d\u1EE5ng", UiTheme.Amber, UiTheme.TextMuted);
             this.SetupKpi4();
             // 
             // tlpBottom
@@ -180,8 +182,8 @@ namespace Cinema.WinForms.Features.Reports
             // 
             // chartCard
             // 
-            this.chartCard.BackColor = System.Drawing.Color.White;
-            this.chartCard.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.chartCard.BackColor = UiTheme.CardBg;
+            this.chartCard.Paint += UiTheme.DrawCardBorder;
             this.chartCard.Controls.Add(this.chartArea);
             this.chartCard.Controls.Add(this.lblChartTitle);
             this.chartCard.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -190,14 +192,14 @@ namespace Cinema.WinForms.Features.Reports
             this.chartCard.TabIndex = 0;
             this.lblChartTitle.AutoSize = true;
             this.lblChartTitle.Font = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Bold);
-            this.lblChartTitle.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblChartTitle.ForeColor = UiTheme.TextMain;
             this.lblChartTitle.Location = new System.Drawing.Point(14, 12);
             this.lblChartTitle.Name = "lblChartTitle";
             this.lblChartTitle.Text = "Bi\u1EC3u \u0111\u1ED3 doanh thu 7 ng\u00E0y";
             this.chartArea.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.chartArea.BackColor = System.Drawing.Color.White;
+            this.chartArea.BackColor = UiTheme.CardBg;
             this.chartArea.Controls.Add(this.lblVal7); this.chartArea.Controls.Add(this.lblVal6); this.chartArea.Controls.Add(this.lblVal5); this.chartArea.Controls.Add(this.lblVal4); this.chartArea.Controls.Add(this.lblVal3); this.chartArea.Controls.Add(this.lblVal2); this.chartArea.Controls.Add(this.lblVal1);
             this.chartArea.Controls.Add(this.lblDay7); this.chartArea.Controls.Add(this.lblDay6); this.chartArea.Controls.Add(this.lblDay5); this.chartArea.Controls.Add(this.lblDay4); this.chartArea.Controls.Add(this.lblDay3); this.chartArea.Controls.Add(this.lblDay2); this.chartArea.Controls.Add(this.lblDay1);
             this.chartArea.Controls.Add(this.bar7); this.chartArea.Controls.Add(this.bar6); this.chartArea.Controls.Add(this.bar5); this.chartArea.Controls.Add(this.bar4); this.chartArea.Controls.Add(this.bar3); this.chartArea.Controls.Add(this.bar2); this.chartArea.Controls.Add(this.bar1);
@@ -211,8 +213,8 @@ namespace Cinema.WinForms.Features.Reports
             // 
             // topCard
             // 
-            this.topCard.BackColor = System.Drawing.Color.White;
-            this.topCard.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.topCard.BackColor = UiTheme.CardBg;
+            this.topCard.Paint += UiTheme.DrawCardBorder;
             this.topCard.Controls.Add(this.track4); this.topCard.Controls.Add(this.lblPct4); this.topCard.Controls.Add(this.lblMovie4);
             this.topCard.Controls.Add(this.track3); this.topCard.Controls.Add(this.lblPct3); this.topCard.Controls.Add(this.lblMovie3);
             this.topCard.Controls.Add(this.track2); this.topCard.Controls.Add(this.lblPct2); this.topCard.Controls.Add(this.lblMovie2);
@@ -224,13 +226,13 @@ namespace Cinema.WinForms.Features.Reports
             this.topCard.TabIndex = 1;
             this.lblTopTitle.AutoSize = true;
             this.lblTopTitle.Font = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Bold);
-            this.lblTopTitle.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblTopTitle.ForeColor = UiTheme.TextMain;
             this.lblTopTitle.Location = new System.Drawing.Point(14, 12);
             this.lblTopTitle.Name = "lblTopTitle";
             this.lblTopTitle.Text = "Top phim doanh thu cao nh\u1EA5t";
-            this.SetupTopRow(this.lblMovie1, this.lblPct1, this.track1, this.fill1, 60, "Anh Trai V\u01B0\u1EE3t Ng\u00E0n S\u00F3ng Gi\u00F3", "45%", 45, System.Drawing.Color.FromArgb(37, 99, 235));
-            this.SetupTopRow(this.lblMovie2, this.lblPct2, this.track2, this.fill2, 125, "Dune: Part Two", "30%", 30, System.Drawing.Color.FromArgb(217, 119, 6));
-            this.SetupTopRow(this.lblMovie3, this.lblPct3, this.track3, this.fill3, 190, "K\u1EBB Tr\u1ED9m M\u1EB7t Tr\u0103ng 4", "15%", 15, System.Drawing.Color.FromArgb(22, 163, 74));
+            this.SetupTopRow(this.lblMovie1, this.lblPct1, this.track1, this.fill1, 60, "Anh Trai V\u01B0\u1EE3t Ng\u00E0n S\u00F3ng Gi\u00F3", "45%", 45, UiTheme.Primary);
+            this.SetupTopRow(this.lblMovie2, this.lblPct2, this.track2, this.fill2, 125, "Dune: Part Two", "30%", 30, UiTheme.Amber);
+            this.SetupTopRow(this.lblMovie3, this.lblPct3, this.track3, this.fill3, 190, "K\u1EBB Tr\u1ED9m M\u1EB7t Tr\u0103ng 4", "15%", 15, UiTheme.Success);
             this.SetupTopRow(this.lblMovie4, this.lblPct4, this.track4, this.fill4, 255, "Kh\u00E1c", "10%", 10, System.Drawing.Color.FromArgb(148, 163, 184));
             // 
             this.pnlHeader.ResumeLayout(false);
@@ -247,47 +249,47 @@ namespace Cinema.WinForms.Features.Reports
 
         private void SetupKpi(System.Windows.Forms.Panel card, System.Windows.Forms.Panel accent, System.Windows.Forms.Label title, System.Windows.Forms.Label value, System.Windows.Forms.Label desc, string t, string v, string d, System.Drawing.Color accentColor, System.Drawing.Color descColor)
         {
-            card.BackColor = System.Drawing.Color.White; card.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle; card.Dock = System.Windows.Forms.DockStyle.Fill; card.Margin = new System.Windows.Forms.Padding(0, 0, 12, 0);
+            card.BackColor = UiTheme.CardBg; card.Paint += UiTheme.DrawCardBorder; card.Dock = System.Windows.Forms.DockStyle.Fill; card.Margin = new System.Windows.Forms.Padding(0, 0, 12, 0);
             accent.BackColor = accentColor; accent.Dock = System.Windows.Forms.DockStyle.Left; accent.Width = 4;
-            title.Font = new System.Drawing.Font("Segoe UI", 8.5F); title.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139); title.Location = new System.Drawing.Point(14, 12); title.AutoSize = true; title.Text = t;
-            value.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold); value.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42); value.Location = new System.Drawing.Point(12, 40); value.AutoSize = true; value.Text = v;
+            title.Font = new System.Drawing.Font("Segoe UI", 8.5F); title.ForeColor = UiTheme.TextMuted; title.Location = new System.Drawing.Point(14, 12); title.AutoSize = true; title.Text = t;
+            value.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold); value.ForeColor = UiTheme.TextMain; value.Location = new System.Drawing.Point(12, 40); value.AutoSize = true; value.Text = v;
             desc.Font = new System.Drawing.Font("Segoe UI", 8.5F); desc.ForeColor = descColor; desc.Location = new System.Drawing.Point(14, 82); desc.AutoSize = true; desc.Text = d;
             card.Controls.Add(desc); card.Controls.Add(value); card.Controls.Add(title); card.Controls.Add(accent);
         }
 
         private void SetupKpi4()
         {
-            this.cardKpi4.BackColor = System.Drawing.Color.White; this.cardKpi4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle; this.cardKpi4.Dock = System.Windows.Forms.DockStyle.Fill; this.cardKpi4.Margin = new System.Windows.Forms.Padding(0);
-            this.accentKpi4.BackColor = System.Drawing.Color.FromArgb(220, 38, 38); this.accentKpi4.Dock = System.Windows.Forms.DockStyle.Left; this.accentKpi4.Width = 4;
-            this.lblKpi4Title.Font = new System.Drawing.Font("Segoe UI", 8.5F); this.lblKpi4Title.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139); this.lblKpi4Title.Location = new System.Drawing.Point(14, 12); this.lblKpi4Title.AutoSize = true; this.lblKpi4Title.Text = "Y\u00EAu c\u1EA7u ho\u00E0n v\u00E9";
-            this.lblKpi4Value.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold); this.lblKpi4Value.ForeColor = System.Drawing.Color.FromArgb(220, 38, 38); this.lblKpi4Value.Location = new System.Drawing.Point(12, 40); this.lblKpi4Value.AutoSize = true; this.lblKpi4Value.Text = "2 ch\u1EDD duy\u1EC7t";
-            this.lnkKpi4Desc.AutoSize = true; this.lnkKpi4Desc.Font = new System.Drawing.Font("Segoe UI", 8.5F); this.lnkKpi4Desc.LinkColor = System.Drawing.Color.FromArgb(37, 99, 235); this.lnkKpi4Desc.ActiveLinkColor = System.Drawing.Color.FromArgb(37, 99, 235); this.lnkKpi4Desc.Location = new System.Drawing.Point(14, 82); this.lnkKpi4Desc.Text = "M\u1EDF c\u1EEDa s\u1ED5 duy\u1EC7t ngo\u1EA1i l\u1EC7 \u2192"; this.lnkKpi4Desc.TabStop = true;
+            this.cardKpi4.BackColor = UiTheme.CardBg; this.cardKpi4.Paint += UiTheme.DrawCardBorder; this.cardKpi4.Dock = System.Windows.Forms.DockStyle.Fill; this.cardKpi4.Margin = new System.Windows.Forms.Padding(0);
+            this.accentKpi4.BackColor = UiTheme.Danger; this.accentKpi4.Dock = System.Windows.Forms.DockStyle.Left; this.accentKpi4.Width = 4;
+            this.lblKpi4Title.Font = new System.Drawing.Font("Segoe UI", 8.5F); this.lblKpi4Title.ForeColor = UiTheme.TextMuted; this.lblKpi4Title.Location = new System.Drawing.Point(14, 12); this.lblKpi4Title.AutoSize = true; this.lblKpi4Title.Text = "Y\u00EAu c\u1EA7u ho\u00E0n v\u00E9";
+            this.lblKpi4Value.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold); this.lblKpi4Value.ForeColor = UiTheme.Danger; this.lblKpi4Value.Location = new System.Drawing.Point(12, 40); this.lblKpi4Value.AutoSize = true; this.lblKpi4Value.Text = "2 ch\u1EDD duy\u1EC7t";
+            this.lnkKpi4Desc.AutoSize = true; this.lnkKpi4Desc.Font = new System.Drawing.Font("Segoe UI", 8.5F); this.lnkKpi4Desc.LinkColor = UiTheme.Primary; this.lnkKpi4Desc.ActiveLinkColor = UiTheme.Primary; this.lnkKpi4Desc.Location = new System.Drawing.Point(14, 82); this.lnkKpi4Desc.Text = "M\u1EDF c\u1EEDa s\u1ED5 duy\u1EC7t ngo\u1EA1i l\u1EC7 \u2192"; this.lnkKpi4Desc.TabStop = true;
             this.cardKpi4.Controls.Add(this.lnkKpi4Desc); this.cardKpi4.Controls.Add(this.lblKpi4Value); this.cardKpi4.Controls.Add(this.lblKpi4Title); this.cardKpi4.Controls.Add(this.accentKpi4);
         }
 
         private void SetupBar(System.Windows.Forms.Panel bar, int x, int y, int h, bool today)
         {
-            bar.BackColor = today ? System.Drawing.Color.FromArgb(37, 99, 235) : System.Drawing.Color.FromArgb(148, 163, 184);
+            bar.BackColor = today ? UiTheme.Primary : System.Drawing.Color.FromArgb(148, 163, 184);
             bar.Location = new System.Drawing.Point(x, y); bar.Size = new System.Drawing.Size(44, h); bar.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
         }
 
         private void SetupBarValue(System.Windows.Forms.Label lbl, string text, int x, int y)
         {
-            lbl.AutoSize = true; lbl.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold); lbl.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139); lbl.Location = new System.Drawing.Point(x, y); lbl.Text = text; lbl.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            lbl.AutoSize = true; lbl.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold); lbl.ForeColor = UiTheme.TextMuted; lbl.Location = new System.Drawing.Point(x, y); lbl.Text = text; lbl.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
         }
 
         private void SetupDay(System.Windows.Forms.Label lbl, string text, int x)
         {
-            lbl.AutoSize = true; lbl.Font = new System.Drawing.Font("Segoe UI", 8.5F); lbl.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139); lbl.Location = new System.Drawing.Point(x, 196); lbl.Text = text; lbl.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            lbl.AutoSize = true; lbl.Font = new System.Drawing.Font("Segoe UI", 8.5F); lbl.ForeColor = UiTheme.TextMuted; lbl.Location = new System.Drawing.Point(x, 196); lbl.Text = text; lbl.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
         }
 
         private void SetupTopRow(System.Windows.Forms.Label name, System.Windows.Forms.Label pct, System.Windows.Forms.Panel track, System.Windows.Forms.Panel fill, int y, string movie, string percent, int fillPercent, System.Drawing.Color color)
         {
-            name.AutoSize = true; name.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold); name.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42); name.Location = new System.Drawing.Point(14, y); name.Text = movie;
+            name.AutoSize = true; name.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold); name.ForeColor = UiTheme.TextMain; name.Location = new System.Drawing.Point(14, y); name.Text = movie;
             pct.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            pct.AutoSize = true; pct.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold); pct.ForeColor = color; pct.Location = new System.Drawing.Point(360, y); pct.Text = percent;
+            pct.AutoSize = true; pct.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold); pct.ForeColor = UiTheme.TextMain; pct.Location = new System.Drawing.Point(360, y); pct.Text = percent;
             track.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
-            track.BackColor = System.Drawing.Color.FromArgb(226, 232, 240); track.Location = new System.Drawing.Point(14, y + 28); track.Size = new System.Drawing.Size(390, 10);
+            track.BackColor = UiTheme.Border; track.Location = new System.Drawing.Point(14, y + 28); track.Size = new System.Drawing.Size(390, 10);
             fill.BackColor = color; fill.Dock = System.Windows.Forms.DockStyle.Left; fill.Width = Math.Max(10, 390 * fillPercent / 100);
             track.Controls.Add(fill);
         }

@@ -1,7 +1,7 @@
 using System;
-using System.Drawing;
 using System.Windows.Forms;
 using Cinema.WinForms.Features.Pricing;
+using Cinema.WinForms.Controls;
 
 namespace Cinema.WinForms.Features.ShowtimeManagement
 {
@@ -15,12 +15,7 @@ namespace Cinema.WinForms.Features.ShowtimeManagement
 
         private void SetupRuntime()
         {
-            gridPrice.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(248, 250, 252);
-            gridPrice.ColumnHeadersDefaultCellStyle.ForeColor = Color.FromArgb(15, 23, 42);
-            gridPrice.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            gridPrice.DefaultCellStyle.SelectionBackColor = Color.FromArgb(219, 234, 254);
-            gridPrice.DefaultCellStyle.SelectionForeColor = Color.FromArgb(15, 23, 42);
-            gridPrice.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            UiTheme.StyleGrid(gridPrice);
 
             dtpDate.Value = new DateTime(2026, 11, 18);
             gridPrice.Rows.Add("SC-101", "Ph\u00F2ng 01", "Anh Trai V\u01B0\u1EE3t Ng\u00E0n S\u00F3ng Gi\u00F3", "09:00", "0 \u0111", "0 \u0111", "0 \u0111", "0 \u0111");

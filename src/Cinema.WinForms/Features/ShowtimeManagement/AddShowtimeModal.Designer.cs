@@ -1,3 +1,5 @@
+using Cinema.WinForms.Controls;
+
 namespace Cinema.WinForms.Features.ShowtimeManagement
 {
     partial class AddShowtimeModal
@@ -47,7 +49,7 @@ namespace Cinema.WinForms.Features.ShowtimeManagement
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.White;
+            this.BackColor = UiTheme.CardBg;
             this.ClientSize = new System.Drawing.Size(464, 381);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnCancel);
@@ -74,7 +76,7 @@ namespace Cinema.WinForms.Features.ShowtimeManagement
             // 
             this.lblMovie.AutoSize = true;
             this.lblMovie.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
-            this.lblMovie.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblMovie.ForeColor = UiTheme.TextMain;
             this.lblMovie.Location = new System.Drawing.Point(20, 18);
             this.lblMovie.Name = "lblMovie";
             this.lblMovie.Text = "1. Ch\u1ECDn phim (\u0110ang chi\u1EBFu)";
@@ -91,7 +93,7 @@ namespace Cinema.WinForms.Features.ShowtimeManagement
             // 
             this.lblRoom.AutoSize = true;
             this.lblRoom.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
-            this.lblRoom.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblRoom.ForeColor = UiTheme.TextMain;
             this.lblRoom.Location = new System.Drawing.Point(20, 74);
             this.lblRoom.Name = "lblRoom";
             this.lblRoom.Text = "2. Ch\u1ECDn ph\u00F2ng chi\u1EBFu";
@@ -108,7 +110,7 @@ namespace Cinema.WinForms.Features.ShowtimeManagement
             // 
             this.lblDate.AutoSize = true;
             this.lblDate.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
-            this.lblDate.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblDate.ForeColor = UiTheme.TextMain;
             this.lblDate.Location = new System.Drawing.Point(20, 130);
             this.lblDate.Name = "lblDate";
             this.lblDate.Text = "3. Ng\u00E0y chi\u1EBFu";
@@ -125,7 +127,7 @@ namespace Cinema.WinForms.Features.ShowtimeManagement
             // 
             this.lblStart.AutoSize = true;
             this.lblStart.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
-            this.lblStart.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblStart.ForeColor = UiTheme.TextMain;
             this.lblStart.Location = new System.Drawing.Point(240, 130);
             this.lblStart.Name = "lblStart";
             this.lblStart.Text = "4. Gi\u1EDD b\u1EAFt \u0111\u1EA7u";
@@ -144,14 +146,14 @@ namespace Cinema.WinForms.Features.ShowtimeManagement
             // 
             this.lblEnd.AutoSize = true;
             this.lblEnd.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
-            this.lblEnd.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblEnd.ForeColor = UiTheme.TextMain;
             this.lblEnd.Location = new System.Drawing.Point(20, 186);
             this.lblEnd.Name = "lblEnd";
             this.lblEnd.Text = "5. Gi\u1EDD k\u1EBFt th\u00FAc (t\u1EF1 \u0111\u1ED9ng +20p d\u1ECDn r\u1EA1p)";
             // 
             // txtEndTime
             // 
-            this.txtEndTime.BackColor = System.Drawing.Color.FromArgb(241, 245, 249);
+            this.txtEndTime.BackColor = UiTheme.MainBg;
             this.txtEndTime.Location = new System.Drawing.Point(20, 208);
             this.txtEndTime.Name = "txtEndTime";
             this.txtEndTime.ReadOnly = true;
@@ -161,8 +163,8 @@ namespace Cinema.WinForms.Features.ShowtimeManagement
             // 
             // pnlNote
             // 
-            this.pnlNote.BackColor = System.Drawing.Color.FromArgb(241, 245, 249);
-            this.pnlNote.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlNote.BackColor = UiTheme.MainBg;
+            this.pnlNote.Paint += UiTheme.DrawCardBorder;
             this.pnlNote.Controls.Add(this.lblNote);
             this.pnlNote.Location = new System.Drawing.Point(20, 248);
             this.pnlNote.Name = "pnlNote";
@@ -173,7 +175,7 @@ namespace Cinema.WinForms.Features.ShowtimeManagement
             // 
             this.lblNote.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblNote.Font = new System.Drawing.Font("Segoe UI", 8.5F);
-            this.lblNote.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139);
+            this.lblNote.ForeColor = UiTheme.TextMuted;
             this.lblNote.Location = new System.Drawing.Point(0, 0);
             this.lblNote.Name = "lblNote";
             this.lblNote.Padding = new System.Windows.Forms.Padding(8);
@@ -182,11 +184,11 @@ namespace Cinema.WinForms.Features.ShowtimeManagement
             // 
             // btnCancel
             // 
-            this.btnCancel.BackColor = System.Drawing.Color.White;
-            this.btnCancel.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(226, 232, 240);
+            this.btnCancel.BackColor = UiTheme.CardBg;
+            this.btnCancel.FlatAppearance.BorderColor = UiTheme.Border;
             this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCancel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnCancel.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139);
+            this.btnCancel.ForeColor = UiTheme.TextMuted;
             this.btnCancel.Location = new System.Drawing.Point(210, 324);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(100, 36);
@@ -196,11 +198,11 @@ namespace Cinema.WinForms.Features.ShowtimeManagement
             // 
             // btnSave
             // 
-            this.btnSave.BackColor = System.Drawing.Color.FromArgb(37, 99, 235);
+            this.btnSave.BackColor = UiTheme.Primary;
             this.btnSave.FlatAppearance.BorderSize = 0;
             this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSave.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnSave.ForeColor = System.Drawing.Color.White;
+            this.btnSave.ForeColor = UiTheme.CardBg;
             this.btnSave.Location = new System.Drawing.Point(320, 324);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(120, 36);

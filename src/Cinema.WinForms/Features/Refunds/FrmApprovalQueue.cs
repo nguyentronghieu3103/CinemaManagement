@@ -1,6 +1,6 @@
 using System;
-using System.Drawing;
 using System.Windows.Forms;
+using Cinema.WinForms.Controls;
 
 namespace Cinema.WinForms.Features.Refunds
 {
@@ -14,12 +14,7 @@ namespace Cinema.WinForms.Features.Refunds
 
         private void SetupRuntime()
         {
-            gridQueue.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(248, 250, 252);
-            gridQueue.ColumnHeadersDefaultCellStyle.ForeColor = Color.FromArgb(15, 23, 42);
-            gridQueue.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            gridQueue.DefaultCellStyle.SelectionBackColor = Color.FromArgb(219, 234, 254);
-            gridQueue.DefaultCellStyle.SelectionForeColor = Color.FromArgb(15, 23, 42);
-            gridQueue.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            UiTheme.StyleGrid(gridQueue);
 
             gridQueue.Rows.Add("VE-10234", "Anh Trai V\u01B0\u1EE3t Ng\u00E0n S\u00F3ng Gi\u00F3", "A5, A6", "180.000 \u0111", "Kh\u00E1ch b\u1EADn vi\u1EC7c \u0111\u1ED9t xu\u1EA5t");
             gridQueue.Rows.Add("VE-10251", "Mai 2", "C3", "95.000 \u0111", "\u0110\u1EB7t nh\u1EA7m su\u1EA5t chi\u1EBFu");

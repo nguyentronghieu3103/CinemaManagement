@@ -1,3 +1,5 @@
+using Cinema.WinForms.Controls;
+
 namespace Cinema.WinForms.Features.Members
 {
     partial class UcCustomerLoyalty
@@ -50,7 +52,7 @@ namespace Cinema.WinForms.Features.Members
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(241, 245, 249);
+            this.BackColor = UiTheme.MainBg;
             this.Controls.Add(this.grid);
             this.Controls.Add(this.pnlHeader);
             // Higher index docks first; Fill (grid) must be index 0 (dock last)
@@ -75,7 +77,7 @@ namespace Cinema.WinForms.Features.Members
             // 
             this.lblTitle.AutoSize = true;
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
-            this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblTitle.ForeColor = UiTheme.TextMain;
             this.lblTitle.Location = new System.Drawing.Point(0, 0);
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Text = "Qu\u1EA3n l\u00FD Th\u00E0nh vi\u00EAn && Kh\u00E1ch h\u00E0ng";
@@ -84,7 +86,7 @@ namespace Cinema.WinForms.Features.Members
             // 
             this.lblSubtitle.AutoSize = true;
             this.lblSubtitle.Font = new System.Drawing.Font("Segoe UI", 8.5F);
-            this.lblSubtitle.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139);
+            this.lblSubtitle.ForeColor = UiTheme.TextMuted;
             this.lblSubtitle.Location = new System.Drawing.Point(2, 34);
             this.lblSubtitle.Name = "lblSubtitle";
             this.lblSubtitle.Text = "X\u00E9t n\u00E2ng h\u1EA1ng t\u1EF1 \u0111\u1ED9ng theo t\u1ED5ng chi ti\u00EAu. \u0110\u1ED5i v\u00E9 xem phim b\u1EB1ng \u0111i\u1EC3m c\u00F2n l\u1EA1i.";
@@ -101,11 +103,11 @@ namespace Cinema.WinForms.Features.Members
             // btnAdd
             // 
             this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAdd.BackColor = System.Drawing.Color.FromArgb(37, 99, 235);
+            this.btnAdd.BackColor = UiTheme.Primary;
             this.btnAdd.FlatAppearance.BorderSize = 0;
             this.btnAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAdd.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnAdd.ForeColor = System.Drawing.Color.White;
+            this.btnAdd.ForeColor = UiTheme.CardBg;
             this.btnAdd.Location = new System.Drawing.Point(920, 54);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(180, 36);
@@ -118,7 +120,7 @@ namespace Cinema.WinForms.Features.Members
             this.grid.AllowUserToAddRows = false;
             this.grid.AllowUserToResizeRows = false;
             this.grid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.grid.BackgroundColor = System.Drawing.Color.White;
+            this.grid.BackgroundColor = UiTheme.CardBg;
             this.grid.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.grid.ColumnHeadersHeight = 42;
             this.grid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
@@ -126,7 +128,7 @@ namespace Cinema.WinForms.Features.Members
             this.colCode, this.colName, this.colPhone, this.colTier, this.colSpend, this.colP1, this.colP2, this.colP3, this.colView});
             this.grid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grid.EnableHeadersVisualStyles = false;
-            this.grid.GridColor = System.Drawing.Color.FromArgb(226, 232, 240);
+            this.grid.GridColor = UiTheme.Border;
             this.grid.Location = new System.Drawing.Point(0, 96);
             this.grid.MultiSelect = false;
             this.grid.Name = "grid";

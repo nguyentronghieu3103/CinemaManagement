@@ -1,3 +1,5 @@
+using Cinema.WinForms.Controls;
+
 namespace Cinema.WinForms.Features.Members
 {
     partial class RedeemTicketModal
@@ -34,7 +36,7 @@ namespace Cinema.WinForms.Features.Members
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.White;
+            this.BackColor = UiTheme.CardBg;
             this.ClientSize = new System.Drawing.Size(444, 321);
             this.Controls.Add(this.btnOk);
             this.Controls.Add(this.lblPrice);
@@ -56,7 +58,7 @@ namespace Cinema.WinForms.Features.Members
             // 
             this.lblMovie.AutoSize = true;
             this.lblMovie.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.lblMovie.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblMovie.ForeColor = UiTheme.TextMain;
             this.lblMovie.Location = new System.Drawing.Point(20, 20);
             this.lblMovie.Name = "lblMovie";
             this.lblMovie.Text = "Chọn Phim";
@@ -73,7 +75,7 @@ namespace Cinema.WinForms.Features.Members
             // 
             this.lblRoom.AutoSize = true;
             this.lblRoom.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.lblRoom.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblRoom.ForeColor = UiTheme.TextMain;
             this.lblRoom.Location = new System.Drawing.Point(20, 82);
             this.lblRoom.Name = "lblRoom";
             this.lblRoom.Text = "Chọn Phòng";
@@ -90,7 +92,7 @@ namespace Cinema.WinForms.Features.Members
             // 
             this.lblSeat.AutoSize = true;
             this.lblSeat.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.lblSeat.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblSeat.ForeColor = UiTheme.TextMain;
             this.lblSeat.Location = new System.Drawing.Point(20, 144);
             this.lblSeat.Name = "lblSeat";
             this.lblSeat.Text = "Loại ghế";
@@ -107,18 +109,18 @@ namespace Cinema.WinForms.Features.Members
             // 
             this.lblPrice.AutoSize = true;
             this.lblPrice.Font = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Bold);
-            this.lblPrice.ForeColor = System.Drawing.Color.FromArgb(22, 163, 74);
+            this.lblPrice.ForeColor = UiTheme.TextMain;
             this.lblPrice.Location = new System.Drawing.Point(20, 215);
             this.lblPrice.Name = "lblPrice";
             this.lblPrice.Text = "Giá thanh toán: 0 VNĐ";
             // 
             // btnOk
             // 
-            this.btnOk.BackColor = System.Drawing.Color.FromArgb(37, 99, 235);
+            this.btnOk.BackColor = UiTheme.Primary;
             this.btnOk.FlatAppearance.BorderSize = 0;
             this.btnOk.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnOk.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnOk.ForeColor = System.Drawing.Color.White;
+            this.btnOk.ForeColor = UiTheme.CardBg;
             this.btnOk.Location = new System.Drawing.Point(290, 255);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(130, 36);

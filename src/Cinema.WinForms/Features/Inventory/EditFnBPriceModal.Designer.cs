@@ -1,3 +1,5 @@
+using Cinema.WinForms.Controls;
+
 namespace Cinema.WinForms.Features.Inventory
 {
     partial class EditFnBPriceModal
@@ -36,7 +38,7 @@ namespace Cinema.WinForms.Features.Inventory
             // 
             lblBasePrice.AutoSize = true;
             lblBasePrice.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblBasePrice.ForeColor = Color.FromArgb(15, 23, 42);
+            lblBasePrice.ForeColor = UiTheme.TextMain;
             lblBasePrice.Location = new Point(24, 24);
             lblBasePrice.Name = "lblBasePrice";
             lblBasePrice.Size = new Size(124, 23);
@@ -57,7 +59,7 @@ namespace Cinema.WinForms.Features.Inventory
             // 
             lblDiscount.AutoSize = true;
             lblDiscount.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblDiscount.ForeColor = Color.FromArgb(15, 23, 42);
+            lblDiscount.ForeColor = UiTheme.TextMain;
             lblDiscount.Location = new Point(24, 86);
             lblDiscount.Name = "lblDiscount";
             lblDiscount.Size = new Size(248, 23);
@@ -79,7 +81,7 @@ namespace Cinema.WinForms.Features.Inventory
             // 
             lblPreview.AutoSize = true;
             lblPreview.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            lblPreview.ForeColor = Color.FromArgb(37, 99, 235);
+            lblPreview.ForeColor = UiTheme.Primary;
             lblPreview.Location = new Point(24, 150);
             lblPreview.Name = "lblPreview";
             lblPreview.Size = new Size(301, 25);
@@ -91,7 +93,7 @@ namespace Cinema.WinForms.Features.Inventory
             chkPos.AutoSize = true;
             chkPos.Checked = true;
             chkPos.CheckState = CheckState.Checked;
-            chkPos.ForeColor = Color.FromArgb(15, 23, 42);
+            chkPos.ForeColor = UiTheme.TextMain;
             chkPos.Location = new Point(24, 185);
             chkPos.Name = "chkPos";
             chkPos.Size = new Size(141, 25);
@@ -100,11 +102,11 @@ namespace Cinema.WinForms.Features.Inventory
             // 
             // btnCancel
             // 
-            btnCancel.BackColor = Color.White;
-            btnCancel.FlatAppearance.BorderColor = Color.FromArgb(226, 232, 240);
+            btnCancel.BackColor = UiTheme.CardBg;
+            btnCancel.FlatAppearance.BorderColor = UiTheme.Border;
             btnCancel.FlatStyle = FlatStyle.Flat;
             btnCancel.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnCancel.ForeColor = Color.FromArgb(100, 116, 139);
+            btnCancel.ForeColor = UiTheme.TextMuted;
             btnCancel.Location = new Point(228, 240);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(90, 36);
@@ -114,11 +116,11 @@ namespace Cinema.WinForms.Features.Inventory
             // 
             // btnSave
             // 
-            btnSave.BackColor = Color.FromArgb(37, 99, 235);
+            btnSave.BackColor = UiTheme.Primary;
             btnSave.FlatAppearance.BorderSize = 0;
             btnSave.FlatStyle = FlatStyle.Flat;
             btnSave.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnSave.ForeColor = Color.White;
+            btnSave.ForeColor = UiTheme.CardBg;
             btnSave.Location = new Point(324, 240);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(90, 36);
@@ -130,7 +132,7 @@ namespace Cinema.WinForms.Features.Inventory
             // 
             AutoScaleDimensions = new SizeF(9F, 21F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.White;
+            BackColor = UiTheme.CardBg;
             ClientSize = new Size(444, 301);
             Controls.Add(btnSave);
             Controls.Add(btnCancel);

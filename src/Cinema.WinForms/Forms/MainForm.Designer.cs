@@ -1,402 +1,610 @@
-namespace Cinema.WinForms.Forms
+using Cinema.WinForms.Features.Members;
+using Cinema.WinForms.Features.Orders;
+using Cinema.WinForms.Features.Refunds;
+using Cinema.WinForms.Features.TicketCheckIn;
+using Cinema.WinForms.Features.ShiftManagement;
+using Cinema.WinForms.Features.TicketSales;
+
+namespace Cinema.WinForms.Forms;
+
+partial class MainForm
 {
-    partial class MainForm
+    private System.ComponentModel.IContainer components;
+
+    protected override void Dispose(bool disposing)
     {
-        private System.ComponentModel.IContainer components = null;
-        private System.Windows.Forms.Panel sidebar;
-        private System.Windows.Forms.Panel brand;
-        private System.Windows.Forms.Label logo;
-        private System.Windows.Forms.Label roleTop;
-        private System.Windows.Forms.Panel menuPanel;
-        private System.Windows.Forms.Button btnMenu1;
-        private System.Windows.Forms.Button btnMenu2;
-        private System.Windows.Forms.Button btnMenu3;
-        private System.Windows.Forms.Button btnMenu4;
-        private System.Windows.Forms.Button btnMenu5;
-        private System.Windows.Forms.Button btnMenu6;
-        private System.Windows.Forms.Panel bottomBox;
-        private System.Windows.Forms.Label lblBottomTitle;
-        private System.Windows.Forms.Label lblBottomStatus;
-        private System.Windows.Forms.Panel activeIndicator;
-        private System.Windows.Forms.Panel topbar;
-        private System.Windows.Forms.Label lblTitle;
-        private System.Windows.Forms.Label lblBell;
-        private System.Windows.Forms.Label lblBadge;
-        // btnEmergency removed - integrated into bell click (issue 2)
-        private System.Windows.Forms.Panel contentHost;
-        private System.Windows.Forms.StatusStrip statusStrip;
-        private System.Windows.Forms.ToolStripStatusLabel lblStatusLeft;
-        private System.Windows.Forms.ToolStripStatusLabel lblStatusTime;
-
-        protected override void Dispose(bool disposing)
+        if (disposing)
         {
-            if (disposing && (components != null)) components.Dispose();
-            base.Dispose(disposing);
+            picBrand?.Image?.Dispose();
+            components?.Dispose();
         }
 
-        private void InitializeComponent()
-        {
-            this.sidebar = new System.Windows.Forms.Panel();
-            this.brand = new System.Windows.Forms.Panel();
-            this.logo = new System.Windows.Forms.Label();
-            this.roleTop = new System.Windows.Forms.Label();
-            this.menuPanel = new System.Windows.Forms.Panel();
-            this.btnMenu1 = new System.Windows.Forms.Button();
-            this.btnMenu2 = new System.Windows.Forms.Button();
-            this.btnMenu3 = new System.Windows.Forms.Button();
-            this.btnMenu4 = new System.Windows.Forms.Button();
-            this.btnMenu5 = new System.Windows.Forms.Button();
-            this.btnMenu6 = new System.Windows.Forms.Button();
-            this.bottomBox = new System.Windows.Forms.Panel();
-            this.lblBottomTitle = new System.Windows.Forms.Label();
-            this.lblBottomStatus = new System.Windows.Forms.Label();
-            this.activeIndicator = new System.Windows.Forms.Panel();
-            this.topbar = new System.Windows.Forms.Panel();
-            this.lblTitle = new System.Windows.Forms.Label();
-            this.lblBell = new System.Windows.Forms.Label();
-            this.lblBadge = new System.Windows.Forms.Label();
-            // btnEmergency removed
-            this.contentHost = new System.Windows.Forms.Panel();
-            this.statusStrip = new System.Windows.Forms.StatusStrip();
-            this.lblStatusLeft = new System.Windows.Forms.ToolStripStatusLabel();
-            this.lblStatusTime = new System.Windows.Forms.ToolStripStatusLabel();
-            this.sidebar.SuspendLayout();
-            this.brand.SuspendLayout();
-            this.menuPanel.SuspendLayout();
-            this.bottomBox.SuspendLayout();
-            this.topbar.SuspendLayout();
-            this.statusStrip.SuspendLayout();
-            this.SuspendLayout();
-            // 
-            // sidebar
-            // 
-            this.sidebar.BackColor = System.Drawing.Color.FromArgb(30, 41, 59);
-            this.sidebar.Controls.Add(this.activeIndicator);
-            this.sidebar.Controls.Add(this.menuPanel);
-            this.sidebar.Controls.Add(this.bottomBox);
-            this.sidebar.Controls.Add(this.brand);
-            this.sidebar.Dock = System.Windows.Forms.DockStyle.Left;
-            this.sidebar.Location = new System.Drawing.Point(0, 0);
-            this.sidebar.Name = "sidebar";
-            this.sidebar.Size = new System.Drawing.Size(250, 820);
-            this.sidebar.TabIndex = 2;
-            // 
-            // brand
-            // 
-            this.brand.BackColor = System.Drawing.Color.FromArgb(30, 41, 59);
-            this.brand.Controls.Add(this.roleTop);
-            this.brand.Controls.Add(this.logo);
-            this.brand.Dock = System.Windows.Forms.DockStyle.Top;
-            this.brand.Location = new System.Drawing.Point(0, 0);
-            this.brand.Name = "brand";
-            this.brand.Size = new System.Drawing.Size(250, 86);
-            this.brand.TabIndex = 0;
-            // 
-            // logo
-            // 
-            this.logo.Dock = System.Windows.Forms.DockStyle.Top;
-            this.logo.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
-            this.logo.ForeColor = System.Drawing.Color.FromArgb(217, 119, 6);
-            this.logo.Location = new System.Drawing.Point(0, 0);
-            this.logo.Name = "logo";
-            this.logo.Size = new System.Drawing.Size(250, 50);
-            this.logo.TabIndex = 0;
-            this.logo.Text = "🎬  CINEMA MANAGER";
-            this.logo.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            // 
-            // roleTop
-            // 
-            this.roleTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.roleTop.Font = new System.Drawing.Font("Segoe UI", 8.5F);
-            this.roleTop.ForeColor = System.Drawing.Color.FromArgb(148, 163, 184);
-            this.roleTop.Location = new System.Drawing.Point(0, 50);
-            this.roleTop.Name = "roleTop";
-            this.roleTop.Size = new System.Drawing.Size(250, 24);
-            this.roleTop.TabIndex = 1;
-            this.roleTop.Text = "Hệ thống quản lý nội bộ";
-            this.roleTop.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
-            // menuPanel
-            // 
-            this.menuPanel.Controls.Add(this.btnMenu6);
-            this.menuPanel.Controls.Add(this.btnMenu5);
-            this.menuPanel.Controls.Add(this.btnMenu4);
-            this.menuPanel.Controls.Add(this.btnMenu3);
-            this.menuPanel.Controls.Add(this.btnMenu2);
-            this.menuPanel.Controls.Add(this.btnMenu1);
-            this.menuPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.menuPanel.Location = new System.Drawing.Point(0, 86);
-            this.menuPanel.Name = "menuPanel";
-            this.menuPanel.Padding = new System.Windows.Forms.Padding(0, 8, 0, 0);
-            this.menuPanel.Size = new System.Drawing.Size(250, 660);
-            this.menuPanel.TabIndex = 1;
-            // 
-            // btnMenu1
-            // 
-            this.btnMenu1.BackColor = System.Drawing.Color.FromArgb(30, 41, 59);
-            this.btnMenu1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnMenu1.FlatAppearance.BorderSize = 0;
-            this.btnMenu1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(39, 53, 73);
-            this.btnMenu1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMenu1.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.btnMenu1.ForeColor = System.Drawing.Color.FromArgb(203, 213, 225);
-            this.btnMenu1.Location = new System.Drawing.Point(0, 8);
-            this.btnMenu1.Name = "btnMenu1";
-            this.btnMenu1.Padding = new System.Windows.Forms.Padding(18, 0, 0, 0);
-            this.btnMenu1.Size = new System.Drawing.Size(250, 46);
-            this.btnMenu1.TabIndex = 0;
-            this.btnMenu1.Text = "  1. B\u00E1o c\u00E1o && Dashboard";
-            this.btnMenu1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnMenu1.UseVisualStyleBackColor = false;
-            // 
-            // btnMenu2
-            // 
-            this.btnMenu2.BackColor = System.Drawing.Color.FromArgb(30, 41, 59);
-            this.btnMenu2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnMenu2.FlatAppearance.BorderSize = 0;
-            this.btnMenu2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(39, 53, 73);
-            this.btnMenu2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMenu2.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.btnMenu2.ForeColor = System.Drawing.Color.FromArgb(203, 213, 225);
-            this.btnMenu2.Location = new System.Drawing.Point(0, 56);
-            this.btnMenu2.Name = "btnMenu2";
-            this.btnMenu2.Padding = new System.Windows.Forms.Padding(18, 0, 0, 0);
-            this.btnMenu2.Size = new System.Drawing.Size(250, 46);
-            this.btnMenu2.TabIndex = 1;
-            this.btnMenu2.Text = "  2. Phim && Ph\u00F2ng chi\u1EBFu";
-            this.btnMenu2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnMenu2.UseVisualStyleBackColor = false;
-            // 
-            // btnMenu3
-            // 
-            this.btnMenu3.BackColor = System.Drawing.Color.FromArgb(30, 41, 59);
-            this.btnMenu3.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnMenu3.FlatAppearance.BorderSize = 0;
-            this.btnMenu3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(39, 53, 73);
-            this.btnMenu3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMenu3.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.btnMenu3.ForeColor = System.Drawing.Color.FromArgb(203, 213, 225);
-            this.btnMenu3.Location = new System.Drawing.Point(0, 104);
-            this.btnMenu3.Name = "btnMenu3";
-            this.btnMenu3.Padding = new System.Windows.Forms.Padding(18, 0, 0, 0);
-            this.btnMenu3.Size = new System.Drawing.Size(250, 46);
-            this.btnMenu3.TabIndex = 2;
-            this.btnMenu3.Text = "  3. L\u1ECBch chi\u1EBFu && Gi\u00E1 v\u00E9";
-            this.btnMenu3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnMenu3.UseVisualStyleBackColor = false;
-            // 
-            // btnMenu4
-            // 
-            this.btnMenu4.BackColor = System.Drawing.Color.FromArgb(30, 41, 59);
-            this.btnMenu4.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnMenu4.FlatAppearance.BorderSize = 0;
-            this.btnMenu4.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(39, 53, 73);
-            this.btnMenu4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMenu4.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.btnMenu4.ForeColor = System.Drawing.Color.FromArgb(203, 213, 225);
-            this.btnMenu4.Location = new System.Drawing.Point(0, 152);
-            this.btnMenu4.Name = "btnMenu4";
-            this.btnMenu4.Padding = new System.Windows.Forms.Padding(18, 0, 0, 0);
-            this.btnMenu4.Size = new System.Drawing.Size(250, 46);
-            this.btnMenu4.TabIndex = 3;
-            this.btnMenu4.Text = "  4. B\u1EAFp n\u01B0\u1EDBc && Kho (F&&B)";
-            this.btnMenu4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnMenu4.UseVisualStyleBackColor = false;
-            // 
-            // btnMenu5
-            // 
-            this.btnMenu5.BackColor = System.Drawing.Color.FromArgb(30, 41, 59);
-            this.btnMenu5.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnMenu5.FlatAppearance.BorderSize = 0;
-            this.btnMenu5.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(39, 53, 73);
-            this.btnMenu5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMenu5.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.btnMenu5.ForeColor = System.Drawing.Color.FromArgb(203, 213, 225);
-            this.btnMenu5.Location = new System.Drawing.Point(0, 200);
-            this.btnMenu5.Name = "btnMenu5";
-            this.btnMenu5.Padding = new System.Windows.Forms.Padding(18, 0, 0, 0);
-            this.btnMenu5.Size = new System.Drawing.Size(250, 46);
-            this.btnMenu5.TabIndex = 4;
-            this.btnMenu5.Text = "  5. Đối soát ca làm";
-            this.btnMenu5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnMenu5.UseVisualStyleBackColor = false;
-            // 
-            // btnMenu6
-            // 
-            this.btnMenu6.BackColor = System.Drawing.Color.FromArgb(30, 41, 59);
-            this.btnMenu6.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnMenu6.FlatAppearance.BorderSize = 0;
-            this.btnMenu6.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(39, 53, 73);
-            this.btnMenu6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMenu6.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.btnMenu6.ForeColor = System.Drawing.Color.FromArgb(203, 213, 225);
-            this.btnMenu6.Location = new System.Drawing.Point(0, 248);
-            this.btnMenu6.Name = "btnMenu6";
-            this.btnMenu6.Padding = new System.Windows.Forms.Padding(18, 0, 0, 0);
-            this.btnMenu6.Size = new System.Drawing.Size(250, 46);
-            this.btnMenu6.TabIndex = 5;
-            this.btnMenu6.Text = "  6. Th\u00E0nh vi\u00EAn && Kh\u00E1ch";
-            this.btnMenu6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnMenu6.UseVisualStyleBackColor = false;
-            // 
-            // bottomBox
-            // 
-            this.bottomBox.BackColor = System.Drawing.Color.FromArgb(22, 32, 51);
-            this.bottomBox.Controls.Add(this.lblBottomStatus);
-            this.bottomBox.Controls.Add(this.lblBottomTitle);
-            this.bottomBox.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.bottomBox.Location = new System.Drawing.Point(0, 746);
-            this.bottomBox.Name = "bottomBox";
-            this.bottomBox.Padding = new System.Windows.Forms.Padding(14, 10, 14, 10);
-            this.bottomBox.Size = new System.Drawing.Size(250, 74);
-            this.bottomBox.TabIndex = 2;
-            // 
-            // lblBottomTitle
-            // 
-            this.lblBottomTitle.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lblBottomTitle.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.lblBottomTitle.ForeColor = System.Drawing.Color.White;
-            this.lblBottomTitle.Location = new System.Drawing.Point(14, 10);
-            this.lblBottomTitle.Name = "lblBottomTitle";
-            this.lblBottomTitle.Size = new System.Drawing.Size(222, 24);
-            this.lblBottomTitle.TabIndex = 0;
-            this.lblBottomTitle.Text = "Quản Lý Rạp";
-            // 
-            // lblBottomStatus
-            // 
-            this.lblBottomStatus.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lblBottomStatus.Font = new System.Drawing.Font("Segoe UI", 8.5F);
-            this.lblBottomStatus.ForeColor = System.Drawing.Color.FromArgb(22, 163, 74);
-            this.lblBottomStatus.Location = new System.Drawing.Point(14, 34);
-            this.lblBottomStatus.Name = "lblBottomStatus";
-            this.lblBottomStatus.Size = new System.Drawing.Size(222, 20);
-            this.lblBottomStatus.TabIndex = 1;
-            this.lblBottomStatus.Text = "● Đang trực ca";
-            // 
-            // activeIndicator
-            // 
-            this.activeIndicator.BackColor = System.Drawing.Color.FromArgb(59, 130, 246);
-            this.activeIndicator.Location = new System.Drawing.Point(0, 94);
-            this.activeIndicator.Name = "activeIndicator";
-            this.activeIndicator.Size = new System.Drawing.Size(4, 46);
-            this.activeIndicator.TabIndex = 3;
-            this.activeIndicator.Visible = false;
-            // 
-            // topbar
-            // 
-            this.topbar.BackColor = System.Drawing.Color.White;
-            this.topbar.Controls.Add(this.lblBadge);
-            this.topbar.Controls.Add(this.lblBell);
-            this.topbar.Controls.Add(this.lblTitle);
-            this.topbar.Dock = System.Windows.Forms.DockStyle.Top;
-            this.topbar.Location = new System.Drawing.Point(250, 0);
-            this.topbar.Name = "topbar";
-            this.topbar.Size = new System.Drawing.Size(1150, 58);
-            this.topbar.TabIndex = 1;
-            // 
-            // lblTitle
-            // 
-            this.lblTitle.AutoSize = true;
-            this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Bold);
-            this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
-            this.lblTitle.Location = new System.Drawing.Point(24, 16);
-            this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(381, 25);
-            this.lblTitle.TabIndex = 0;
-            this.lblTitle.Text = "Hệ thống Quản lý Rạp Chiếu Phim Nội bộ";
-            // 
-            // lblBell
-            // 
-            this.lblBell.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblBell.AutoSize = true;
-            this.lblBell.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.lblBell.Font = new System.Drawing.Font("Segoe UI", 14F);
-            this.lblBell.Location = new System.Drawing.Point(1080, 14);
-            this.lblBell.Name = "lblBell";
-            this.lblBell.Size = new System.Drawing.Size(32, 25);
-            this.lblBell.TabIndex = 1;
-            this.lblBell.Text = "🔔";
-            // 
-            // lblBadge
-            // 
-            this.lblBadge.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblBadge.BackColor = System.Drawing.Color.FromArgb(220, 38, 38);
-            this.lblBadge.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.lblBadge.Font = new System.Drawing.Font("Segoe UI", 7F, System.Drawing.FontStyle.Bold);
-            this.lblBadge.ForeColor = System.Drawing.Color.White;
-            this.lblBadge.Location = new System.Drawing.Point(1102, 8);
-            this.lblBadge.Name = "lblBadge";
-            this.lblBadge.Size = new System.Drawing.Size(20, 20);
-            this.lblBadge.TabIndex = 2;
-            this.lblBadge.Text = "3";
-            this.lblBadge.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // contentHost
-            // 
-            this.contentHost.BackColor = System.Drawing.Color.FromArgb(241, 245, 249);
-            this.contentHost.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.contentHost.Location = new System.Drawing.Point(250, 58);
-            this.contentHost.Name = "contentHost";
-            this.contentHost.Padding = new System.Windows.Forms.Padding(24);
-            this.contentHost.Size = new System.Drawing.Size(1150, 740);
-            this.contentHost.TabIndex = 0;
-            // 
-            // statusStrip
-            // 
-            this.statusStrip.BackColor = System.Drawing.Color.White;
-            this.statusStrip.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.lblStatusLeft,
-            this.lblStatusTime});
-            this.statusStrip.Location = new System.Drawing.Point(250, 798);
-            this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(1150, 22);
-            this.statusStrip.SizingGrip = false;
-            this.statusStrip.TabIndex = 3;
-            // 
-            // lblStatusLeft
-            // 
-            this.lblStatusLeft.Name = "lblStatusLeft";
-            this.lblStatusLeft.Text = "Tr\u1EA1ng th\u00E1i: S\u1EB5n s\u00E0ng (UI Preview Mode)  |  T\u00E0i kho\u1EA3n: Qu\u1EA3n L\u00FD R\u1EA1p";
-            // 
-            // lblStatusTime
-            // 
-            this.lblStatusTime.Name = "lblStatusTime";
-            this.lblStatusTime.Spring = true;
-            this.lblStatusTime.Text = "";
-            this.lblStatusTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // MainForm
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(241, 245, 249);
-            this.ClientSize = new System.Drawing.Size(1400, 820);
-            this.Controls.Add(this.contentHost);
-            this.Controls.Add(this.statusStrip);
-            this.Controls.Add(this.topbar);
-            this.Controls.Add(this.sidebar);
-            // WinForms docking: higher index docks first, index 0 docks last (Fill).
-            this.Controls.SetChildIndex(this.sidebar, 3);
-            this.Controls.SetChildIndex(this.topbar, 2);
-            this.Controls.SetChildIndex(this.statusStrip, 1);
-            this.Controls.SetChildIndex(this.contentHost, 0);
-            this.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.MinimumSize = new System.Drawing.Size(1400, 820);
-            this.Name = "MainForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Hệ thống Quản lý Rạp Chiếu Phim Nội bộ";
-            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.sidebar.ResumeLayout(false);
-            this.brand.ResumeLayout(false);
-            this.menuPanel.ResumeLayout(false);
-            this.bottomBox.ResumeLayout(false);
-            this.topbar.ResumeLayout(false);
-            this.topbar.PerformLayout();
-            this.statusStrip.ResumeLayout(false);
-            this.statusStrip.PerformLayout();
-            this.ResumeLayout(false);
-            this.PerformLayout();
-        }
+        base.Dispose(disposing);
     }
+
+    private void InitializeComponent()
+    {
+        components = new System.ComponentModel.Container();
+        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+        layoutMain = new TableLayoutPanel();
+        pnlNavigation = new Panel();
+        pnlMenu = new Panel();
+        menuNavigation = new ToolStrip();
+        navTicketSales = new ToolStripButton();
+        navTicketCheck = new ToolStripButton();
+        navMembers = new ToolStripButton();
+        navInvoices = new ToolStripButton();
+        navShifts = new ToolStripButton();
+        pnlRail = new Panel();
+        pnlNavStripe = new Panel();
+        pnlBrand = new Panel();
+        picBrand = new PictureBox();
+        lblBrand = new Label();
+        layoutHeader = new TableLayoutPanel();
+        lblOperator = new Label();
+        lblClock = new Label();
+        pnlHeaderDivider = new Panel();
+        btnLogout = new Button();
+        pnlWorkspace = new Panel();
+        showtimeSelectionView = new ShowtimeSelectionView();
+        seatSelectionView = new SeatSelectionView();
+        concessionSelectionView = new ConcessionSelectionView();
+        paymentView = new PaymentView();
+        saleCompletionView = new SaleCompletionView();
+        shiftManagementView = new ShiftManagementView();
+        shiftHandoverView = new ShiftHandoverView();
+        memberListView = new MemberListView();
+        memberDetailsView = new MemberDetailsView();
+        memberEditView = new MemberEditView();
+        memberRegistrationView = new MemberRegistrationView();
+        orderListView = new OrderListView();
+        orderDetailsView = new OrderDetailsView();
+        refundRequestView = new RefundRequestView();
+        checkInSessionView = new CheckInSessionView();
+        ticketScannerView = new TicketScannerView();
+        ticketScanResultView = new TicketScanResultView();
+        checkInHistoryView = new CheckInHistoryView();
+        clockTimer = new System.Windows.Forms.Timer(components);
+        layoutMain.SuspendLayout();
+        pnlNavigation.SuspendLayout();
+        pnlMenu.SuspendLayout();
+        menuNavigation.SuspendLayout();
+        pnlRail.SuspendLayout();
+        pnlBrand.SuspendLayout();
+        ((System.ComponentModel.ISupportInitialize)picBrand).BeginInit();
+        layoutHeader.SuspendLayout();
+        pnlWorkspace.SuspendLayout();
+        SuspendLayout();
+        // 
+        // layoutMain
+        // 
+        layoutMain.ColumnCount = 2;
+        layoutMain.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 212F));
+        layoutMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        layoutMain.Controls.Add(pnlNavigation, 0, 0);
+        layoutMain.Controls.Add(layoutHeader, 1, 0);
+        layoutMain.Controls.Add(pnlWorkspace, 1, 1);
+        layoutMain.Dock = DockStyle.Fill;
+        layoutMain.Location = new Point(0, 0);
+        layoutMain.Name = "layoutMain";
+        layoutMain.RowCount = 2;
+        layoutMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 52F));
+        layoutMain.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+        layoutMain.Size = new Size(1348, 782);
+        layoutMain.TabIndex = 0;
+        // 
+        // pnlNavigation
+        // 
+        pnlNavigation.BackColor = Color.FromArgb(30, 41, 59);
+        pnlNavigation.Controls.Add(pnlMenu);
+        pnlNavigation.Controls.Add(pnlBrand);
+        pnlNavigation.Dock = DockStyle.Fill;
+        pnlNavigation.Location = new Point(0, 0);
+        pnlNavigation.Margin = new Padding(0);
+        pnlNavigation.Name = "pnlNavigation";
+        layoutMain.SetRowSpan(pnlNavigation, 2);
+        pnlNavigation.Size = new Size(212, 782);
+        pnlNavigation.TabIndex = 0;
+        // 
+        // pnlMenu
+        // 
+        pnlMenu.Controls.Add(menuNavigation);
+        pnlMenu.Controls.Add(pnlRail);
+        pnlMenu.Dock = DockStyle.Top;
+        pnlMenu.Location = new Point(0, 70);
+        pnlMenu.Name = "pnlMenu";
+        pnlMenu.Size = new Size(212, 250);
+        pnlMenu.TabIndex = 0;
+        // 
+        // menuNavigation
+        // 
+        menuNavigation.AccessibleName = "Điều hướng POS";
+        menuNavigation.AutoSize = false;
+        menuNavigation.BackColor = Color.FromArgb(30, 41, 59);
+        menuNavigation.CanOverflow = false;
+        menuNavigation.Dock = DockStyle.Fill;
+        menuNavigation.Font = new Font("Segoe UI", 10F);
+        menuNavigation.ForeColor = Color.FromArgb(241, 245, 249);
+        menuNavigation.GripStyle = ToolStripGripStyle.Hidden;
+        menuNavigation.ImageScalingSize = new Size(22, 22);
+        menuNavigation.Items.AddRange(new ToolStripItem[] { navTicketSales, navTicketCheck, navMembers, navInvoices, navShifts });
+        menuNavigation.LayoutStyle = ToolStripLayoutStyle.VerticalStackWithOverflow;
+        menuNavigation.Location = new Point(4, 0);
+        menuNavigation.Name = "menuNavigation";
+        menuNavigation.Padding = new Padding(0);
+        menuNavigation.Size = new Size(208, 250);
+        menuNavigation.TabIndex = 0;
+        menuNavigation.SizeChanged += MenuNavigation_SizeChanged;
+        // 
+        // navTicketSales
+        // 
+        navTicketSales.AutoSize = false;
+        navTicketSales.BackColor = Color.FromArgb(51, 65, 85);
+        navTicketSales.ForeColor = Color.FromArgb(241, 245, 249);
+        navTicketSales.Image = (Image)resources.GetObject("navTicketSales.Image");
+        navTicketSales.ImageAlign = ContentAlignment.MiddleLeft;
+        navTicketSales.Margin = new Padding(0);
+        navTicketSales.Name = "navTicketSales";
+        navTicketSales.Padding = new Padding(14, 0, 0, 0);
+        navTicketSales.Size = new Size(208, 48);
+        navTicketSales.Text = "Bán vé";
+        navTicketSales.TextAlign = ContentAlignment.MiddleLeft;
+        navTicketSales.Click += NavTicketSales_Click;
+        // 
+        // navTicketCheck
+        // 
+        navTicketCheck.AutoSize = false;
+        navTicketCheck.ForeColor = Color.FromArgb(241, 245, 249);
+        navTicketCheck.Image = (Image)resources.GetObject("navTicketCheck.Image");
+        navTicketCheck.ImageAlign = ContentAlignment.MiddleLeft;
+        navTicketCheck.Margin = new Padding(0);
+        navTicketCheck.Name = "navTicketCheck";
+        navTicketCheck.Padding = new Padding(14, 0, 0, 0);
+        navTicketCheck.Size = new Size(208, 48);
+        navTicketCheck.Text = "Soát vé";
+        navTicketCheck.TextAlign = ContentAlignment.MiddleLeft;
+        navTicketCheck.Click += NavTicketCheck_Click;
+        // 
+        // navMembers
+        // 
+        navMembers.AutoSize = false;
+        navMembers.ForeColor = Color.FromArgb(241, 245, 249);
+        navMembers.Image = (Image)resources.GetObject("navMembers.Image");
+        navMembers.ImageAlign = ContentAlignment.MiddleLeft;
+        navMembers.Margin = new Padding(0);
+        navMembers.Name = "navMembers";
+        navMembers.Padding = new Padding(14, 0, 0, 0);
+        navMembers.Size = new Size(208, 48);
+        navMembers.Text = "Thành viên";
+        navMembers.TextAlign = ContentAlignment.MiddleLeft;
+        navMembers.Click += NavMembers_Click;
+        // 
+        // navInvoices
+        // 
+        navInvoices.AutoSize = false;
+        navInvoices.ForeColor = Color.FromArgb(241, 245, 249);
+        navInvoices.Image = (Image)resources.GetObject("navInvoices.Image");
+        navInvoices.ImageAlign = ContentAlignment.MiddleLeft;
+        navInvoices.Margin = new Padding(0);
+        navInvoices.Name = "navInvoices";
+        navInvoices.Padding = new Padding(14, 0, 0, 0);
+        navInvoices.Size = new Size(208, 48);
+        navInvoices.Text = "Hóa đơn && Hủy vé";
+        navInvoices.TextAlign = ContentAlignment.MiddleLeft;
+        navInvoices.Click += NavInvoices_Click;
+        // 
+        // navShifts
+        // 
+        navShifts.AutoSize = false;
+        navShifts.ForeColor = Color.FromArgb(241, 245, 249);
+        navShifts.Image = (Image)resources.GetObject("navShifts.Image");
+        navShifts.ImageAlign = ContentAlignment.MiddleLeft;
+        navShifts.Margin = new Padding(0);
+        navShifts.Name = "navShifts";
+        navShifts.Padding = new Padding(14, 0, 0, 0);
+        navShifts.Size = new Size(208, 48);
+        navShifts.Text = "Quản lý ca";
+        navShifts.TextAlign = ContentAlignment.MiddleLeft;
+        navShifts.Click += NavShifts_Click;
+        // 
+        // pnlRail
+        // 
+        pnlRail.Controls.Add(pnlNavStripe);
+        pnlRail.Dock = DockStyle.Left;
+        pnlRail.Location = new Point(0, 0);
+        pnlRail.Name = "pnlRail";
+        pnlRail.Size = new Size(4, 250);
+        pnlRail.TabIndex = 1;
+        // 
+        // pnlNavStripe
+        // 
+        pnlNavStripe.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+        pnlNavStripe.BackColor = Color.FromArgb(59, 130, 246);
+        pnlNavStripe.Location = new Point(0, 0);
+        pnlNavStripe.Name = "pnlNavStripe";
+        pnlNavStripe.Size = new Size(4, 48);
+        pnlNavStripe.TabIndex = 0;
+        // 
+        // pnlBrand
+        // 
+        pnlBrand.Controls.Add(lblBrand);
+        pnlBrand.Controls.Add(picBrand);
+        pnlBrand.Dock = DockStyle.Top;
+        pnlBrand.Location = new Point(0, 0);
+        pnlBrand.Name = "pnlBrand";
+        pnlBrand.Size = new Size(212, 70);
+        pnlBrand.TabIndex = 1;
+        // 
+        // picBrand
+        // 
+        picBrand.AccessibleName = "Logo STORYLINE";
+        picBrand.Image = (Image)resources.GetObject("picBrand.Image");
+        picBrand.Location = new Point(14, 12);
+        picBrand.Name = "picBrand";
+        picBrand.Size = new Size(46, 46);
+        picBrand.SizeMode = PictureBoxSizeMode.Zoom;
+        picBrand.TabIndex = 0;
+        picBrand.TabStop = false;
+        //
+        // lblBrand
+        //
+        lblBrand.Font = new Font("Segoe UI", 12.5F, FontStyle.Bold);
+        lblBrand.ForeColor = Color.FromArgb(241, 245, 249);
+        lblBrand.Location = new Point(62, 12);
+        lblBrand.Name = "lblBrand";
+        lblBrand.Size = new Size(144, 46);
+        lblBrand.TabIndex = 1;
+        lblBrand.Text = "STORYLINE";
+        lblBrand.TextAlign = ContentAlignment.MiddleLeft;
+        // 
+        // layoutHeader
+        // 
+        layoutHeader.BackColor = Color.White;
+        layoutHeader.ColumnCount = 4;
+        layoutHeader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        layoutHeader.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 92F));
+        layoutHeader.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 1F));
+        layoutHeader.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 105F));
+        layoutHeader.Controls.Add(lblOperator, 0, 0);
+        layoutHeader.Controls.Add(lblClock, 1, 0);
+        layoutHeader.Controls.Add(pnlHeaderDivider, 2, 0);
+        layoutHeader.Controls.Add(btnLogout, 3, 0);
+        layoutHeader.Dock = DockStyle.Fill;
+        layoutHeader.Location = new Point(212, 0);
+        layoutHeader.Margin = new Padding(0);
+        layoutHeader.Name = "layoutHeader";
+        layoutHeader.Padding = new Padding(20, 0, 20, 0);
+        layoutHeader.RowCount = 1;
+        layoutHeader.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+        layoutHeader.Size = new Size(1136, 52);
+        layoutHeader.TabIndex = 0;
+        // 
+        // lblOperator
+        // 
+        lblOperator.Dock = DockStyle.Fill;
+        lblOperator.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+        lblOperator.Location = new Point(20, 0);
+        lblOperator.Margin = new Padding(0);
+        lblOperator.Name = "lblOperator";
+        lblOperator.Size = new Size(898, 52);
+        lblOperator.TabIndex = 0;
+        lblOperator.TextAlign = ContentAlignment.MiddleLeft;
+        lblOperator.Click += lblOperator_Click;
+        // 
+        // lblClock
+        // 
+        lblClock.AccessibleName = "Giờ địa phương";
+        lblClock.Dock = DockStyle.Fill;
+        lblClock.ForeColor = Color.FromArgb(51, 65, 85);
+        lblClock.Location = new Point(918, 0);
+        lblClock.Margin = new Padding(0);
+        lblClock.Name = "lblClock";
+        lblClock.Size = new Size(92, 52);
+        lblClock.TabIndex = 1;
+        lblClock.TextAlign = ContentAlignment.MiddleCenter;
+        //
+        // pnlHeaderDivider
+        //
+        pnlHeaderDivider.BackColor = Color.FromArgb(226, 232, 240);
+        pnlHeaderDivider.Dock = DockStyle.Fill;
+        pnlHeaderDivider.Location = new Point(1010, 15);
+        pnlHeaderDivider.Margin = new Padding(0, 15, 0, 15);
+        pnlHeaderDivider.Name = "pnlHeaderDivider";
+        pnlHeaderDivider.Size = new Size(1, 22);
+        pnlHeaderDivider.TabIndex = 2;
+        // 
+        // btnLogout
+        // 
+        btnLogout.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        btnLogout.BackColor = Color.White;
+        btnLogout.Enabled = false;
+        btnLogout.FlatAppearance.BorderSize = 0;
+        btnLogout.FlatStyle = FlatStyle.Flat;
+        btnLogout.Location = new Point(1011, 9);
+        btnLogout.Margin = new Padding(0);
+        btnLogout.Name = "btnLogout";
+        btnLogout.Size = new Size(105, 34);
+        btnLogout.TabIndex = 3;
+        btnLogout.Text = "Đăng xuất";
+        btnLogout.UseVisualStyleBackColor = false;
+        // 
+        // pnlWorkspace
+        //
+        pnlWorkspace.Controls.Add(showtimeSelectionView);
+        pnlWorkspace.Controls.Add(seatSelectionView);
+        pnlWorkspace.Controls.Add(concessionSelectionView);
+        pnlWorkspace.Controls.Add(paymentView);
+        pnlWorkspace.Controls.Add(saleCompletionView);
+        pnlWorkspace.Controls.Add(shiftManagementView);
+        pnlWorkspace.Controls.Add(shiftHandoverView);
+        pnlWorkspace.Controls.Add(memberListView);
+        pnlWorkspace.Controls.Add(memberDetailsView);
+        pnlWorkspace.Controls.Add(memberEditView);
+        pnlWorkspace.Controls.Add(memberRegistrationView);
+        pnlWorkspace.Controls.Add(orderListView);
+        pnlWorkspace.Controls.Add(orderDetailsView);
+        pnlWorkspace.Controls.Add(refundRequestView);
+        pnlWorkspace.Controls.Add(checkInSessionView);
+        pnlWorkspace.Controls.Add(ticketScannerView);
+        pnlWorkspace.Controls.Add(ticketScanResultView);
+        pnlWorkspace.Controls.Add(checkInHistoryView);
+        pnlWorkspace.Dock = DockStyle.Fill;
+        pnlWorkspace.Location = new Point(212, 52);
+        pnlWorkspace.Margin = Padding.Empty;
+        pnlWorkspace.Name = "pnlWorkspace";
+        pnlWorkspace.Size = new Size(1136, 730);
+        pnlWorkspace.TabIndex = 1;
+        //
+        // showtimeSelectionView
+        // 
+        showtimeSelectionView.BackColor = Color.FromArgb(241, 245, 249);
+        showtimeSelectionView.Dock = DockStyle.Fill;
+        showtimeSelectionView.Font = new Font("Segoe UI", 10F);
+        showtimeSelectionView.ForeColor = Color.FromArgb(15, 23, 42);
+        showtimeSelectionView.Location = Point.Empty;
+        showtimeSelectionView.Margin = new Padding(0);
+        showtimeSelectionView.Name = "showtimeSelectionView";
+        showtimeSelectionView.Size = new Size(1136, 730);
+        showtimeSelectionView.TabIndex = 1;
+        // 
+        // seatSelectionView
+        // 
+        seatSelectionView.Dock = DockStyle.Fill;
+        seatSelectionView.Location = Point.Empty;
+        seatSelectionView.Margin = Padding.Empty;
+        seatSelectionView.Name = "seatSelectionView";
+        seatSelectionView.Size = new Size(1136, 730);
+        seatSelectionView.TabIndex = 2;
+        seatSelectionView.Visible = false;
+        //
+        // concessionSelectionView
+        //
+        concessionSelectionView.Dock = DockStyle.Fill;
+        concessionSelectionView.Location = Point.Empty;
+        concessionSelectionView.Margin = Padding.Empty;
+        concessionSelectionView.Name = "concessionSelectionView";
+        concessionSelectionView.Size = new Size(1136, 730);
+        concessionSelectionView.TabIndex = 3;
+        concessionSelectionView.Visible = false;
+        //
+        // paymentView
+        //
+        paymentView.Dock = DockStyle.Fill;
+        paymentView.Location = Point.Empty;
+        paymentView.Margin = Padding.Empty;
+        paymentView.Name = "paymentView";
+        paymentView.Size = new Size(1136, 730);
+        paymentView.TabIndex = 4;
+        paymentView.Visible = false;
+        // 
+        // saleCompletionView
+        // 
+        saleCompletionView.Dock = DockStyle.Fill;
+        saleCompletionView.Location = Point.Empty;
+        saleCompletionView.Margin = Padding.Empty;
+        saleCompletionView.Name = "saleCompletionView";
+        saleCompletionView.Size = new Size(1136, 730);
+        saleCompletionView.TabIndex = 5;
+        saleCompletionView.Visible = false;
+        //
+        // shiftManagementView
+        //
+        shiftManagementView.Dock = DockStyle.Fill;
+        shiftManagementView.Location = Point.Empty;
+        shiftManagementView.Margin = Padding.Empty;
+        shiftManagementView.Name = "shiftManagementView";
+        shiftManagementView.Size = new Size(1136, 730);
+        shiftManagementView.TabIndex = 1;
+        shiftManagementView.Visible = false;
+        //
+        // shiftHandoverView
+        //
+        shiftHandoverView.Dock = DockStyle.Fill;
+        shiftHandoverView.Location = Point.Empty;
+        shiftHandoverView.Margin = Padding.Empty;
+        shiftHandoverView.Name = "shiftHandoverView";
+        shiftHandoverView.Size = new Size(1136, 730);
+        shiftHandoverView.TabIndex = 2;
+        shiftHandoverView.Visible = false;
+        //
+        // memberListView
+        //
+        memberListView.Dock = DockStyle.Fill;
+        memberListView.Location = Point.Empty;
+        memberListView.Margin = Padding.Empty;
+        memberListView.Name = "memberListView";
+        memberListView.Size = new Size(1136, 730);
+        memberListView.TabIndex = 3;
+        memberListView.Visible = false;
+        //
+        // memberDetailsView
+        //
+        memberDetailsView.Dock = DockStyle.Fill;
+        memberDetailsView.Location = Point.Empty;
+        memberDetailsView.Margin = Padding.Empty;
+        memberDetailsView.Name = "memberDetailsView";
+        memberDetailsView.Size = new Size(1136, 730);
+        memberDetailsView.TabIndex = 4;
+        memberDetailsView.Visible = false;
+        //
+        // memberEditView
+        //
+        memberEditView.Dock = DockStyle.Fill;
+        memberEditView.Location = Point.Empty;
+        memberEditView.Margin = Padding.Empty;
+        memberEditView.Name = "memberEditView";
+        memberEditView.Size = new Size(1136, 730);
+        memberEditView.TabIndex = 5;
+        memberEditView.Visible = false;
+        //
+        // memberRegistrationView
+        //
+        memberRegistrationView.Dock = DockStyle.Fill;
+        memberRegistrationView.Location = Point.Empty;
+        memberRegistrationView.Margin = Padding.Empty;
+        memberRegistrationView.Name = "memberRegistrationView";
+        memberRegistrationView.Size = new Size(1136, 730);
+        memberRegistrationView.TabIndex = 6;
+        memberRegistrationView.Visible = false;
+        //
+        // orderListView
+        //
+        orderListView.Dock = DockStyle.Fill;
+        orderListView.Location = Point.Empty;
+        orderListView.Margin = Padding.Empty;
+        orderListView.Name = "orderListView";
+        orderListView.Size = new Size(1136, 730);
+        orderListView.TabIndex = 7;
+        orderListView.Visible = false;
+        //
+        // orderDetailsView
+        //
+        orderDetailsView.Dock = DockStyle.Fill;
+        orderDetailsView.Location = Point.Empty;
+        orderDetailsView.Margin = Padding.Empty;
+        orderDetailsView.Name = "orderDetailsView";
+        orderDetailsView.Size = new Size(1136, 730);
+        orderDetailsView.TabIndex = 8;
+        orderDetailsView.Visible = false;
+        //
+        // refundRequestView
+        //
+        refundRequestView.Dock = DockStyle.Fill;
+        refundRequestView.Location = Point.Empty;
+        refundRequestView.Margin = Padding.Empty;
+        refundRequestView.Name = "refundRequestView";
+        refundRequestView.Size = new Size(1136, 730);
+        refundRequestView.TabIndex = 9;
+        refundRequestView.Visible = false;
+        //
+        // checkInSessionView
+        //
+        checkInSessionView.Dock = DockStyle.Fill;
+        checkInSessionView.Location = Point.Empty;
+        checkInSessionView.Margin = Padding.Empty;
+        checkInSessionView.Name = "checkInSessionView";
+        checkInSessionView.Size = new Size(1136, 730);
+        checkInSessionView.TabIndex = 10;
+        checkInSessionView.Visible = false;
+        //
+        // ticketScannerView
+        //
+        ticketScannerView.Dock = DockStyle.Fill;
+        ticketScannerView.Location = Point.Empty;
+        ticketScannerView.Margin = Padding.Empty;
+        ticketScannerView.Name = "ticketScannerView";
+        ticketScannerView.Size = new Size(1136, 730);
+        ticketScannerView.TabIndex = 11;
+        ticketScannerView.Visible = false;
+        //
+        // ticketScanResultView
+        //
+        ticketScanResultView.Dock = DockStyle.Fill;
+        ticketScanResultView.Location = Point.Empty;
+        ticketScanResultView.Margin = Padding.Empty;
+        ticketScanResultView.Name = "ticketScanResultView";
+        ticketScanResultView.Size = new Size(1136, 730);
+        ticketScanResultView.TabIndex = 12;
+        ticketScanResultView.Visible = false;
+        //
+        // checkInHistoryView
+        //
+        checkInHistoryView.Dock = DockStyle.Fill;
+        checkInHistoryView.Location = Point.Empty;
+        checkInHistoryView.Margin = Padding.Empty;
+        checkInHistoryView.Name = "checkInHistoryView";
+        checkInHistoryView.Size = new Size(1136, 730);
+        checkInHistoryView.TabIndex = 13;
+        checkInHistoryView.Visible = false;
+        // 
+        // clockTimer
+        // 
+        clockTimer.Interval = 1000;
+        clockTimer.Tick += ClockTimer_Tick;
+        // 
+        // MainForm
+        // 
+        AutoScaleDimensions = new SizeF(120F, 120F);
+        AutoScaleMode = AutoScaleMode.Dpi;
+        BackColor = Color.FromArgb(241, 245, 249);
+        ClientSize = new Size(1348, 782);
+        Controls.Add(layoutMain);
+        Font = new Font("Segoe UI", 10F);
+        ForeColor = Color.FromArgb(15, 23, 42);
+        MinimumSize = new Size(850, 620);
+        Name = "MainForm";
+        StartPosition = FormStartPosition.CenterScreen;
+        Text = "STORYLINE · Cinema POS";
+        layoutMain.ResumeLayout(false);
+        pnlNavigation.ResumeLayout(false);
+        pnlMenu.ResumeLayout(false);
+        menuNavigation.ResumeLayout(false);
+        menuNavigation.PerformLayout();
+        pnlRail.ResumeLayout(false);
+        pnlBrand.ResumeLayout(false);
+        ((System.ComponentModel.ISupportInitialize)picBrand).EndInit();
+        layoutHeader.ResumeLayout(false);
+        pnlWorkspace.ResumeLayout(false);
+        ResumeLayout(false);
+    }
+
+    private TableLayoutPanel layoutMain;
+    private Panel pnlNavigation;
+    private Panel pnlBrand;
+    private PictureBox picBrand;
+    private Label lblBrand;
+    private Panel pnlMenu;
+    private Panel pnlRail;
+    private Panel pnlNavStripe;
+    private ToolStrip menuNavigation;
+    private ToolStripButton navTicketSales;
+    private ToolStripButton navTicketCheck;
+    private ToolStripButton navMembers;
+    private ToolStripButton navInvoices;
+    private ToolStripButton navShifts;
+    private TableLayoutPanel layoutHeader;
+    private Label lblOperator;
+    private Label lblClock;
+    private Panel pnlHeaderDivider;
+    private Button btnLogout;
+    private Panel pnlWorkspace;
+    private ShowtimeSelectionView showtimeSelectionView;
+    private SeatSelectionView seatSelectionView;
+    private ConcessionSelectionView concessionSelectionView;
+    private PaymentView paymentView;
+    private SaleCompletionView saleCompletionView;
+    private ShiftManagementView shiftManagementView;
+    private ShiftHandoverView shiftHandoverView;
+    private MemberListView memberListView;
+    private MemberDetailsView memberDetailsView;
+    private MemberEditView memberEditView;
+    private MemberRegistrationView memberRegistrationView;
+    private OrderListView orderListView;
+    private OrderDetailsView orderDetailsView;
+    private RefundRequestView refundRequestView;
+    private CheckInSessionView checkInSessionView;
+    private TicketScannerView ticketScannerView;
+    private TicketScanResultView ticketScanResultView;
+    private CheckInHistoryView checkInHistoryView;
+    private System.Windows.Forms.Timer clockTimer;
 }

@@ -1,3 +1,5 @@
+using Cinema.WinForms.Controls;
+
 namespace Cinema.WinForms.Features.Members
 {
     partial class RegisterCustomerModal
@@ -45,7 +47,7 @@ namespace Cinema.WinForms.Features.Members
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.White;
+            this.BackColor = UiTheme.CardBg;
             this.ClientSize = new System.Drawing.Size(434, 481);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.numPoints);
@@ -73,7 +75,7 @@ namespace Cinema.WinForms.Features.Members
             this.rbMember.AutoSize = true;
             this.rbMember.Checked = true;
             this.rbMember.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.rbMember.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.rbMember.ForeColor = UiTheme.TextMain;
             this.rbMember.Location = new System.Drawing.Point(24, 20);
             this.rbMember.Name = "rbMember";
             this.rbMember.Size = new System.Drawing.Size(165, 23);
@@ -86,7 +88,7 @@ namespace Cinema.WinForms.Features.Members
             // 
             this.rbGuest.AutoSize = true;
             this.rbGuest.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.rbGuest.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139);
+            this.rbGuest.ForeColor = UiTheme.TextMuted;
             this.rbGuest.Location = new System.Drawing.Point(230, 20);
             this.rbGuest.Name = "rbGuest";
             this.rbGuest.Size = new System.Drawing.Size(108, 23);
@@ -98,7 +100,7 @@ namespace Cinema.WinForms.Features.Members
             // 
             this.lblName.AutoSize = true;
             this.lblName.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
-            this.lblName.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblName.ForeColor = UiTheme.TextMain;
             this.lblName.Location = new System.Drawing.Point(24, 60);
             this.lblName.Name = "lblName";
             this.lblName.Text = "H\u1ECD t\u00EAn";
@@ -114,7 +116,7 @@ namespace Cinema.WinForms.Features.Members
             // 
             this.lblPhone.AutoSize = true;
             this.lblPhone.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
-            this.lblPhone.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblPhone.ForeColor = UiTheme.TextMain;
             this.lblPhone.Location = new System.Drawing.Point(24, 120);
             this.lblPhone.Name = "lblPhone";
             this.lblPhone.Text = "S\u1ED1 \u0111i\u1EC7n tho\u1EA1i";
@@ -130,7 +132,7 @@ namespace Cinema.WinForms.Features.Members
             // 
             this.lblEmail.AutoSize = true;
             this.lblEmail.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
-            this.lblEmail.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblEmail.ForeColor = UiTheme.TextMain;
             this.lblEmail.Location = new System.Drawing.Point(24, 180);
             this.lblEmail.Name = "lblEmail";
             this.lblEmail.Text = "Email";
@@ -146,7 +148,7 @@ namespace Cinema.WinForms.Features.Members
             // 
             this.lblTier.AutoSize = true;
             this.lblTier.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
-            this.lblTier.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblTier.ForeColor = UiTheme.TextMain;
             this.lblTier.Location = new System.Drawing.Point(24, 240);
             this.lblTier.Name = "lblTier";
             this.lblTier.Text = "H\u1EA1ng th\u1EBB ban \u0111\u1EA7u";
@@ -165,7 +167,7 @@ namespace Cinema.WinForms.Features.Members
             // 
             this.lblPoints.AutoSize = true;
             this.lblPoints.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
-            this.lblPoints.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
+            this.lblPoints.ForeColor = UiTheme.TextMain;
             this.lblPoints.Location = new System.Drawing.Point(24, 300);
             this.lblPoints.Name = "lblPoints";
             this.lblPoints.Text = "\u0110i\u1EC3m th\u01B0\u1EDFng ch\u00E0o m\u1EEBng";
@@ -182,11 +184,11 @@ namespace Cinema.WinForms.Features.Members
             // 
             // btnSave
             // 
-            this.btnSave.BackColor = System.Drawing.Color.FromArgb(37, 99, 235);
+            this.btnSave.BackColor = UiTheme.Primary;
             this.btnSave.FlatAppearance.BorderSize = 0;
             this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSave.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnSave.ForeColor = System.Drawing.Color.White;
+            this.btnSave.ForeColor = UiTheme.CardBg;
             this.btnSave.Location = new System.Drawing.Point(274, 390);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(130, 36);
