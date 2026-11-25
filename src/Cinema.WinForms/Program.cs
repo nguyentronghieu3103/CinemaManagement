@@ -1,18 +1,17 @@
 using Cinema.WinForms.Forms;
+
 namespace Cinema.WinForms
 {
     internal static class Program
     {
-        /// <summary>
-        ///  The main entry point for the application.
-        /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new MainForm());
+            Form mainForm = args.Contains("--management", StringComparer.OrdinalIgnoreCase)
+                ? new ManagementForm()
+                : new MainForm();
+            Application.Run(mainForm);
         }
     }
 }
